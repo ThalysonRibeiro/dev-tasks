@@ -1,0 +1,37 @@
+"use server"
+import prisma from "@/lib/prisma";
+import { z } from "zod"
+import { revalidatePath } from "next/cache";
+
+const formSchema = z.object({
+  id: z.string().min(1, "o id é obrigatóriro"),
+  title: z.string().min(1, "O titulo é obrigatório"),
+  textColor: z.string().min(4, "O titulo é obrigatório"),
+});
+
+type FormSchema = z.infer<typeof formSchema>;
+
+export async function updateTaskGroup(formData: FormSchema) {
+  const schema = formSchema.safeParse(formData);
+  if (!schema.success) {
+    return {
+      error: schema.error.issues[0].message
+    }
+  }
+  try {
+    await prisma.tasksGroup.update({
+      where: { id: formData.id },
+      data: {
+        title: formData.title,
+        textColor: formData.textColor
+      }
+    });
+    revalidatePath("/dashboard");
+    return;
+  } catch (error) {
+    console.log(error);
+    return {
+      error: "Falha ao atualizar grupo"
+    }
+  }
+}
