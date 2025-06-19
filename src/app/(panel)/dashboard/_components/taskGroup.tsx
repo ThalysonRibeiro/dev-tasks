@@ -1,9 +1,11 @@
 "use client"
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
 import { useState } from "react";
 import { TasksGroupWithTasks } from "./tasks-content";
 import { TaskGroupForm } from "./task-group-form";
+import { deleteTaskGroup } from "../_actions/delete-taskGroup";
+import { toast } from "react-toastify";
 
 
 export function TaskGroup({ tasksData }: { tasksData: TasksGroupWithTasks[]; }) {
@@ -26,9 +28,14 @@ export function TaskGroup({ tasksData }: { tasksData: TasksGroupWithTasks[]; }) 
     return newValue;
   }
 
+  function handleDeleteTaskGroup(id: string) {
+    deleteTaskGroup(id);
+    toast.success("Grupo deletado com sucesso!")
+  }
+
   return (
     <div className="space-y-6">
-      <div>
+      <div className="space-y-6">
         {tasksData.map((taskGroup) => (
           <div key={taskGroup.id}>
 
@@ -42,13 +49,26 @@ export function TaskGroup({ tasksData }: { tasksData: TasksGroupWithTasks[]; }) 
                 } : undefined}
               />
             ) : (
-              <h2
-                className="font-bold text-lg"
-                style={{ color: taskGroup.textColor }}
-                onClick={() => handleEditeGroup(taskGroup)}
-              >
-                {taskGroup.title}
-              </h2>
+              <div>
+                <div className="flex gap-4 items-center">
+                  <h2
+                    className="font-bold text-lg"
+                    style={{ color: taskGroup.textColor }}
+                    onClick={() => handleEditeGroup(taskGroup)}
+                  >
+                    {taskGroup.title}
+                  </h2>
+                  <Button
+                    size={"icon"}
+                    variant={"outline"}
+                    className="border-dashed cursor-pointer"
+                    onClick={() => handleDeleteTaskGroup(taskGroup.id)}
+                  >
+                    <Trash />
+                  </Button>
+                </div>
+                <h3>13</h3>
+              </div>
             )}
           </div>
         ))}
