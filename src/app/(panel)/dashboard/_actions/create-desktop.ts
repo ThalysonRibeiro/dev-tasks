@@ -1,21 +1,20 @@
 "use server"
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { z } from "zod"
 import { revalidatePath } from "next/cache";
+import { auth } from "@/lib/auth";
 
 const formSchema = z.object({
   title: z.string().min(1, "O titulo é obrigatório"),
-  textColor: z.string().min(4, "O titulo é obrigatório"),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
 
-export async function createTakGroup(formData: FormSchema) {
+export async function createDesktop(formData: FormSchema) {
   const session = await auth();
   if (!session?.user?.id) {
     return {
-      error: "Falha ao cadastrar grupo"
+      error: "Falha ao cadastrar Áreas de trabalho"
     }
   }
   const schema = formSchema.safeParse(formData);
@@ -24,20 +23,21 @@ export async function createTakGroup(formData: FormSchema) {
       error: schema.error.issues[0].message
     }
   }
+
   try {
-    const newGroup = await prisma.tasksGroup.create({
+    const newDesktop = await prisma.desktop.create({
       data: {
-        userId: session.user.id,
+        userId: session.user?.id,
         title: formData.title,
-        textColor: formData.textColor,
       }
     });
+
     revalidatePath("/dashboard");
-    return { data: newGroup }
+    return { newDesktop };
   } catch (error) {
     console.log(error);
     return {
-      error: "Falha ao cadastrar grupo"
+      error: "Falha ao cadastrar Áreas de trabalho"
     }
   }
 }

@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import { ChevronDownIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -10,11 +9,23 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { useEffect, useState } from "react"
 
-export function DateCalendar({ onChange }: { onChange: (date: Date) => void; }) {
-  const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(undefined);
+export function CalendarTerm({
+  onChange,
+  initialDate,
+}: {
+  onChange: (date: Date) => void;
+  initialDate?: Date;
+}) {
+  const [open, setOpen] = useState(false);
+  const [date, setDate] = useState<Date | undefined>(initialDate);
 
+  useEffect(() => {
+    if (initialDate) {
+      setDate(initialDate);
+    }
+  }, [initialDate]);
 
   return (
     <div className="flex flex-col gap-3">
@@ -33,14 +44,14 @@ export function DateCalendar({ onChange }: { onChange: (date: Date) => void; }) 
           <Calendar
             mode="single"
             selected={date}
-            onSelect={(date) => {
-              setDate(date)
-              onChange(date || new Date())
-              setOpen(false)
+            onSelect={(newDate) => {
+              setDate(newDate);
+              onChange(newDate || new Date());
+              setOpen(false);
             }}
           />
         </PopoverContent>
       </Popover>
     </div>
-  )
+  );
 }

@@ -112,7 +112,6 @@
   --sidebar-ring: oklch(0.606 0.25 292.717);
 }
 
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -121,4 +120,31 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Firefox */
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+/* Chrome, Safari, Opera */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f100;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
 }

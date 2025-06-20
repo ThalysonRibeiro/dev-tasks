@@ -4,24 +4,22 @@ import { z } from "zod";
 
 const formSchema = z.object({
   title: z.string().min(1, "O titulo é obrigatório"),
-  textColor: z.string().min(4, "O titulo é obrigatório"),
 });
 
-export interface UseTaskGroupFormProps {
+export interface UseDesktopProps {
   initialValues?: {
     title: string;
-    textColor: string;
   }
 }
 
-export type TaskGroupFormData = z.infer<typeof formSchema>;
+export type DesktopFormData = z.infer<typeof formSchema>;
 
-export function UseTaskGroupForm({ initialValues }: UseTaskGroupFormProps) {
-  return useForm<TaskGroupFormData>({
+export function UseDesktop({ initialValues }: UseDesktopProps) {
+  return useForm<DesktopFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: initialValues || {
       title: "",
-      textColor: "#AD46FF"
     }
   })
 }
+

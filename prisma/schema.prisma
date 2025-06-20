@@ -23,28 +23,58 @@ enum Priority {
   STANDARD
 }
 
-model TasksGroup {
+model Goals {
+  id                     String            @id @default(cuid())
+  title                  String
+  desiredWeeklyFrequency Int
+  goalCompletions        GoalCompletions[]
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
+}
+
+model GoalCompletions {
+  id     String @id @default(cuid())
+  goalId String
+  userId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  goal Goals @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Desktop {
   id        String   @id @default(cuid())
   title     String
-  textColor String
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tasks     Tasks[]
+  groupe    Group[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Tasks {
-  id           String      @id @default(cuid())
-  title        String
-  status       Status      @default(NOT_STARTED)
-  startDate    DateTime
-  endDate      DateTime
-  priority     Priority    @default(STANDARD)
-  notes        String
-  budget       Float
-  tasksGroupId String?
-  tasksGroup   TasksGroup? @relation(fields: [tasksGroupId], references: [id])
+model Group {
+  id        String   @id @default(cuid())
+  title     String
+  textColor String
+  desktopId String
+  desktop   Desktop  @relation(fields: [desktopId], references: [id], onDelete: Cascade)
+  item      Item[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Item {
+  id          String   @id @default(cuid())
+  title       String
+  status      Status   @default(NOT_STARTED)
+  term        DateTime
+  priority    Priority @default(STANDARD)
+  notes       String
+  description String
+  groupId     String?
+  group       Group?   @relation(fields: [groupId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -56,14 +86,15 @@ model User {
   email         String    @unique
   emailVerified DateTime?
   image         String?
+  desktop       Desktop[]
   accounts      Account[]
   sessions      Session[]
 
-  tasksGroupe   TasksGroup[]
   Authenticator Authenticator[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  GoalCompletions GoalCompletions[]
 }
 
 model Account {

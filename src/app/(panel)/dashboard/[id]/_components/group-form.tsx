@@ -8,54 +8,56 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form"
-import { TaskGroupFormData, UseTaskGroupForm } from "./taskGroup-form";
+import { GroupFormData, UseGroupForm } from "./use-group-form";
 import { useEffect, useRef, useState } from "react";
-import { createTakGroup } from "../_actions/create-taskGroupe";
 import { toast } from "react-toastify";
-import { updateTaskGroup } from "../_actions/update-taskGroup";
+import { updateGroup } from "../_actions/update-group";
+import { createGroup } from "../_actions/create-groupe";
 
-interface CreateTaskGroupFormProps {
-  setAddTaskGroup: (value: boolean) => boolean;
+interface CreateGroupFormProps {
+  setAddGroup: (value: boolean) => boolean;
   groupId?: string;
   initialValues?: {
     title: string;
     textColor: string;
   }
+  desktopId: string;
 }
 
-export function TaskGroupForm({ setAddTaskGroup, initialValues, groupId }: CreateTaskGroupFormProps) {
+export function GroupForm({ setAddGroup, initialValues, groupId, desktopId }: CreateGroupFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const formRef = useRef<HTMLDivElement>(null);
 
-  const form = UseTaskGroupForm({ initialValues: initialValues });
+  const form = UseGroupForm({ initialValues: initialValues });
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (formRef.current && !formRef.current.contains(event.target as Node)) {
-        setAddTaskGroup(false);
+        setAddGroup(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [setAddTaskGroup]);
+  }, [setAddGroup]);
 
-  async function onSubmit(formData: TaskGroupFormData) {
+  async function onSubmit(formData: GroupFormData) {
     setIsLoading(true);
 
     if (groupId) {
-      await updateTaskGroup({
+      await updateGroup({
         id: groupId,
         title: formData.title,
         textColor: formData.textColor
       });
       setIsLoading(false);
-      setAddTaskGroup(false)
+      setAddGroup(false)
       toast.success("Grupo atualizado com sucesso!");
       return;
     }
 
     try {
-      const response = await createTakGroup({
+      const response = await createGroup({
+        desktopId: desktopId,
         title: formData.title,
         textColor: formData.textColor,
       });
@@ -64,7 +66,7 @@ export function TaskGroupForm({ setAddTaskGroup, initialValues, groupId }: Creat
         return;
       }
       toast.success("Grupo cadastrado com sucesso!");
-      setAddTaskGroup(false);
+      setAddGroup(false);
     } catch (error) {
       console.log(error);
       toast.error("Erro inesperado");
@@ -92,7 +94,7 @@ export function TaskGroupForm({ setAddTaskGroup, initialValues, groupId }: Creat
                     {...field}
                     id="title"
                     placeholder="Digite o nome do grupo"
-                    aria-describedby="task-group-name-error"
+                    aria-describedby="group-name-error"
                     aria-required="true"
                   />
                 </FormControl>
@@ -111,9 +113,9 @@ export function TaskGroupForm({ setAddTaskGroup, initialValues, groupId }: Creat
                     {...field}
                     id="textColor"
                     type="color"
-                    aria-describedby="task-group-name-error"
+                    aria-describedby="group-name-error"
                     aria-required="true"
-                    className="w-10 border-0 p-0"
+                    className="w-8 border-0 p-0"
                   />
                 </FormControl>
                 <FormDescription />

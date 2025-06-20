@@ -6,12 +6,12 @@ import { revalidatePath } from "next/cache";
 const formSchema = z.object({
   id: z.string().min(1, "o id é obrigatóriro"),
   title: z.string().min(1, "O titulo é obrigatório"),
-  textColor: z.string().min(4, "O titulo é obrigatório"),
+  textColor: z.string().min(4, "O cor é obrigatório"),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
 
-export async function updateTaskGroup(formData: FormSchema) {
+export async function updateGroup(formData: FormSchema) {
   const schema = formSchema.safeParse(formData);
   if (!schema.success) {
     return {
@@ -19,7 +19,7 @@ export async function updateTaskGroup(formData: FormSchema) {
     }
   }
   try {
-    await prisma.tasksGroup.update({
+    await prisma.group.update({
       where: { id: formData.id },
       data: {
         title: formData.title,

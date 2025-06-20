@@ -5,38 +5,37 @@ import { z } from "zod";
 
 const formSchema = z.object({
   title: z.string().min(1, "O titulo é obrigatório"),
-  startDate: z.date().optional(),
-  endDate: z.date().optional(),
+  term: z.date().optional(),
   priority: z.enum(["CRITICAL", "HIGH", "MEDIUM", "LOW", "STANDARD"]),
   notes: z.string()
-    .min(1, "Notas é obrigatório")
+    .min(1, "Notas é obrigatória")
     .max(300, "A nota da terefa deve ter no máximo 300 caracteres."),
-  budget: z.coerce.number().min(0).optional(),
+  description: z.string()
+    .min(1, "A descrição é obrigatória")
+    .max(500, "A descrição da terefa deve ter no máximo 500 caracteres."),
 });
 
-export interface UseDialogTaskFormProps {
+export interface UseItemFormProps {
   initialValues?: {
     title: string;
-    startDate: Date;
-    endDate: Date;
+    term: Date;
     priority: Priority;
     notes: string;
-    budget: number;
+    description: string;
   }
 }
 
-export type DialogTaskFormData = z.infer<typeof formSchema>;
+export type ItemFormData = z.infer<typeof formSchema>;
 
-export function UseDialogTaskForm({ initialValues }: UseDialogTaskFormProps) {
-  return useForm<DialogTaskFormData>({
+export function UseItemForm({ initialValues }: UseItemFormProps) {
+  return useForm<ItemFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: initialValues || {
       title: "",
-      startDate: new Date(),
-      endDate: new Date(),
+      term: new Date(),
       priority: "STANDARD",
       notes: "",
-      budget: 0,
+      description: "",
     }
   })
 }
