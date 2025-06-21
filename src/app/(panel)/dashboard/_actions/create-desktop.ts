@@ -14,7 +14,7 @@ export async function createDesktop(formData: FormSchema) {
   const session = await auth();
   if (!session?.user?.id) {
     return {
-      error: "Falha ao cadastrar Áreas de trabalho"
+      error: "Falha ao cadastrar Desktop"
     }
   }
   const schema = formSchema.safeParse(formData);
@@ -37,7 +37,7 @@ export async function createDesktop(formData: FormSchema) {
   } catch (error) {
     console.log(error);
     return {
-      error: "Falha ao cadastrar Áreas de trabalho"
+      error: "Falha ao cadastrar Desktop"
     }
   }
 }

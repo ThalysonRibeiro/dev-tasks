@@ -16,7 +16,7 @@ export async function updateDesktop(formData: FormSchema) {
   });
   if (!existingDesktop) {
     return {
-      error: "Áreas de trabalho não encontrada"
+      error: "Desktop não encontrada"
     }
   }
   const schema = formSchema.safeParse(formData);
@@ -32,12 +32,12 @@ export async function updateDesktop(formData: FormSchema) {
     })
     revalidatePath("/dashboard");
     return {
-      data: "Áreas de trabalho atualizada com sucesso!"
+      data: "Desktop atualizada com sucesso!"
     }
   } catch (error) {
     console.log(error);
     return {
-      error: "Falha ao atualizar Áreas de trabalho"
+      error: "Falha ao atualizar Desktop"
     }
   }
 }

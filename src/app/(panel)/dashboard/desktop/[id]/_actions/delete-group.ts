@@ -9,7 +9,7 @@ export async function deleteGroup(groupId: string) {
         id: groupId,
       }
     });
-    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/desktop");
     return;
   } catch (error) {
     console.log(error);

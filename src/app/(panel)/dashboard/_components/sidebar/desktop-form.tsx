@@ -62,10 +62,10 @@ export function DesktopForm({ setAddDesktop, desktopId, initialValues }: Desktop
           title: formData.title
         });
         if (response.error) {
-          toast.error("Erro ao cadastrar Áreas de trabalho");
+          toast.error("Erro ao cadastrar Desktop");
           return;
         }
-        toast.success("Áreas de trabalho cadastrada com sucesso!");
+        toast.success("Desktop cadastrada com sucesso!");
         setAddDesktop(false);
         form.reset();
       } catch (error) {
@@ -95,8 +95,8 @@ export function DesktopForm({ setAddDesktop, desktopId, initialValues }: Desktop
               <FormItem>
                 <FormLabel>
                   {desktopId !== undefined
-                    ? "Atualizar Área de trabalho"
-                    : "Adicionar Área de trabalho"
+                    ? "Atualizar Desktop"
+                    : "Adicionar Desktop"
                   }
                 </FormLabel>
                 <FormControl>
@@ -104,7 +104,7 @@ export function DesktopForm({ setAddDesktop, desktopId, initialValues }: Desktop
                     {...field}
                     id="title"
                     autoFocus
-                    placeholder="Digite o nome da Área de trabalho"
+                    placeholder="Digite o nome da Desktop"
                     aria-describedby="desktop-name-error"
                     aria-required="true"
                   />

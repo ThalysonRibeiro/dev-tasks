@@ -35,7 +35,7 @@ import { Button } from "@/components/ui/button"
 import { deleteDesktop } from "../../_actions/delete-desktop"
 import { toast } from "react-toastify"
 import { useState, useCallback } from "react"
-import { Menu } from "../menu"
+import { Menu } from "./menu"
 import { Session } from "next-auth"
 
 const navigationLinks = [
@@ -184,7 +184,7 @@ export function AppSidebar({ desktops, userData }: AppSidebarProps) {
                     <SidebarMenuItem>
                       <div className="flex items-center w-full group">
                         <SidebarMenuButton asChild className="flex-1">
-                          <Link href={`/dashboard/${desktop.id}`}>
+                          <Link href={`/dashboard/desktop/${desktop.id}`}>
                             <Dock className="h-4 w-4" />
                             <span className="truncate">{desktop.title}</span>
                           </Link>
@@ -234,7 +234,7 @@ export function AppSidebar({ desktops, userData }: AppSidebarProps) {
 
             {desktops.length === 0 && !isAddingDesktop && (
               <div className="px-2 py-4 text-center text-sm text-muted-foreground">
-                Nenhuma área de trabalho criada
+                Nenhuma Desktop criada
               </div>
             )}
           </SidebarGroupContent>

@@ -35,7 +35,7 @@ export async function createGroup(formData: FormSchema) {
         textColor: formData.textColor,
       }
     });
-    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/desktop");
     return { data: newGroup }
   } catch (error) {
     console.log(error);

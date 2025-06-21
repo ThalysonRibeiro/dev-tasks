@@ -26,7 +26,7 @@ export async function updateGroup(formData: FormSchema) {
         textColor: formData.textColor
       }
     });
-    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/desktop");
     return;
   } catch (error) {
     console.log(error);

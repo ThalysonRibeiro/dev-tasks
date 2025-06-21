@@ -1,8 +1,9 @@
 import getSession from "@/lib/getSession";
 import { redirect } from "next/navigation";
-import { getGroups } from "../_data-access/get-groups";
-import { Header } from "../_components/header";
+
 import { GroupContent } from "./_components/group-content";
+import { getGroups } from "../../_data-access/get-groups";
+import { Header } from "../../_components/header";
 
 
 export default async function DesktopPage({

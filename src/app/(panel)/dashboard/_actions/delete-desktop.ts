@@ -9,7 +9,7 @@ export async function deleteDesktop(desktopId: string) {
   });
   if (!existingDesktop) {
     return {
-      error: "Áreas de trabalho não encontrada"
+      error: "Desktop não encontrada"
     }
   }
   try {
@@ -18,12 +18,12 @@ export async function deleteDesktop(desktopId: string) {
     });
     revalidatePath("/dashboard");
     return {
-      data: "Áreas de trabalho deletada com sucesso!"
+      data: "Desktop deletada com sucesso!"
     };
   } catch (error) {
     console.log(error);
     return {
-      error: "Áreas de trabalho não encontrada"
+      error: "Desktop não encontrada"
     }
   }
 }

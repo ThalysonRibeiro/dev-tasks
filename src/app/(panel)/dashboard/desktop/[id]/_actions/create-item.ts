@@ -45,7 +45,7 @@ export async function createItem(formData: FormSchema) {
         description: formData.description || ""
       }
     });
-    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/desktop");
     return { data: newItem }
   } catch (error) {
     console.log(error);

@@ -58,7 +58,7 @@ export async function updateItem(formData: FormSchema) {
       data: updateData
     });
 
-    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/desktop");
 
     return {
       success: true

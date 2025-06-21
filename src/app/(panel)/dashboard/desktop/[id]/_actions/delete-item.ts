@@ -7,7 +7,7 @@ export async function deleteItem(id: string) {
     await prisma.item.delete({
       where: { id: id }
     })
-    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/desktop");
     return;
   } catch (error) {
     console.log(error);
