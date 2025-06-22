@@ -1,7 +1,5 @@
 import getSession from "@/lib/getSession";
 import { redirect } from "next/navigation";
-import { Header } from "./_components/header";
-// import { Menu } from "./_components/menu";
 
 export default async function Dashboard() {
   const session = await getSession();
@@ -22,7 +20,6 @@ export default async function Dashboard() {
         </div>
       </div>
       <section className="mt-6 space-y-6">
-        <Header />
       </section>
     </main>
   )
