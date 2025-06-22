@@ -7,7 +7,7 @@ export function colorStatus(status: string): string {
     case "STOPPED":
       return "bg-red-500 text-white";
     default:
-      return "bg-zinc-400"; // PENDING ou qualquer outro
+      return "bg-zinc-400";
   }
 }
 
@@ -29,7 +29,7 @@ export function colorPriority(status: string): string {
     case "LOW":
       return "bg-green-400";
     default:
-      return "bg-zinc-400"; // PENDING ou qualquer outro
+      return "bg-zinc-400";
   }
 }
 
