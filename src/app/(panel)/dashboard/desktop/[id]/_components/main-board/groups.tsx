@@ -7,7 +7,7 @@ import { GroupForm } from "./group-form";
 import { toast } from "react-toastify";
 import { CreateItemsForm } from "./create-item-form";
 import { ItemsTables } from "./items-tables";
-import { deleteGroup } from "../_actions/delete-group";
+import { deleteGroup } from "../../_actions/delete-group";
 
 export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[], desktopId: string }) {
   const [isAddingGroup, setIsAddingGroup] = useState(false);

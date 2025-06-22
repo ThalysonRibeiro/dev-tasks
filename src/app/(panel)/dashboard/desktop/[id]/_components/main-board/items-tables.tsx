@@ -23,9 +23,9 @@ import { colorPriority, colorStatus, priorityMap, statusMap } from "@/utils/colo
 import { Trash, Check, X, CircleAlert } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { CalendarTerm } from "./calendar-term"
-import { updateItem } from "../_actions/update-item"
-import { deleteItem } from "../_actions/delete-item"
 import { Textarea } from "@/components/ui/textarea"
+import { updateItem } from "../../_actions/update-item"
+import { deleteItem } from "../../_actions/delete-item"
 
 type EditingField = 'title' | 'notes' | 'description' | 'term' | null;
 
