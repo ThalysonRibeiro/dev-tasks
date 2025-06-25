@@ -25,12 +25,16 @@ export function CalendarGrid({ groupsData }: { groupsData: GroupWithItems[] }) {
   // Gerar array de dias
   const days = [];
 
-  // Espaços vazios no início
-  for (let i = 0; i < startingDayOfWeek; i++) {
-    days.push(null);
+  // Dias do mês anterior para preencher o início
+  const lastDayOfPreviousMonth = new Date(year, month, 0);
+  const daysInPreviousMonth = lastDayOfPreviousMonth.getDate();
+
+  for (let i = startingDayOfWeek - 1; i >= 0; i--) {
+    const dayNumber = daysInPreviousMonth - i;
+    days.push(new Date(year, month - 1, dayNumber));
   }
 
-  // Dias do mês
+  // Dias do mês atual
   for (let day = 1; day <= daysInMonth; day++) {
     days.push(new Date(year, month, day));
   }
@@ -57,27 +61,6 @@ export function CalendarGrid({ groupsData }: { groupsData: GroupWithItems[] }) {
     return allItems;
   }, [groupsData]);
 
-  // Organizar itens por linha/posição para alinhamento visual
-  const organizeItemsInRows = () => {
-    const itemRows: { [key: string]: number } = {};
-    let nextRowIndex = 0;
-
-    // Primeiro, identificar todos os itens únicos e suas posições
-    const uniqueItems = Array.from(new Set(items.map(item => item.id)))
-      .map(id => items.find(item => item.id === id)!)
-      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-
-    uniqueItems.forEach(item => {
-      if (!itemRows[item.id]) {
-        itemRows[item.id] = nextRowIndex++;
-      }
-    });
-
-    return itemRows;
-  };
-
-  const itemRows = useMemo(organizeItemsInRows, [items]);
-
   // Função para verificar se um item deve ser exibido em uma data específica
   const getItemsForDate = (date: Date) => {
     return items.filter(item => {
@@ -91,8 +74,48 @@ export function CalendarGrid({ groupsData }: { groupsData: GroupWithItems[] }) {
 
       // Item é exibido se está entre a data de criação e o prazo (inclusive)
       return dateToCheck >= createdDate && dateToCheck <= termDate;
-    }).sort((a, b) => itemRows[a.id] - itemRows[b.id]); // Ordenar por linha
+    });
   };
+
+  // Organizar itens por linha/posição para o mês atual
+  const organizeItemsInRowsForMonth = useMemo(() => {
+    const itemRows: { [key: string]: number } = {};
+    let nextRowIndex = 0;
+
+    // Filtrar itens que aparecem no mês atual
+    const monthStart = new Date(year, month, 1);
+    const monthEnd = new Date(year, month + 1, 0);
+
+    const itemsInMonth = items.filter(item => {
+      const itemCreatedAt = new Date(item.createdAt);
+      const itemTerm = new Date(item.term);
+
+      // Normalizar datas
+      const createdDate = new Date(itemCreatedAt.getFullYear(), itemCreatedAt.getMonth(), itemCreatedAt.getDate());
+      const termDate = new Date(itemTerm.getFullYear(), itemTerm.getMonth(), itemTerm.getDate());
+      const monthStartNorm = new Date(monthStart.getFullYear(), monthStart.getMonth(), monthStart.getDate());
+      const monthEndNorm = new Date(monthEnd.getFullYear(), monthEnd.getMonth(), monthEnd.getDate());
+
+      // Item aparece no mês se há sobreposição entre o período do item e o mês
+      return !(termDate < monthStartNorm || createdDate > monthEndNorm);
+    });
+
+    // Identificar itens únicos e ordenar por data de criação
+    const uniqueItems = Array.from(new Set(itemsInMonth.map(item => item.id)))
+      .map(id => itemsInMonth.find(item => item.id === id)!)
+      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+
+    // Atribuir linhas sequenciais começando do 0 para cada mês
+    uniqueItems.forEach(item => {
+      if (!itemRows[item.id]) {
+        itemRows[item.id] = nextRowIndex++;
+      }
+    });
+
+    return { itemRows, maxRows: nextRowIndex };
+  }, [items, year, month]);
+
+  const { itemRows, maxRows } = organizeItemsInRowsForMonth;
 
   return (
     <div className="p-4">
@@ -123,22 +146,16 @@ export function CalendarGrid({ groupsData }: { groupsData: GroupWithItems[] }) {
             day.getMonth() === currentMonth &&
             day.getFullYear() === currentYear;
 
-          const dayItems = day ? getItemsForDate(day) : [];
+          const isCurrentMonth = day && day.getMonth() === month;
+          const dayItems = day ? getItemsForDate(day).sort((a, b) => itemRows[a.id] - itemRows[b.id]) : [];
 
           return (
             <div
               key={index}
               className={cn(
-                "text-center text-sm min-h-24 flex flex-col border-b border-l",
+                "text-center text-sm min-h-24 flex flex-col border",
                 isToday && "border border-violet-500",
-                !day && "bg-gray-500",
-                index === 0 && "border-r-0",
-                index === 6 && "border-r",
-                index === 13 && "border-r",
-                index === 20 && "border-r",
-                index === 27 && "border-r",
-                index === 29 && "border-r",
-                index === 30 && "border-r",
+                !isCurrentMonth && "bg-zinc-900", // Estilo diferente para dias de outros meses
               )}
             >
               <div className="font-medium mb-0.5 text-center flex-shrink-0">
@@ -146,7 +163,7 @@ export function CalendarGrid({ groupsData }: { groupsData: GroupWithItems[] }) {
               </div>
 
               <div className="flex flex-col gap-0.5 h-full">
-                {Array.from({ length: Math.max(3, Object.keys(itemRows).length) }).map((_, rowIndex) => {
+                {Array.from({ length: Math.max(3, maxRows) }).map((_, rowIndex) => {
                   const itemInThisRow = dayItems.find(item => itemRows[item.id] === rowIndex);
 
                   if (!itemInThisRow) {
