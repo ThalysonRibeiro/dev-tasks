@@ -26,14 +26,14 @@ export function DesktopContent({ groupsData, desktopId }: DesktopContentProps) {
         "kanban",
       label:
         "Kanban",
-      component: <KanbanContent groupsData={groupsData} />
+      component: groupsData.length === 0 ? <p>Nenhum item encontrado</p> : <KanbanContent groupsData={groupsData} />
     },
     {
       key:
         "calendar",
       label:
         "Calendário",
-      component: <CalendarContent groupsData={groupsData} />
+      component: groupsData.length === 0 ? <p>Nenhum item encontrado</p> : <CalendarContent groupsData={groupsData} />
     }
   ];
   return (

@@ -18,6 +18,7 @@ export function GroupContent({ groupsData, desktopId }: GroupContentProps) {
   return (
     <article>
       <div>
+        {groupsData.length === 0 && <h2>Cadastre um grupo</h2>}
         <Groups groupsData={groupsData} desktopId={desktopId} />
       </div>
     </article>
