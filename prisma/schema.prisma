@@ -27,7 +27,9 @@ model Goals {
   id                     String            @id @default(cuid())
   title                  String
   desiredWeeklyFrequency Int
+  userId                 String
   goalCompletions        GoalCompletions[]
+  user                   User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt              DateTime          @default(now())
   updatedAt              DateTime          @updatedAt
 }
@@ -81,20 +83,20 @@ model Item {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  image         String?
-  desktop       Desktop[]
-  accounts      Account[]
-  sessions      Session[]
+  id              String            @id @default(cuid())
+  name            String?
+  email           String            @unique
+  emailVerified   DateTime?
+  image           String?
+  desktop         Desktop[]
+  accounts        Account[]
+  sessions        Session[]
+  goals           Goals[]
+  goalCompletions GoalCompletions[]
+  Authenticator   Authenticator[]
 
-  Authenticator Authenticator[]
-
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  GoalCompletions GoalCompletions[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Account {
