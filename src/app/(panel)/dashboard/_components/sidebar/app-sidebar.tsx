@@ -39,12 +39,18 @@ import { Menu } from "./menu"
 import { Session } from "next-auth"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
+import { FaTasks } from "react-icons/fa"
 
 const navigationLinks = [
   {
     title: "Home",
     url: "/dashboard",
     icon: Home,
+  },
+  {
+    title: "Metas",
+    url: "/dashboard/goals",
+    icon: FaTasks,
   },
 ] as const;
 
@@ -136,7 +142,11 @@ export function AppSidebar({ desktops, userData }: AppSidebarProps) {
           <SidebarGroupContent>
             <SidebarMenu>
               {navigationLinks.map((link) => (
-                <SidebarMenuItem key={link.title}>
+                <SidebarMenuItem
+                  key={link.title}
+                  className={cn("",
+                    pathname === link.url && "border border-primary rounded-md")}
+                >
                   <SidebarMenuButton asChild>
                     <Link href={link.url}>
                       <link.icon className="h-4 w-4" />
