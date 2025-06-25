@@ -37,6 +37,8 @@ import { toast } from "react-toastify"
 import { useState, useCallback } from "react"
 import { Menu } from "./menu"
 import { Session } from "next-auth"
+import { usePathname } from "next/navigation"
+import { cn } from "@/lib/utils"
 
 const navigationLinks = [
   {
@@ -57,6 +59,7 @@ interface EditingState {
 }
 
 export function AppSidebar({ desktops, userData }: AppSidebarProps) {
+  const pathname = usePathname();
   const [isAddingDesktop, setIsAddingDesktop] = useState(false);
   const [editingState, setEditingState] = useState<EditingState>({
     isEditing: false,
@@ -182,7 +185,9 @@ export function AppSidebar({ desktops, userData }: AppSidebarProps) {
                     </div>
                   ) : (
                     <SidebarMenuItem>
-                      <div className="flex items-center w-full group">
+                      <div className={cn("flex items-center w-full",
+                        pathname === `/dashboard/desktop/${desktop.id}` && "border border-primary rounded-md")
+                      }>
                         <SidebarMenuButton asChild className="flex-1">
                           <Link href={`/dashboard/desktop/${desktop.id}`}>
                             <Dock className="h-4 w-4" />

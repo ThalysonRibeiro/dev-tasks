@@ -63,7 +63,8 @@ export function CreateItemsForm({ closeForm, initialValues, groupId }: CreateIte
         term: formData.term,
         priority: formData.priority,
         notes: formData.notes || "",
-        description: formData.description || ""
+        description: formData.description || "",
+        status: "NOT_STARTED"
       });
       if (response.error) {
         console.log(response.error);
@@ -162,7 +163,7 @@ export function CreateItemsForm({ closeForm, initialValues, groupId }: CreateIte
             name="term"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Notas</FormLabel>
+                <FormLabel>Prazo</FormLabel>
                 <FormControl>
                   <CalendarTerm
                     onChange={(date) => {
@@ -181,7 +182,7 @@ export function CreateItemsForm({ closeForm, initialValues, groupId }: CreateIte
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Notas</FormLabel>
+                <FormLabel>Descrição</FormLabel>
                 <FormControl>
                   <Input
                     {...field}

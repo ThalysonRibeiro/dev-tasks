@@ -10,6 +10,18 @@ export function colorStatus(status: string): string {
       return "bg-zinc-400";
   }
 }
+export function borderColorStatus(status: string): string {
+  switch (status) {
+    case "DONE":
+      return "border-green-500";
+    case "IN_PROGRESS":
+      return "border-blue-500";
+    case "STOPPED":
+      return "border-red-500";
+    default:
+      return "border-zinc-400";
+  }
+}
 
 export const statusMap = {
   DONE: "CONCLUÍDO",
@@ -30,6 +42,20 @@ export function colorPriority(status: string): string {
       return "bg-green-400";
     default:
       return "bg-zinc-400";
+  }
+}
+export function borderColorPriority(status: string): string {
+  switch (status) {
+    case "CRITICAL":
+      return "border-red-500";
+    case "HIGH":
+      return "border-orange-500";
+    case "MEDIUM":
+      return "border-yellow-500";
+    case "LOW":
+      return "border-green-400";
+    default:
+      return "border-zinc-400";
   }
 }
 

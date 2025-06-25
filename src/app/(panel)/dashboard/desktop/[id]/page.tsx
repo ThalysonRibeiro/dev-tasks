@@ -1,6 +1,6 @@
 import getSession from "@/lib/getSession";
 import { redirect } from "next/navigation";
-import { getGroups } from "../../_data-access/get-groups";
+import { getGroups } from "./_data-access/get-groups";
 import { DesktopContent } from "./_components/desktop-content";
 
 

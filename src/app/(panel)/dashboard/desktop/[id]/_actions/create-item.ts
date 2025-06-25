@@ -8,6 +8,7 @@ const formSchema = z.object({
   title: z.string().min(1, "O titulo é obrigatório"),
   term: z.date().optional(),
   priority: z.enum(["CRITICAL", "HIGH", "MEDIUM", "LOW", "STANDARD"]),
+  status: z.enum(["DONE", "IN_PROGRESS", "STOPPED", "NOT_STARTED"]),
   notes: z.string()
     .min(1, "Notas é obrigatória")
     .max(300, "A nota da item deve ter no máximo 300 caracteres."),
@@ -41,6 +42,7 @@ export async function createItem(formData: FormSchema) {
         title: formData.title,
         term: formData.term || new Date(),
         priority: formData.priority || "STANDARD",
+        status: formData.status,
         notes: formData.notes || "",
         description: formData.description || ""
       }

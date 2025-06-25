@@ -41,7 +41,6 @@ export async function updateItem(formData: FormSchema) {
       }
     }
 
-    // Filtra apenas os campos que foram fornecidos
     const updateData = Object.fromEntries(
       Object.entries({
         title: formData.title,
