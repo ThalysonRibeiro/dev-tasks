@@ -89,7 +89,7 @@ export function CreateItemsForm({ closeForm, initialValues, groupId }: CreateIte
   return (
     <div ref={formRef}>
       <Form {...form}>
-        <form className="flex justify-between items-center gap-4 px-2" onSubmit={form.handleSubmit(onSubmit)}>
+        <form className="flex flex-col lg:flex-row justify-between items-center gap-4 px-2" onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
             name="title"
