@@ -1,7 +1,7 @@
 "use server"
 import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
-import { format } from "date-fns";
+import { format, startOfWeek, endOfWeek } from "date-fns";
 import { Prisma } from "@/generated/prisma";
 
 export type GoalCompletionsWihtGoal = Prisma.GoalCompletionsGetPayload<{
@@ -23,11 +23,21 @@ export async function GetWeekSummary() {
       error: "Nenhum meta completa"
     };
   }
+
   try {
+    const weekStart = startOfWeek(new Date(), { weekStartsOn: 1 });
+    const weekEnd = endOfWeek(new Date(), { weekStartsOn: 1 });
+
     const allGoals = await prisma.goals.findMany({
       where: { userId: session.user.id },
       include: {
         goalCompletions: {
+          where: {
+            createdAt: {
+              gte: weekStart,
+              lte: weekEnd,
+            }
+          },
           orderBy: {
             createdAt: 'desc',
           },
@@ -37,6 +47,7 @@ export async function GetWeekSummary() {
         }
       }
     });
+
     const goalsCompletedByWeekDay: Record<string, GoalsCompletedByWeekDayType[]> = {};
     let totalCompleted: number = 0;
 
@@ -44,8 +55,6 @@ export async function GetWeekSummary() {
     allGoals.forEach((comp) => {
       if (Array.isArray(comp.goalCompletions)) {
         allCompletions.push(...comp.goalCompletions);
-      } else {
-        allCompletions.push(comp.goalCompletions);
       }
     });
 

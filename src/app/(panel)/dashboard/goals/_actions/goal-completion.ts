@@ -2,6 +2,7 @@
 import prisma from "@/lib/prisma";
 import { z } from "zod"
 import { revalidatePath } from "next/cache";
+import { endOfWeek, startOfWeek } from "date-fns";
 
 const formSchema = z.object({
   goalId: z.string().min(1, "o id da meta é obrigatório"),
@@ -10,6 +11,8 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>;
 
 export async function goalCompletion(formData: FormSchema) {
+  const weekStart = startOfWeek(new Date(), { weekStartsOn: 1 });
+  const weekEnd = endOfWeek(new Date(), { weekStartsOn: 1 });
   const schema = formSchema.safeParse(formData);
   if (!schema.success) {
     return {
@@ -27,7 +30,11 @@ export async function goalCompletion(formData: FormSchema) {
   try {
     const completionCount = await prisma.goalCompletions.count({
       where: {
-        goalId: formData.goalId,
+        goalId: existingGoal.id,
+        createdAt: {
+          gte: weekStart,
+          lte: weekEnd,
+        }
       }
     });
     if (completionCount >= existingGoal.desiredWeeklyFrequency) {

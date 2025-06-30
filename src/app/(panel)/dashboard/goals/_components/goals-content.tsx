@@ -34,6 +34,7 @@ export type SummaryDataProps = {
 
 
 export function GoalsContent({ data, summaryData }: GoalsContentProps) {
+
   return (
     <section>
       <Sheet>

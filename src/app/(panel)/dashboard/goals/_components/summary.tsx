@@ -26,7 +26,6 @@ export function Summary({ data, summaryData }: SummaryProps) {
   const firstDayOfWeek = format(startOfWeek(new Date()), "d MMM", { locale: ptBR });
   const lastDayOfWeek = format(endOfWeek(new Date()), "d MMM", { locale: ptBR });
 
-  const completedPercentage = Math.round((summaryData?.summary?.completed * 100) / summaryData?.summary?.total);
 
   async function handleUndo(goalId: string) {
     if (!goalId) {
@@ -59,14 +58,11 @@ export function Summary({ data, summaryData }: SummaryProps) {
       </div>
 
       <div className="flex flex-col gap-4">
-        <Progress max={summaryData?.summary?.total} value={summaryData?.summary?.completed}>
-          <ProgressIndicator style={{ width: `${completedPercentage}%` }} />
-        </Progress>
+        <ProgressGoals
+          total={summaryData?.summary?.total}
+          completed={summaryData?.summary?.completed}
+        />
 
-        <div className="flex items-center justify-between text-xs text-zinc-400">
-          <span>Você completou <span className="text-zinc-100">{summaryData?.summary?.completed}</span> de <span className="text-zinc-100">{summaryData?.summary?.total}</span> metas nessa semana.</span>
-          <span>{completedPercentage}%</span>
-        </div>
         <Separator />
 
         <PedingGoals data={data} />
@@ -113,5 +109,26 @@ export function Summary({ data, summaryData }: SummaryProps) {
       </div>
 
     </article>
+  )
+}
+
+export function ProgressGoals({
+  total,
+  completed
+}: {
+  total: number;
+  completed: number;
+}) {
+  const completedPercentage = Math.round((completed * 100) / total);
+  return (
+    <div className="space-y-4">
+      <Progress max={total} value={completed}>
+        <ProgressIndicator style={{ width: `${completedPercentage}%` }} />
+      </Progress>
+      <div className="flex items-center justify-between text-xs text-zinc-400">
+        <span>Você completou <span className="text-zinc-100">{completed}</span> de <span className="text-zinc-100">{total}</span> metas nessa semana.</span>
+        <span>{completedPercentage}%</span>
+      </div>
+    </div>
   )
 }
