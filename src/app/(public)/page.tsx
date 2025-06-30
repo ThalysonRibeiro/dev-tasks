@@ -1,8 +1,15 @@
 import { CardSignIn } from "@/components/card-signIn";
 import Image from "next/image";
 import logo_img from "@/assets/logo-goallist.png";
+import getSession from "@/lib/getSession";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getSession();
+
+  if (session) {
+    redirect('/dashboard');
+  }
   return (
     <main className="container mx-auto w-full h-screen flex flex-col gap-6 justify-center items-center px-6">
       <div className="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-size-[44px_44px]" />
