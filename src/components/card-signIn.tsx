@@ -24,7 +24,7 @@ export function CardSignIn() {
           <FaGithub /> GitHub
         </Button>
         <Button
-          onClick={() => handleSignIn("github")}
+          onClick={() => handleSignIn("google")}
           className="w-full cursor-pointer bg-background hover:bg-background border hover:border-primary">
           <FcGoogle /> Google
         </Button>
