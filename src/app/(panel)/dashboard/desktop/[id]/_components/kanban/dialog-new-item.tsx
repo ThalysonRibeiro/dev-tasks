@@ -60,7 +60,6 @@ export function DialogContentNewItem({ closeDialog, groups, initialValues, statu
         description: formData.description || ""
       });
       if (response.error) {
-        console.log(response.error);
 
         toast.error("Erro ao cadastrar item");
         return;
@@ -69,7 +68,6 @@ export function DialogContentNewItem({ closeDialog, groups, initialValues, statu
       form.reset();
       closeDialog(false);
     } catch (error) {
-      console.log(error);
       toast.error("Erro inesperado");
     }
   }

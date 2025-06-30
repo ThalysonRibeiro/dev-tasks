@@ -86,7 +86,6 @@ export async function GetWeekSummary() {
     }
 
   } catch (error) {
-    console.log(error);
     return {
       error: "Nenhum meta completa"
     };

@@ -47,7 +47,6 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
       await deleteGroup(id);
       toast.success("Grupo deletado com sucesso!");
     } catch (error) {
-      console.log(error);
       toast.error("Erro ao deletar grupo");
     }
   }

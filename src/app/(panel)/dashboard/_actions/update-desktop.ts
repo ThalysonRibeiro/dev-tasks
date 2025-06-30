@@ -35,7 +35,6 @@ export async function updateDesktop(formData: FormSchema) {
       data: "Desktop atualizada com sucesso!"
     }
   } catch (error) {
-    console.log(error);
     return {
       error: "Falha ao atualizar Desktop"
     }

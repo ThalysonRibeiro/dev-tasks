@@ -113,7 +113,6 @@ export function AppSidebar({ desktops, userData }: AppSidebarProps) {
       toast.success(response.data || "Desktop deletado com sucesso!");
     } catch (error) {
       toast.error("Erro inesperado ao deletar desktop");
-      console.error("Delete desktop error:", error);
     } finally {
       setDeletingDesktopId(null);
     }

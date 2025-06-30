@@ -50,7 +50,6 @@ export async function goalCompletion(formData: FormSchema) {
     revalidatePath("/dashboard/desktop");
     return { data: `parabêns você completou a meta ${existingGoal.title}.` };
   } catch (error) {
-    console.log(error);
     return {
       error: "Erro ao completar meta."
     }

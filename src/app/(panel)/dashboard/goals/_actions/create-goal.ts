@@ -42,7 +42,6 @@ export async function createGoal(formData: FormSchema) {
     revalidatePath("/dashboard/desktop");
     return { data: "Meta cadastrada com sucesso!" };
   } catch (error) {
-    console.log(error);
     return {
       error: "Falha ao cadastrar Meta"
     }

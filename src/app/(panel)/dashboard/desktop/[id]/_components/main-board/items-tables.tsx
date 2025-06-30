@@ -88,14 +88,12 @@ export function ItemsTables({ items }: { items: Item[] }) {
 
       if (result?.error) {
         toast.error("Erro ao atualizar item");
-        console.error(result.error);
       } else {
         toast.success("Item atualizado com sucesso!");
         cancelEditing();
       }
     } catch (error) {
       toast.error("Erro ao atualizar item");
-      console.error(error);
     } finally {
       setIsLoading(null);
     }
@@ -117,13 +115,11 @@ export function ItemsTables({ items }: { items: Item[] }) {
 
       if (result?.error) {
         toast.error("Erro ao atualizar item");
-        console.error(result.error);
       } else {
         toast.success("Item atualizado!");
       }
     } catch (error) {
       toast.error("Erro ao atualizar item");
-      console.error(error);
     } finally {
       setIsLoading(null);
     }
@@ -137,7 +133,6 @@ export function ItemsTables({ items }: { items: Item[] }) {
       toast.success("Item deletado com sucesso!");
     } catch (error) {
       toast.error("Erro ao deletar item");
-      console.error(error);
     } finally {
       setIsLoading(null);
     }

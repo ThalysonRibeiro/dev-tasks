@@ -35,7 +35,6 @@ export async function createDesktop(formData: FormSchema) {
     revalidatePath("/dashboard");
     return { newDesktop };
   } catch (error) {
-    console.log(error);
     return {
       error: "Falha ao cadastrar Desktop"
     }

@@ -38,7 +38,6 @@ export function Summary({ data, summaryData }: SummaryProps) {
       }
       toast.success(response.data)
     } catch (error) {
-      console.log(error);
       toast.error("Erro ao desfazer meta.");
     }
 

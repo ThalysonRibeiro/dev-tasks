@@ -21,7 +21,6 @@ export function PedingGoals({ data }: { data: GoalsWithCompletions[] }) {
       }
       toast.success(response.data);
     } catch (error) {
-      console.log(error);
       toast.error("Falha ao completar meta");
     }
   }
@@ -38,7 +37,6 @@ export function PedingGoals({ data }: { data: GoalsWithCompletions[] }) {
       }
       toast.success(response.data);
     } catch (error) {
-      console.log(error);
       toast.error("Falha ao deletar meta");
     }
   }

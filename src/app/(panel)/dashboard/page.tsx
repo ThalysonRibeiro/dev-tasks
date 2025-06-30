@@ -36,13 +36,17 @@ export default async function Dashboard() {
           ))}
         </div>
         <Separator />
-        <div className="w-full space-y-4">
-          <h3>Progresso das suas metas</h3>
-          <ProgressGoals
-            total={weekSummaryDate?.summary?.total}
-            completed={weekSummaryDate?.summary?.completed}
-          />
-        </div>
+        {weekSummaryDate?.summary?.total > 0 ? (
+          <div className="w-full space-y-4">
+            <h3>Progresso das suas metas</h3>
+            <ProgressGoals
+              total={weekSummaryDate?.summary?.total}
+              completed={weekSummaryDate?.summary?.completed}
+            />
+          </div>
+        ) : (
+          <p>Cadastre metas e acompanhe sua evolução</p>
+        )}
       </section>
     </main>
   )

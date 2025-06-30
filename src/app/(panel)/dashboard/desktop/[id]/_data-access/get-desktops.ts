@@ -13,7 +13,6 @@ export async function getDesktops() {
     });
     return desktops;
   } catch (error) {
-    console.log(error);
     return [];
   }
 }

@@ -29,7 +29,6 @@ export async function updateGroup(formData: FormSchema) {
     revalidatePath("/dashboard/desktop");
     return;
   } catch (error) {
-    console.log(error);
     return {
       error: "Falha ao atualizar grupo"
     }

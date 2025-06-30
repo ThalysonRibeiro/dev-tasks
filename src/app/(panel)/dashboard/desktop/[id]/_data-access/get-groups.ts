@@ -14,7 +14,6 @@ export async function getGroups({ desktopId }: { desktopId: string }) {
     });
     return groupes
   } catch (error) {
-    console.log(error);
     return [];
   }
 }

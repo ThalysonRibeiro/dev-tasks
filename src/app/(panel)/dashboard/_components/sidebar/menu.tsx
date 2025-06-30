@@ -33,7 +33,6 @@ export function Menu({ userData }: MenuProps) {
       await update();
       router.replace("/");
     } catch (error) {
-      console.error('Erro ao fazer logout:', error);
     } finally {
       setIsLoggingOut(false);
     }

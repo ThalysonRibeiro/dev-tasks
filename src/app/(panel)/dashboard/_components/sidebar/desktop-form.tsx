@@ -69,7 +69,6 @@ export function DesktopForm({ setAddDesktop, desktopId, initialValues }: Desktop
         setAddDesktop(false);
         form.reset();
       } catch (error) {
-        console.log(error);
         toast.error("Erro inesperado");
       }
       finally {

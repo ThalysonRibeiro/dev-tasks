@@ -38,7 +38,6 @@ export async function createGroup(formData: FormSchema) {
     revalidatePath("/dashboard/desktop");
     return { data: newGroup }
   } catch (error) {
-    console.log(error);
     return {
       error: "Falha ao cadastrar grupo"
     }

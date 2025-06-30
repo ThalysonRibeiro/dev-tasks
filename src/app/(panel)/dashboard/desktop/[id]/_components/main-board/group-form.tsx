@@ -69,7 +69,6 @@ export function GroupForm({ setAddGroup, initialValues, groupId, desktopId }: Cr
       toast.success("Grupo cadastrado com sucesso!");
       setAddGroup(false);
     } catch (error) {
-      console.log(error);
       toast.error("Erro inesperado");
     } finally {
       setIsLoading(false);

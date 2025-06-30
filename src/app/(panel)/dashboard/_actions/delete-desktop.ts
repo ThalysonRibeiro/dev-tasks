@@ -21,7 +21,6 @@ export async function deleteDesktop(desktopId: string) {
       data: "Desktop deletada com sucesso!"
     };
   } catch (error) {
-    console.log(error);
     return {
       error: "Desktop não encontrada"
     }

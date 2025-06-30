@@ -31,7 +31,6 @@ export async function deleteGoal(formData: FormSchema) {
     revalidatePath("/dashboard/desktop");
     return { data: "Meta deletada com sucesso!" }
   } catch (error) {
-    console.log(error);
     return {
       error: "Falha ao deletar Meta"
     }

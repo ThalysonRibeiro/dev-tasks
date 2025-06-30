@@ -50,7 +50,6 @@ export async function createItem(formData: FormSchema) {
     revalidatePath("/dashboard/desktop");
     return { data: newItem }
   } catch (error) {
-    console.log(error);
     return {
       error: "Falha ao cadastrar item"
     }

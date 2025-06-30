@@ -10,7 +10,6 @@ export async function deleteItem(id: string) {
     revalidatePath("/dashboard/desktop");
     return;
   } catch (error) {
-    console.log(error);
     return {
       error: "Falha ao deletar item"
     }

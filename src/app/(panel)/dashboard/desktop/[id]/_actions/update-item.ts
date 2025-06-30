@@ -64,7 +64,6 @@ export async function updateItem(formData: FormSchema) {
     };
 
   } catch (error) {
-    console.error("Erro ao atualizar item:", error);
     return {
       error: "Falha ao atualizar item"
     }

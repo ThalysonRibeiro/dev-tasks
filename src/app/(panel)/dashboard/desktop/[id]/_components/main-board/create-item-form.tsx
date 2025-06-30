@@ -67,7 +67,6 @@ export function CreateItemsForm({ closeForm, initialValues, groupId }: CreateIte
         status: "NOT_STARTED"
       });
       if (response.error) {
-        console.log(response.error);
 
         toast.error("Erro ao cadastrar item");
         return;
@@ -75,7 +74,6 @@ export function CreateItemsForm({ closeForm, initialValues, groupId }: CreateIte
       toast.success("Item cadastrado com sucesso!");
       form.reset();
     } catch (error) {
-      console.log(error);
       toast.error("Erro inesperado");
     } finally {
       setIsLoading(false);

@@ -12,7 +12,6 @@ export async function deleteGroup(groupId: string) {
     revalidatePath("/dashboard/desktop");
     return;
   } catch (error) {
-    console.log(error);
     return {
       error: "Falha ao deletar grupo"
     }

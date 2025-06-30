@@ -50,7 +50,6 @@ export function CreateGoals({ initialValues }: CreateGoalProps) {
       toast.success(response.data);
       form.reset();
     } catch (error) {
-      console.log(error);
     }
     finally {
       setIsLoading(false);

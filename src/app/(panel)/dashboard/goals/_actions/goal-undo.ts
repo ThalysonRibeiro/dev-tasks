@@ -37,7 +37,6 @@ export async function goalUndo(formData: FormSchema) {
       data: "mewta desfeita"
     }
   } catch (error) {
-    console.log(error);
     return {
       erro: "erro ao completar meta"
     }

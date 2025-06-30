@@ -39,7 +39,6 @@ export async function getWeekPendingGoal() {
     }));
     return formattedGoals
   } catch (error) {
-    console.log(error);
     return [];
   }
 }
