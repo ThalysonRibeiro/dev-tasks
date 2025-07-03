@@ -99,6 +99,7 @@ export function Summary({ data, summaryData }: SummaryProps) {
                     )
                   })}
                 </ul>
+                <Separator />
               </div>
             )
           })}
