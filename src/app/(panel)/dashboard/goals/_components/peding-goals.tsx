@@ -1,13 +1,13 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { GoalsWithCompletions } from "./goals-content"
 import { Plus, Trash } from "lucide-react"
 import { goalCompletion } from "../_actions/goal-completion"
 import { toast } from "react-toastify"
 import { deleteGoal } from "../_actions/delete-goal"
+import { PendingGoal } from "../_types"
 
-export function PedingGoals({ data }: { data: GoalsWithCompletions[] }) {
+export function PedingGoals({ data }: { data: PendingGoal[] }) {
 
   async function handleCompleteGoal(goalId: string) {
     if (!goalId) {

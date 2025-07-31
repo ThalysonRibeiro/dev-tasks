@@ -2,9 +2,10 @@
 import prisma from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { endOfWeek, startOfWeek } from "date-fns";
+import { PendingGoal } from "../_types";
 
 
-export async function getWeekPendingGoal() {
+export async function getWeekPendingGoal(): Promise<PendingGoal[]> {
   const session = await auth();
   if (!session?.user?.id) {
     return [];
@@ -31,7 +32,7 @@ export async function getWeekPendingGoal() {
         }
       }
     });
-    const formattedGoals = goals.map(goal => ({
+    const formattedGoals: PendingGoal[] = goals.map(goal => ({
       id: goal.id,
       title: goal.title,
       desiredWeeklyFrequency: goal.desiredWeeklyFrequency,

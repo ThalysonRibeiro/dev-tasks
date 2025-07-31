@@ -1,6 +1,5 @@
 "use client"
 import { endOfWeek, format, startOfWeek } from "date-fns";
-import { GoalsWithCompletions, SummaryDataProps, } from "./goals-content";
 import { ptBR } from "date-fns/locale";
 import { DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -10,10 +9,11 @@ import { Separator } from "@/components/ui/separator"
 import { PedingGoals } from "./peding-goals";
 import { goalUndo } from "../_actions/goal-undo";
 import { toast } from "react-toastify";
+import { PendingGoal, WeekSummaryResponse } from "../_types";
 
 interface SummaryProps {
-  data: GoalsWithCompletions[];
-  summaryData: SummaryDataProps;
+  data: PendingGoal[];
+  summaryData: WeekSummaryResponse;
 }
 
 
@@ -70,13 +70,13 @@ export function Summary({ data, summaryData }: SummaryProps) {
           <div className="flex gap-3 justify-between items-center">
             <h2 className="text-xl font-medium">Sua semana</h2>
           </div>
-          {Object.entries(summaryData.summary.goalsPerDay).map(([date, goals]) => {
-            const weekDay = format(new Date(date + 'T03:00:00Z'), 'eeee', { locale: ptBR });
+          {summaryData.summary.goalsPerDay.map(({ date, dayOfWeek, goals }) => {
             const formattedDate = format(new Date(date + 'T03:00:00Z'), "d 'de' MMMM", { locale: ptBR });
             return (
               <div key={date} className="flex flex-col gap-4">
                 <h3 className="font-medium">
-                  <span className="capitalize">{weekDay}</span>{' '} <span className="text-zinc-400 text-xs">({formattedDate})</span>
+                  <span className="capitalize">{dayOfWeek}</span>{' '}
+                  <span className="text-zinc-400 text-xs">({formattedDate})</span>
                 </h3>
                 <ul className="flex flex-col gap-3">
                   {goals.map(goal => {

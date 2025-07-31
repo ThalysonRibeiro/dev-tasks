@@ -30,7 +30,7 @@ export default async function Dashboard() {
             <Link
               href={`/dashboard/desktop/${desktop.id}`}
               key={desktop.id}
-              className="border border-dashed rounded-full hover:border-primary text-center capitalize font-bold py-2 px-4">
+              className="border border-dashed rounded-lg hover:border-primary transition-all duration-300 ease-in-out flex items-center justify-center capitalize font-bold w-60 h-40 p-4">
               <p>{desktop.title}</p>
             </Link>
           ))}

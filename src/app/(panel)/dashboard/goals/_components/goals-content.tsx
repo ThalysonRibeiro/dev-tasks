@@ -6,32 +6,13 @@ import {
 import { CreateGoals } from "./create-goals"
 import { EmptyGoal } from "./empyt-goal"
 import { Summary } from "./summary"
-import { GoalsCompletedByWeekDayType } from "../_data-access/get-week-summary"
+import { PendingGoal, WeekSummaryResponse } from "../_types"
 
-export type GoalsWithCompletions = {
-  id: string
-  title: string
-  desiredWeeklyFrequency: number
-  completionCount: number
-};
 
 interface GoalsContentProps {
-  data: GoalsWithCompletions[];
-  summaryData: SummaryDataProps
+  data: PendingGoal[];
+  summaryData: WeekSummaryResponse
 }
-
-export type SummaryDataProps = {
-  error: string;
-  summary?: undefined;
-} | {
-  summary: {
-    completed: number;
-    total: number;
-    goalsPerDay: Record<string, GoalsCompletedByWeekDayType[]>;
-  };
-  error?: undefined;
-}
-
 
 export function GoalsContent({ data, summaryData }: GoalsContentProps) {
 
