@@ -2,6 +2,8 @@ import getSession from "@/lib/getSession";
 import { redirect } from "next/navigation";
 import { getGroups } from "./_data-access/get-groups";
 import { DesktopContent } from "./_components/desktop-content";
+import { getPriorities } from "./_data-access/get-priorities";
+import { getStatus } from "./_data-access/get-status";
 
 
 export default async function DesktopPage({
@@ -15,6 +17,8 @@ export default async function DesktopPage({
   }
   const desktopId = (await params).id;
   const groupsData = await getGroups({ desktopId: desktopId as string });
+  const prioritiesData = await getPriorities(desktopId);
+  const statusData = await getStatus(desktopId);
 
 
 
@@ -23,6 +27,8 @@ export default async function DesktopPage({
       <DesktopContent
         groupsData={groupsData}
         desktopId={desktopId}
+        prioritiesData={prioritiesData}
+        statusData={statusData}
       />
     </main>
   )

@@ -14,8 +14,8 @@ export default async function Layout({ children }: { children: React.ReactNode }
   return (
     <SidebarProvider>
       <AppSidebar desktops={desktops} userData={session} />
-      <main className="w-full">
-        <SidebarTrigger />
+      <main className="w-full px-2">
+        <SidebarTrigger className="fixed" />
         {children}
       </main>
     </SidebarProvider>

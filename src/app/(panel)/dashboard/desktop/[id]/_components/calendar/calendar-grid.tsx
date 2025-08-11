@@ -10,43 +10,36 @@ import { colorStatus } from '@/utils/colorStatus-priority';
 export function CalendarGrid({ groupsData }: { groupsData: GroupWithItems[] }) {
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth();
-  const currentDay = new Date().getDate();
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-
-  // Informações do mês atual
-  const firstDayOfMonth = new Date(year, month, 1);
-  const lastDayOfMonth = new Date(year, month + 1, 0);
-  const daysInMonth = lastDayOfMonth.getDate();
-  const startingDayOfWeek = firstDayOfMonth.getDay(); // 0 = domingo
-
-  // Gerar array de dias
-  const days = [];
-
-  // Dias do mês anterior para preencher o início
-  const lastDayOfPreviousMonth = new Date(year, month, 0);
-  const daysInPreviousMonth = lastDayOfPreviousMonth.getDate();
-
-  for (let i = startingDayOfWeek - 1; i >= 0; i--) {
-    const dayNumber = daysInPreviousMonth - i;
-    days.push(new Date(year, month - 1, dayNumber));
-  }
-
-  // Dias do mês atual
-  for (let day = 1; day <= daysInMonth; day++) {
-    days.push(new Date(year, month, day));
-  }
-
-  // Navegação
-  const goToPreviousMonth = () => {
-    setCurrentDate(new Date(year, month - 1, 1));
+  // Navegação por semana
+  const goToPreviousWeek = () => {
+    const newDate = new Date(currentDate);
+    newDate.setDate(currentDate.getDate() - 7);
+    setCurrentDate(newDate);
   };
 
-  const goToNextMonth = () => {
-    setCurrentDate(new Date(year, month + 1, 1));
+  const goToNextWeek = () => {
+    const newDate = new Date(currentDate);
+    newDate.setDate(currentDate.getDate() + 7);
+    setCurrentDate(newDate);
   };
+
+  // Gerar os dias da semana atual
+  const getWeekDays = (date: Date) => {
+    const startOfWeek = new Date(date);
+    const day = startOfWeek.getDay(); // 0 = domingo
+    startOfWeek.setDate(date.getDate() - day);
+
+    const weekDays = [];
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(startOfWeek);
+      day.setDate(startOfWeek.getDate() + i);
+      weekDays.push(day);
+    }
+    return weekDays;
+  };
+
+  const weekDays = getWeekDays(currentDate);
+  const today = new Date();
 
   // Memoizar os itens para performance
   const items: Item[] = useMemo(() => {
@@ -77,35 +70,35 @@ export function CalendarGrid({ groupsData }: { groupsData: GroupWithItems[] }) {
     });
   };
 
-  // Organizar itens por linha/posição para o mês atual
-  const organizeItemsInRowsForMonth = useMemo(() => {
+  // Organizar itens por linha/posição para a semana atual
+  const organizeItemsInRowsForWeek = useMemo(() => {
     const itemRows: { [key: string]: number } = {};
     let nextRowIndex = 0;
 
-    // Filtrar itens que aparecem no mês atual
-    const monthStart = new Date(year, month, 1);
-    const monthEnd = new Date(year, month + 1, 0);
+    // Filtrar itens que aparecem na semana atual
+    const weekStart = weekDays[0];
+    const weekEnd = weekDays[6];
 
-    const itemsInMonth = items.filter(item => {
+    const itemsInWeek = items.filter(item => {
       const itemCreatedAt = new Date(item.createdAt);
       const itemTerm = new Date(item.term);
 
       // Normalizar datas
       const createdDate = new Date(itemCreatedAt.getFullYear(), itemCreatedAt.getMonth(), itemCreatedAt.getDate());
       const termDate = new Date(itemTerm.getFullYear(), itemTerm.getMonth(), itemTerm.getDate());
-      const monthStartNorm = new Date(monthStart.getFullYear(), monthStart.getMonth(), monthStart.getDate());
-      const monthEndNorm = new Date(monthEnd.getFullYear(), monthEnd.getMonth(), monthEnd.getDate());
+      const weekStartNorm = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate());
+      const weekEndNorm = new Date(weekEnd.getFullYear(), weekEnd.getMonth(), weekEnd.getDate());
 
-      // Item aparece no mês se há sobreposição entre o período do item e o mês
-      return !(termDate < monthStartNorm || createdDate > monthEndNorm);
+      // Item aparece na semana se há sobreposição entre o período do item e a semana
+      return !(termDate < weekStartNorm || createdDate > weekEndNorm);
     });
 
     // Identificar itens únicos e ordenar por data de criação
-    const uniqueItems = Array.from(new Set(itemsInMonth.map(item => item.id)))
-      .map(id => itemsInMonth.find(item => item.id === id)!)
+    const uniqueItems = Array.from(new Set(itemsInWeek.map(item => item.id)))
+      .map(id => itemsInWeek.find(item => item.id === id)!)
       .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 
-    // Atribuir linhas sequenciais começando do 0 para cada mês
+    // Atribuir linhas sequenciais começando do 0 para cada semana
     uniqueItems.forEach(item => {
       if (!itemRows[item.id]) {
         itemRows[item.id] = nextRowIndex++;
@@ -113,93 +106,143 @@ export function CalendarGrid({ groupsData }: { groupsData: GroupWithItems[] }) {
     });
 
     return { itemRows, maxRows: nextRowIndex };
-  }, [items, year, month]);
+  }, [items, weekDays]);
 
-  const { itemRows, maxRows } = organizeItemsInRowsForMonth;
+  const { itemRows, maxRows } = organizeItemsInRowsForWeek;
 
   return (
-    <div className="p-4">
+    <div className="p-4 text-zinc-100 min-h-screen">
       {/* Header com navegação */}
       <div className="flex justify-between items-center mb-4">
-        <Button variant={'outline'} size={'icon'} onClick={goToPreviousMonth}>
+        <Button variant={'outline'} size={'icon'} onClick={goToPreviousWeek}>
           <ChevronLeft />
         </Button>
         <h2 className="text-lg font-semibold">
-          {currentDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
+          {weekDays[0].toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })} - {weekDays[6].toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' })}
         </h2>
-        <Button variant={'outline'} size={'icon'} onClick={goToNextMonth}>
+        <Button variant={'outline'} size={'icon'} onClick={goToNextWeek}>
           <ChevronRight />
         </Button>
       </div>
 
-      {/* Grid do calendário */}
-      <div className="grid grid-cols-7">
-        {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(day => (
-          <div key={day} className="p-2 text-center font-semibold bg-gray-500 border">
-            {day}
+      {/* Container com scroll horizontal */}
+      <div className="overflow-x-auto">
+        <div className="min-w-full">
+          {/* Header dos dias da semana */}
+          <div className="grid grid-cols-7 mb-2">
+            {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((dayName, index) => {
+              const day = weekDays[index];
+              const isToday = day &&
+                day.getDate() === today.getDate() &&
+                day.getMonth() === today.getMonth() &&
+                day.getFullYear() === today.getFullYear();
+
+              return (
+                <div
+                  key={dayName}
+                  className={cn(
+                    "p-3 text-center font-semibold bg-zinc-800 border text-zinc-200",
+                    isToday && "bg-violet-900/50 border-violet-500 ring-1 ring-violet-500"
+                  )}
+                >
+                  <div className="text-sm font-medium">{dayName}</div>
+                  <div className={cn(
+                    "text-lg",
+                    isToday && "text-violet-300 font-bold"
+                  )}>
+                    {day.getDate()}
+                  </div>
+                  <div className="text-xs text-zinc-400">
+                    {day.toLocaleDateString('pt-BR', { month: 'short' })}
+                  </div>
+                </div>
+              );
+            })}
           </div>
-        ))}
 
-        {days.map((day, index) => {
-          const isToday = day &&
-            day.getDate() === currentDay &&
-            day.getMonth() === currentMonth &&
-            day.getFullYear() === currentYear;
+          {/* Grid dos itens - Gantt Style */}
+          <div className="grid grid-cols-7 min-h-[calc(100vh-22rem)]">
+            {weekDays.map((day, dayIndex) => {
+              const dayItems = getItemsForDate(day).sort((a, b) => itemRows[a.id] - itemRows[b.id]);
 
-          const isCurrentMonth = day && day.getMonth() === month;
-          const dayItems = day ? getItemsForDate(day).sort((a, b) => itemRows[a.id] - itemRows[b.id]) : [];
+              return (
+                <div
+                  key={dayIndex}
+                  className={cn("bg-zinc-800 border-r relative py-0.5 min-h-[calc(100vh-22rem)]",
+                    dayIndex === 0 && "border-l"
+                  )}
+                >
+                  {/* Renderizar linhas para cada item */}
+                  {Array.from({ length: Math.max(1, maxRows) }).map((_, rowIndex) => {
+                    const itemInThisRow = dayItems.find(item => itemRows[item.id] === rowIndex);
 
-          return (
-            <div
-              key={index}
-              className={cn(
-                "text-center text-sm min-h-24 flex flex-col border",
-                isToday && "border border-violet-500",
-                !isCurrentMonth && "bg-zinc-900", // Estilo diferente para dias de outros meses
-              )}
-            >
-              <div className="font-medium mb-0.5 text-center flex-shrink-0">
-                {day ? day.getDate() : ''}
+                    if (!itemInThisRow) {
+                      return (
+                        <div
+                          key={rowIndex}
+                          className="h-8 mb-1 flex items-center"
+                        // style={{ marginTop: `${rowIndex * 36}px` }}
+                        />
+                      );
+                    }
+
+                    const isCreated = new Date(itemInThisRow.createdAt).toDateString() === day.toDateString();
+                    const isDeadline = new Date(itemInThisRow.term).toDateString() === day.toDateString();
+                    const isFirstDay = isCreated;
+                    const isLastDay = isDeadline;
+
+                    return (
+                      <div
+                        key={`${itemInThisRow.id}-${rowIndex}`}
+                        className={cn(
+                          "absolute left-1 right-1 h-7 mb-1 flex items-center px-2 text-xs truncate",
+                          colorStatus(itemInThisRow.status),
+                          // Bordas arredondadas apenas no início e fim
+                          isFirstDay && "rounded-l-md",
+                          isLastDay && "rounded-r-md",
+                          !isFirstDay && !isLastDay && "rounded-none",
+                          isFirstDay && isLastDay && "rounded-md", // Item de um dia só
+                          // Destaque para prazos
+                          isDeadline && "ring-1 ring-white",
+                          isCreated && "font-semibold"
+                        )}
+                        style={{
+                          top: `${rowIndex * 36 + 4}px`,
+                          zIndex: isDeadline ? 10 : 1
+                        }}
+                        title={`${itemInThisRow.title} (${new Date(itemInThisRow.createdAt).toLocaleDateString('pt-BR')} - ${new Date(itemInThisRow.term).toLocaleDateString('pt-BR')})`}
+                      >
+                        <span className="truncate">
+                          {isFirstDay && itemInThisRow.title}
+                          {!isFirstDay && !isLastDay && ""}
+                          {isLastDay && !isFirstDay && ""}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Legenda */}
+          <div className="mt-4 text-xs text-zinc-400">
+            <div className="flex flex-wrap gap-4">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-white/50 border-2 border-white rounded"></div>
+                <span>Com prazo hoje</span>
               </div>
-
-              <div className="flex flex-col gap-0.5 h-full">
-                {Array.from({ length: Math.max(3, maxRows) }).map((_, rowIndex) => {
-                  const itemInThisRow = dayItems.find(item => itemRows[item.id] === rowIndex);
-
-                  if (!itemInThisRow) {
-                    return <div key={rowIndex} className="h-5 flex-shrink-0" />; // Espaço vazio para manter alinhamento
-                  }
-
-                  const isCreated = day && new Date(itemInThisRow.createdAt).toDateString() === day.toDateString();
-                  const isDeadline = day && new Date(itemInThisRow.term).toDateString() === day.toDateString();
-                  const isFirstDay = isCreated;
-                  const isLastDay = isDeadline;
-
-                  return (
-                    <div
-                      key={`${itemInThisRow.id}-${rowIndex}`}
-                      className={cn(
-                        "text-xs px-2 py-0.5 truncate h-5 flex items-center flex-shrink-0 line-clamp-1",
-                        colorStatus(itemInThisRow.status),
-                        // Bordas arredondadas apenas no início e fim
-                        isFirstDay && "rounded-l-md",
-                        isLastDay && "rounded-r-md",
-                        !isFirstDay && !isLastDay && "rounded-none",
-                        isFirstDay && isLastDay && "rounded-md", // Item de um dia só
-                        // Destaque para prazos
-                        isDeadline && "ring-1 ring-red-400",
-                        isCreated && "font-semibold"
-                      )}
-                      title={`${itemInThisRow.title}`}
-                    >
-                      {itemInThisRow.title}
-                    </div>
-                  );
-                })}
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-blue-900/50 rounded-l border border-blue-400"></div>
+                <span>Início do item</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-blue-900/50 rounded-r border border-blue-400"></div>
+                <span>Fim do item</span>
               </div>
             </div>
-          );
-        })}
+          </div>
+        </div>
       </div>
     </div>
   );
