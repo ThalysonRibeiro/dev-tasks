@@ -25,7 +25,7 @@ export default async function Dashboard() {
           <h1 className="text-2xl font-semibold">Bem vindo de volta!</h1>
           <h2>Aqui está uma seu resumo.</h2>
         </div>
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap gap-4">
           {desktops.map(desktop => (
             <Link
               href={`/dashboard/desktop/${desktop.id}`}

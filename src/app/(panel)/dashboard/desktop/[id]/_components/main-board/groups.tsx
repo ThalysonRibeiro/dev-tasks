@@ -14,6 +14,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import { cn } from "@/lib/utils";
+import { GroupProgressBar } from "./group-progress-bar";
 
 export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[], desktopId: string }) {
   const [isAddingGroup, setIsAddingGroup] = useState(false);
@@ -118,6 +119,9 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
                     <button onClick={() => toggleDropdown(group.id)}>
                       <ChevronDown className={cn("transition-all duration-300", isGroupOpen && "rotate-180")} />
                     </button>
+                    <div className="w-full justify-items-end ">
+                      <GroupProgressBar items={group.item} />
+                    </div>
                   </div>
 
                   {/* Conteúdo do grupo */}

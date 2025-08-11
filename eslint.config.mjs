@@ -12,12 +12,11 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
-    plugins: {
-      react: eslintPluginReact,
-    },
+    ignores: ["src/generated/**"],
+  },
+  {
     rules: {
-      'react/jsx-uses-react': 'off',
-      'react/react-in-jsx-scope': 'off',
+      "@typescript-eslint/no-unused-vars": "off",
     },
   }
 ];

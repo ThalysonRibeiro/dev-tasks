@@ -37,11 +37,11 @@ export function KanbanGrid({ groupsData }: KanbanProps) {
 
     // Criar preview customizado
     const dragPreview = document.createElement('div');
-    dragPreview.className = 'bg-white border-2 border-violet-500 rounded-lg p-3 shadow-lg max-w-xs opacity-90';
+    dragPreview.className = 'bg-zinc-950 border-1 border-violet-500 rounded-lg p-3 shadow-lg max-w-xs opacity-90';
     dragPreview.innerHTML = `
-      <div class="font-medium text-gray-900">${item.title}</div>
-      <div class="text-sm text-gray-500 mt-1">${item.status}</div>
-      <div class="text-sm text-gray-500">${format(new Date(item.term), "dd/MM/yyyy")}</div>
+      <div class="font-medium text-gray-200">${item.title}</div>
+      <div class="text-sm text-gray-300 mt-1">${item.status}</div>
+      <div class="text-sm text-gray-300">${format(new Date(item.term), "dd/MM/yyyy")}</div>
     `;
 
     // Posicionar fora da tela
@@ -115,7 +115,7 @@ export function KanbanGrid({ groupsData }: KanbanProps) {
 
 
   return (
-    <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 pb-4 min-h-[calc(100vh-10rem)]">
       {statusConfig.map((config) => (
         <Card
           key={config.status}
