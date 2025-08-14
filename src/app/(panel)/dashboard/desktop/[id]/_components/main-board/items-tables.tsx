@@ -26,6 +26,7 @@ import { CalendarTerm } from "./calendar-term"
 import { Textarea } from "@/components/ui/textarea"
 import { updateItem } from "../../_actions/update-item"
 import { deleteItem } from "../../_actions/delete-item"
+import { cn } from "@/lib/utils"
 
 type EditingField = 'title' | 'notes' | 'description' | 'term' | null;
 
@@ -207,7 +208,7 @@ export function ItemsTables({ items }: { items: Item[] }) {
 
   return (
     <div ref={formRef}>
-      <Table className="border-b">
+      <Table className="border-b text-[11px] mb-4">
         <TableHeader>
           <TableRow>
             <TableHead>Título</TableHead>
@@ -315,23 +316,23 @@ export function ItemsTables({ items }: { items: Item[] }) {
                   onValueChange={(value) => handleSelectChange(item, 'priority', value as Priority)}
                   disabled={isLoading === item.id}
                 >
-                  <SelectTrigger className={colorPriority(item.priority)}>
+                  <SelectTrigger className={cn("text-[11px]", colorPriority(item.priority))} size="sm">
                     <SelectValue placeholder={priorityMap[item.priority]} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="CRITICAL" className={colorPriority("CRITICAL")}>
+                    <SelectItem value="CRITICAL" className={colorPriority("CRITICAL")} style={{ fontSize: '11px' }}>
                       CRÍTICO
                     </SelectItem>
-                    <SelectItem value="HIGH" className={colorPriority("HIGH")}>
+                    <SelectItem value="HIGH" className={colorPriority("HIGH")} style={{ fontSize: '11px' }}>
                       ALTO
                     </SelectItem>
-                    <SelectItem value="MEDIUM" className={colorPriority("MEDIUM")}>
+                    <SelectItem value="MEDIUM" className={colorPriority("MEDIUM")} style={{ fontSize: '11px' }}>
                       MÉDIO
                     </SelectItem>
-                    <SelectItem value="LOW" className={colorPriority("LOW")}>
+                    <SelectItem value="LOW" className={colorPriority("LOW")} style={{ fontSize: '11px' }}>
                       BAIXO
                     </SelectItem>
-                    <SelectItem value="STANDARD" className={colorPriority("STANDARD")}>
+                    <SelectItem value="STANDARD" className={colorPriority("STANDARD")} style={{ fontSize: '11px' }}>
                       PADRÃO
                     </SelectItem>
                   </SelectContent>
@@ -400,20 +401,20 @@ export function ItemsTables({ items }: { items: Item[] }) {
                   onValueChange={(value) => handleSelectChange(item, 'status', value as Status)}
                   disabled={isLoading === item.id}
                 >
-                  <SelectTrigger className={colorStatus(item.status)}>
+                  <SelectTrigger className={cn("text-[11px]", colorStatus(item.status))} size="sm" >
                     <SelectValue placeholder={statusMap[item.status]} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="DONE" className={colorStatus("DONE")}>
+                    <SelectItem value="DONE" className={colorStatus("DONE")} style={{ fontSize: '11px' }}>
                       CONCLUÍDO
                     </SelectItem>
-                    <SelectItem value="IN_PROGRESS" className={colorStatus("IN_PROGRESS")}>
+                    <SelectItem value="IN_PROGRESS" className={colorStatus("IN_PROGRESS")} style={{ fontSize: '11px' }}>
                       EM ANDAMENTO
                     </SelectItem>
-                    <SelectItem value="STOPPED" className={colorStatus("STOPPED")}>
+                    <SelectItem value="STOPPED" className={colorStatus("STOPPED")} style={{ fontSize: '11px' }}>
                       INTERROMPIDO
                     </SelectItem>
-                    <SelectItem value="NOT_STARTED" className={colorStatus("NOT_STARTED")}>
+                    <SelectItem value="NOT_STARTED" className={colorStatus("NOT_STARTED")} style={{ fontSize: '11px' }}>
                       NÃO INICIADO
                     </SelectItem>
                   </SelectContent>

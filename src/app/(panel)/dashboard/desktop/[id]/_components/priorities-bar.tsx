@@ -2,14 +2,15 @@ import { PrioritiesCount } from "../_data-access/get-priorities";
 
 interface PrioritiesBarProps {
   priorities: PrioritiesCount[];
+  label?: boolean;
 }
 
-export function PrioritiesBar({ priorities }: PrioritiesBarProps) {
+export function PrioritiesBar({ priorities, label = true }: PrioritiesBarProps) {
   const total = priorities.reduce((acc, priority) => acc + priority.count, 0);
 
   return (
     <div>
-      <h3 className="font-semibold text-sm">Prooridade</h3>
+      {label && <h3 className="font-semibold text-sm">Prooridade</h3>}
       <div className="flex w-full h-6 rounded-md overflow-hidden">
         {priorities.map((priority) => (
           <div
