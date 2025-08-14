@@ -1,5 +1,5 @@
 import { GroupWithItems } from "../main-board/group-content";
-import { GanttCalendar } from "./calendar-grid";
+import { GanttCalendar } from "./gantt-calendar";
 
 export function CalendarContent({ groupsData }: { groupsData: GroupWithItems[] }) {
   return (
