@@ -98,9 +98,9 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
               ) : (
                 <>
                   {/* Cabeçalho do grupo */}
-                  <div className="flex items-center gap-3 mb-4">
+                  <div className="flex items-center gap-3 mb-4 w-full">
                     <h2
-                      className="font-bold text-lg cursor-pointer hover:opacity-80 transition-opacity"
+                      className="font-bold cursor-pointer hover:opacity-80 transition-opacity"
                       style={{ color: group.textColor }}
                       onClick={() => handleEditGroup(group)}
                       title="Clique para editar"
@@ -110,22 +110,26 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
                     <Button
                       size="icon"
                       variant="outline"
-                      className="cursor-pointer  border-dashed text-gray-600 hover:text-red-600 hover:border-red-300"
+                      className="cursor-pointer border-dashed text-gray-600 hover:text-red-600 hover:border-red-300"
                       onClick={() => handleDeleteGroup(group.id)}
                       title="Deletar grupo"
                     >
                       <Trash className="h-4 w-4" />
                     </Button>
                     <button onClick={() => toggleDropdown(group.id)}>
-                      <ChevronDown className={cn("transition-all duration-300", isGroupOpen && "rotate-180")} />
+                      <ChevronDown className={cn("cursor-pointer transition-all duration-300", isGroupOpen && "rotate-180")} />
                     </button>
-                    <div className="w-full justify-items-end ">
+                    <div className="w-full max-w-75 ml-auto">
                       <GroupProgressBar items={group.item} />
                     </div>
                   </div>
 
                   {/* Conteúdo do grupo */}
-                  <Collapsible className="ml-6 space-y-4 border-l-2 border-gray-200 pl-4" open={isGroupOpen}>
+                  <Collapsible
+                    className="ml-6 space-y-4 border-l pl-4"
+                    open={isGroupOpen}
+                    style={{ borderColor: group.textColor }}
+                  >
                     <CollapsibleContent>
                       <ItemsTables items={group.item} />
 
@@ -149,7 +153,8 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
                     </CollapsibleContent>
                   </Collapsible>
                 </>
-              )}
+              )
+              }
             </div>
           );
         })}
@@ -173,6 +178,6 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
           </Button>
         )}
       </div>
-    </div>
+    </div >
   );
 }

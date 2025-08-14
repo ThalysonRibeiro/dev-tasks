@@ -9,7 +9,10 @@ export async function getDesktops() {
   }
   try {
     const desktops = await prisma.desktop.findMany({
-      where: { userId: session.user.id }
+      where: { userId: session.user.id },
+      include: {
+        groupe: true
+      }
     });
     return desktops;
   } catch (error) {
