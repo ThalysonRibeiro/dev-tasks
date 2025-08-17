@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/collapsible"
 import { cn } from "@/lib/utils";
 import { GroupProgressBar } from "./group-progress-bar";
+import { CompletedItems } from "./completed-items";
 
 export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[], desktopId: string }) {
   const [isAddingGroup, setIsAddingGroup] = useState(false);
@@ -80,7 +81,8 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
     <div className="space-y-6">
       {/* Lista de grupos */}
       <div className="space-y-6">
-        {groupsData.map((group, index) => {
+        {groupsData.map(group => {
+          const unfinishedItems = group.item.filter(item => item.status !== 'DONE');
           const isGroupOpen = openGroups.has(group.id);
 
           return (
@@ -117,7 +119,7 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
                       <Trash className="h-4 w-4" />
                     </Button>
                     <button onClick={() => toggleDropdown(group.id)}>
-                      <ChevronDown className={cn("cursor-pointer transition-all duration-300", isGroupOpen && "rotate-180")} />
+                      <ChevronDown className={cn("cursor-pointer transition-all duration-300", isGroupOpen && "-rotate-90")} />
                     </button>
                     <div className="w-full max-w-75 ml-auto">
                       <GroupProgressBar items={group.item} />
@@ -131,7 +133,7 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
                     style={{ borderColor: group.textColor }}
                   >
                     <CollapsibleContent>
-                      <ItemsTables items={group.item} />
+                      <ItemsTables items={unfinishedItems} />
 
                       {/* Formulário de adicionar item */}
                       {addingItemToGroupId === group.id ? (
@@ -178,6 +180,7 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
           </Button>
         )}
       </div>
+      <CompletedItems groupsData={groupsData} />
     </div >
   );
 }
