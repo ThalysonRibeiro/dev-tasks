@@ -85,7 +85,7 @@ export function GanttCalendar({ groupsData }: { groupsData?: GroupWithItems[] })
         allItems.push(groupStatus.item);
       }
     });
-    return allItems;
+    return allItems.filter(item => item.status !== 'DONE');
   }, [groupsData]);
 
   // Organize items in rows and calculate their spans
@@ -255,8 +255,8 @@ export function GanttCalendar({ groupsData }: { groupsData?: GroupWithItems[] })
       {/* Main Gantt Chart */}
       <div className="flex-1 flex flex-col">
         {/* Header */}
-        <div className="shrink-0 p-4 bg-zinc-800 border-b border-zinc-700">
-          <div className="flex justify-between items-center mb-4">
+        <div className="shrink-0 bg-zinc-800 border-b border-zinc-700">
+          <div className="flex justify-between items-center mb-1 p-4">
             <div className="flex items-center gap-4">
               <Button
                 variant="outline"
@@ -308,7 +308,7 @@ export function GanttCalendar({ groupsData }: { groupsData?: GroupWithItems[] })
           {/* Timeline Header */}
           <div className="grid grid-cols-7 gap-px">
             {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map((dayName, index) => (
-              <div key={dayName} className="p-3 text-center bg-zinc-700 border border-zinc-600">
+              <div key={dayName} className="p-1 text-center bg-zinc-700 border border-zinc-600">
                 <div className="text-xs font-medium text-zinc-300 mb-1">{dayName}</div>
                 <div className="text-sm font-semibold text-zinc-100">
                   {viewDays[index]?.getDate()}
@@ -347,7 +347,7 @@ export function GanttCalendar({ groupsData }: { groupsData?: GroupWithItems[] })
                       ))}
                       {/* Linha vertical no meio para indicar hoje */}
                       {isToday && (
-                        <div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-violet-400 z-30 opacity-60" />
+                        <div className="absolute top-0 bottom-0 left-1/2 w-0.5 bg-violet-500 z-30 opacity-60" />
                       )}
                     </div>
                   );
@@ -385,7 +385,7 @@ export function GanttCalendar({ groupsData }: { groupsData?: GroupWithItems[] })
                       top: `${rowIndex * 48 + 8}px`,
                       left: `${(span.startIndex / 7) * 100}%`,
                       width: `${(span.width / 7) * 100}%`,
-                      height: '32px',
+                      height: '24px',
                       zIndex: isDeadline ? 20 : 10
                     }}
                     title={`${item.title}\nStatus: ${statusMap[item.status as keyof typeof statusMap] || item.status}\nPriority: ${item.priority || 'normal'}\nDuration: ${getDurationInDays(item.createdAt, item.term)} days\nStart: ${new Date(item.createdAt).toLocaleDateString('pt-BR')}\nEnd: ${new Date(item.term).toLocaleDateString('pt-BR')}`}

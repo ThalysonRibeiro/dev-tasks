@@ -6,9 +6,17 @@ import { getDesktops } from "./desktop/[id]/_data-access/get-desktops";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { PrioritiesBar } from "./desktop/[id]/_components/priorities-bar";
-import { Desktop } from "@/generated/prisma";
 import { getPriorities } from "./desktop/[id]/_data-access/get-priorities";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+async function Priorities({ desktopId }: { desktopId: string }) {
+  const data = await getPriorities(desktopId);
+  return (
+    <div className="w-full mt-auto">
+      <PrioritiesBar priorities={data} label={false} />
+    </div>
+  )
+}
 
 export default async function Dashboard() {
   const session = await getSession();
@@ -21,16 +29,6 @@ export default async function Dashboard() {
   if (!weekSummaryDate.summary) {
     return null
   }
-
-  const prioritiesData = async (desktopId: string) => {
-    const data = await getPriorities(desktopId);
-    return (
-      <div className="w-full mt-auto">
-        <PrioritiesBar priorities={data} label={false} />
-      </div>
-    )
-  }
-
 
   return (
     <main className="container mx-auto px-6 pt-6">
@@ -52,7 +50,7 @@ export default async function Dashboard() {
                   <CardDescription>Total itens: {desktop.groupe.length}</CardDescription>
                 </CardHeader>
                 <CardContent className="mt-auto w-full p-2">
-                  {prioritiesData(desktop.id)}
+                  <Priorities desktopId={desktop.id} />
                 </CardContent>
               </Card>
             </Link>
