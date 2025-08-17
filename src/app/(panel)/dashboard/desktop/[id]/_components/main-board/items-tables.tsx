@@ -14,13 +14,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Item, Priority, Status } from "@/generated/prisma"
 import { format } from "date-fns"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { toast } from "react-toastify"
 import { colorPriority, colorStatus, priorityMap, statusMap } from "@/utils/colorStatus-priority"
-import { Trash, Check, X, CircleAlert } from "lucide-react"
+import { Trash, Check, X, CircleAlert, MoreHorizontal, Info } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { CalendarTerm } from "./calendar-term"
 import { Textarea } from "@/components/ui/textarea"
@@ -190,10 +198,18 @@ export function ItemsTables({ items }: { items: Item[] }) {
     return (
       <div
         onClick={() => startEditing(item, field)}
-        className="cursor-pointer hover:bg-accent p-1 rounded transition-colors"
+        className="cursor-pointer hover:bg-accent p-1 rounded transition-colors overflow-auto"
         title="Clique para editar"
       >
-        {value || 'Clique para editar'}
+        <p className="overflow-hidden text-ellipsis" style={{
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical',
+          lineHeight: '1.4em',
+          maxHeight: '2.8em'
+        }}>
+          {value || 'Clique para editar'}
+        </p>
       </div>
     );
   };
@@ -207,319 +223,323 @@ export function ItemsTables({ items }: { items: Item[] }) {
   }
 
   return (
-    <div ref={formRef}>
-      <Table className="border-b text-[11px] mb-4">
-        <TableHeader>
-          <TableRow>
-            <TableHead>Título</TableHead>
-            <TableHead>Notas</TableHead>
-            <TableHead>Prioridade</TableHead>
-            <TableHead>Prazo</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Descrição</TableHead>
-            <TableHead className="text-right">Ações</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {items.map(item => (
-            <TableRow key={item.id} className={isLoading === item.id ? 'opacity-50' : ''}>
-              {/* Título */}
-              <TableCell>
-                {renderEditableCell(item, 'title', item.title)}
-              </TableCell>
+    <div ref={formRef} className="flex items-center">
+      <div className="border-y border-l rounded-l-lg flex flex-col mt-2.5">
+        {items.map(item => (
+          <div
+            key={item.id}
+            className={cn("h-14 min-w-30 md:min-w-75 w-full border-b flex items-center justify-between p-2 rounded",
+              items.slice(-1).includes(item) && 'border-b-0',
+            )}
+          >
+            {renderEditableCell(item, 'title', item.title)}
 
-              {/* Notas */}
-              <TableCell className="max-w-65">
-                <div className="max-w-65 overflow-hidden">
-                  {isEditing(item.id, 'notes') && 'notes' ? (
-                    <form
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        handleSaveField(item);
-                      }}
-                      className="flex items-start gap-2"
-                    >
-                      <Textarea
-                        value={editingData?.notes || ''}
-                        onChange={(e) => setEditingData(prev =>
-                          prev ? { ...prev, notes: e.target.value } : null
-                        )}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Escape') cancelEditing();
-                          if (e.key === 'Enter' && e.ctrlKey) handleSaveField(item);
-                        }}
-                        autoFocus
-                        disabled={isLoading === item.id}
-                        className="max-h-[120px] w-full"
-                        placeholder="Digite as notas..."
-                      />
-                      <div className="flex flex-col gap-1">
-                        <Button
-                          type="submit"
-                          size="sm"
-                          variant="ghost"
-                          disabled={isLoading === item.id}
-                          className="text-green-600 hover:text-green-700"
-                          title="Salvar (Ctrl + Enter)"
-                        >
-                          <Check className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="ghost"
-                          onClick={cancelEditing}
-                          disabled={isLoading === item.id}
-                          className="text-red-600 hover:text-red-700"
-                          title="Cancelar (Esc)"
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </form>
-                  ) : (
-                    <div
-                      onClick={() => startEditing(item, 'notes')}
-                      className="cursor-pointer hover:bg-accent p-2 rounded transition-colors min-h-[40px] group"
-                      title="Clique para editar"
-                    >
-                      {item.notes ? (
-                        <div className="space-y-1">
-                          <p className="text-sm overflow-hidden text-ellipsis" style={{
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                            lineHeight: '1.4em',
-                            maxHeight: '2.8em'
-                          }}>
-                            {item.notes}
-                          </p>
-                          {item.notes.length > 100 && (
-                            <span className="text-xs text-blue-600 group-hover:text-blue-800">
-                              Clique para ver mais...
-                            </span>
-                          )}
-                        </div>
-                      ) : (
-                        <span className="text-gray-400 text-sm italic">
-                          Clique para adicionar notas
-                        </span>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </TableCell>
-
-              {/* Prioridade */}
-              <TableCell>
-                <Select
-                  onValueChange={(value) => handleSelectChange(item, 'priority', value as Priority)}
+            <DropdownMenu>
+              <DropdownMenuTrigger className="cursor-pointer">
+                <MoreHorizontal className="h-4 w-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="space-y-1">
+                <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="cursor-pointer">
+                  <Info className="h-4 w-4" /> Visualizar
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  variant="destructive"
                   disabled={isLoading === item.id}
+                  onClick={() => handleDeleteItem(item.id)}
+                  className="cursor-pointer"
                 >
-                  <SelectTrigger className={cn("text-[11px]", colorPriority(item.priority))} size="sm">
-                    <SelectValue placeholder={priorityMap[item.priority]} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="CRITICAL" className={colorPriority("CRITICAL")} style={{ fontSize: '11px' }}>
-                      CRÍTICO
-                    </SelectItem>
-                    <SelectItem value="HIGH" className={colorPriority("HIGH")} style={{ fontSize: '11px' }}>
-                      ALTO
-                    </SelectItem>
-                    <SelectItem value="MEDIUM" className={colorPriority("MEDIUM")} style={{ fontSize: '11px' }}>
-                      MÉDIO
-                    </SelectItem>
-                    <SelectItem value="LOW" className={colorPriority("LOW")} style={{ fontSize: '11px' }}>
-                      BAIXO
-                    </SelectItem>
-                    <SelectItem value="STANDARD" className={colorPriority("STANDARD")} style={{ fontSize: '11px' }}>
-                      PADRÃO
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </TableCell>
-
-              {/* Prazo */}
-              <TableCell>
-                {isEditing(item.id, 'term') ? (
-                  <div className="flex items-center gap-2">
-                    <CalendarTerm
-                      initialDate={editingData?.term || item.term}
-                      onChange={(dateRange) => {
-                        setEditingData(prev => prev ? { ...prev, term: dateRange } : null);
-                      }}
-                    />
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => handleSaveField(item)}
-                      disabled={isLoading === item.id}
-                      className="text-green-600 hover:text-green-700"
-                    >
-                      <Check className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={cancelEditing}
-                      disabled={isLoading === item.id}
-                      className="text-red-600 hover:text-red-700"
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    {/* Indicador visual baseado no status e prazo */}
-                    {new Date(item.term) < new Date() && (
-                      <div className="flex items-center gap-1">
-                        {item.status === 'DONE' ? (
-                          <Check className="h-4 w-4 text-green-600" />
+                  <Trash className="h-4 w-4" /> Deletar
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        ))}
+      </div>
+      <div className="max-w-[56.4dvw] w-full overflow-scroll border rounded-lg">
+        <Table className="border-b mb-4">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Notas</TableHead>
+              <TableHead>Prioridade</TableHead>
+              <TableHead>Prazo</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead className="text-center">Descrição</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {items.map(item => (
+              <TableRow key={item.id} className={isLoading === item.id ? 'opacity-50' : ''}>
+                {/* Notas */}
+                <TableCell className="max-w-65">
+                  <div className="max-w-65 overflow-hidden">
+                    {isEditing(item.id, 'notes') && 'notes' ? (
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          handleSaveField(item);
+                        }}
+                        className="flex items-start gap-2"
+                      >
+                        <Textarea
+                          value={editingData?.notes || ''}
+                          onChange={(e) => setEditingData(prev =>
+                            prev ? { ...prev, notes: e.target.value } : null
+                          )}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Escape') cancelEditing();
+                            if (e.key === 'Enter' && e.ctrlKey) handleSaveField(item);
+                          }}
+                          autoFocus
+                          disabled={isLoading === item.id}
+                          className="max-h-[120px] w-full"
+                          placeholder="Digite as notas..."
+                        />
+                        <div className="flex flex-col gap-1">
+                          <Button
+                            type="submit"
+                            size="sm"
+                            variant="ghost"
+                            disabled={isLoading === item.id}
+                            className="text-green-600 hover:text-green-700"
+                            title="Salvar (Ctrl + Enter)"
+                          >
+                            <Check className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="ghost"
+                            onClick={cancelEditing}
+                            disabled={isLoading === item.id}
+                            className="text-red-600 hover:text-red-700"
+                            title="Cancelar (Esc)"
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </form>
+                    ) : (
+                      <div
+                        onClick={() => startEditing(item, 'notes')}
+                        className="cursor-pointer hover:bg-accent p-2 rounded transition-colors min-h-[40px] group"
+                        title="Clique para editar"
+                      >
+                        {item.notes ? (
+                          <div className="space-y-1">
+                            <p className="overflow-hidden text-ellipsis" style={{
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
+                              lineHeight: '1.4em',
+                              maxHeight: '2.8em'
+                            }}>
+                              {item.notes}
+                            </p>
+                          </div>
                         ) : (
-                          <CircleAlert className="h-4 w-4 text-red-600" />
+                          <span className="text-gray-400 italic">
+                            Clique para adicionar notas
+                          </span>
                         )}
                       </div>
                     )}
-
-                    <div
-                      onClick={() => startEditing(item, 'term')}
-                      className={`cursor-pointer hover:bg-accent p-1 rounded transition-colors ${new Date(item.term) < new Date() && item.status !== 'DONE'
-                        ? 'text-red-600 font-semibold'
-                        : ''
-                        }`}
-                      title="Clique para editar"
-                    >
-                      {format(item.term, "dd/MM/yyyy")}
-                    </div>
                   </div>
-                )}
-              </TableCell>
+                </TableCell>
 
-              {/* Status */}
-              <TableCell>
-                <Select
-                  onValueChange={(value) => handleSelectChange(item, 'status', value as Status)}
-                  disabled={isLoading === item.id}
-                >
-                  <SelectTrigger className={cn("text-[11px]", colorStatus(item.status))} size="sm" >
-                    <SelectValue placeholder={statusMap[item.status]} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="DONE" className={colorStatus("DONE")} style={{ fontSize: '11px' }}>
-                      CONCLUÍDO
-                    </SelectItem>
-                    <SelectItem value="IN_PROGRESS" className={colorStatus("IN_PROGRESS")} style={{ fontSize: '11px' }}>
-                      EM ANDAMENTO
-                    </SelectItem>
-                    <SelectItem value="STOPPED" className={colorStatus("STOPPED")} style={{ fontSize: '11px' }}>
-                      INTERROMPIDO
-                    </SelectItem>
-                    <SelectItem value="NOT_STARTED" className={colorStatus("NOT_STARTED")} style={{ fontSize: '11px' }}>
-                      NÃO INICIADO
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </TableCell>
+                {/* Prioridade */}
+                <TableCell>
+                  <Select
+                    onValueChange={(value) => handleSelectChange(item, 'priority', value as Priority)}
+                    disabled={isLoading === item.id}
+                  >
+                    <SelectTrigger className={cn("", colorPriority(item.priority))} size="sm">
+                      <SelectValue placeholder={priorityMap[item.priority]} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="CRITICAL" className={colorPriority("CRITICAL")}>
+                        CRÍTICO
+                      </SelectItem>
+                      <SelectItem value="HIGH" className={colorPriority("HIGH")}>
+                        ALTO
+                      </SelectItem>
+                      <SelectItem value="MEDIUM" className={colorPriority("MEDIUM")}>
+                        MÉDIO
+                      </SelectItem>
+                      <SelectItem value="LOW" className={colorPriority("LOW")}>
+                        BAIXO
+                      </SelectItem>
+                      <SelectItem value="STANDARD" className={colorPriority("STANDARD")}>
+                        PADRÃO
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </TableCell>
 
-              {/* Descrição */}
-              <TableCell className="max-w-65">
-                <div className="max-w-65 overflow-hidden">
-                  {isEditing(item.id, 'description') && 'description' ? (
-                    <form
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        handleSaveField(item);
-                      }}
-                      className="flex items-start gap-2"
-                    >
-                      <Textarea
-                        value={editingData?.description || ''}
-                        onChange={(e) => setEditingData(prev =>
-                          prev ? { ...prev, description: e.target.value } : null
-                        )}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Escape') cancelEditing();
-                          if (e.key === 'Enter' && e.ctrlKey) handleSaveField(item);
+                {/* Prazo */}
+                <TableCell>
+                  {isEditing(item.id, 'term') ? (
+                    <div className="flex items-center gap-2">
+                      <CalendarTerm
+                        initialDate={editingData?.term || item.term}
+                        onChange={(dateRange) => {
+                          setEditingData(prev => prev ? { ...prev, term: dateRange } : null);
                         }}
-                        autoFocus
-                        disabled={isLoading === item.id}
-                        className="max-h-[120px] w-full"
-                        placeholder="Digite a descrição..."
                       />
-                      <div className="flex flex-col gap-1">
-                        <Button
-                          type="submit"
-                          size="sm"
-                          variant="ghost"
-                          disabled={isLoading === item.id}
-                          className="text-green-600 hover:text-green-700"
-                          title="Salvar (Ctrl + Enter)"
-                        >
-                          <Check className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="ghost"
-                          onClick={cancelEditing}
-                          disabled={isLoading === item.id}
-                          className="text-red-600 hover:text-red-700"
-                          title="Cancelar (Esc)"
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </form>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleSaveField(item)}
+                        disabled={isLoading === item.id}
+                        className="text-green-600 hover:text-green-700"
+                      >
+                        <Check className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={cancelEditing}
+                        disabled={isLoading === item.id}
+                        className="text-red-600 hover:text-red-700"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
                   ) : (
-                    <div
-                      onClick={() => startEditing(item, 'description')}
-                      className="cursor-pointer hover:bg-accent p-2 rounded transition-colors min-h-[40px] group"
-                      title="Clique para editar"
-                    >
-                      {item.description ? (
-                        <div className="space-y-1">
-                          <p className="text-sm overflow-hidden text-ellipsis" style={{
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                            lineHeight: '1.4em',
-                            maxHeight: '2.8em'
-                          }}>
-                            {item.description}
-                          </p>
-                          {item.description.length > 100 && (
-                            <span className="text-xs text-blue-600 group-hover:text-blue-800">
-                              Clique para ver mais...
-                            </span>
+                    <div className="flex items-center gap-2">
+                      {/* Indicador visual baseado no status e prazo */}
+                      {new Date(item.term) < new Date() && (
+                        <div className="flex items-center gap-1">
+                          {item.status === 'DONE' ? (
+                            <Check className="h-4 w-4 text-green-600" />
+                          ) : (
+                            <CircleAlert className="h-4 w-4 text-red-600" />
                           )}
                         </div>
-                      ) : (
-                        <span className="text-gray-400 text-sm italic">
-                          Clique para adicionar descrição
-                        </span>
                       )}
+
+                      <div
+                        onClick={() => startEditing(item, 'term')}
+                        className={`cursor-pointer hover:bg-accent p-1 rounded transition-colors ${new Date(item.term) < new Date() && item.status !== 'DONE'
+                          ? 'text-red-600 font-semibold'
+                          : ''
+                          }`}
+                        title="Clique para editar"
+                      >
+                        {format(item.term, "dd/MM/yyyy")}
+                      </div>
                     </div>
                   )}
-                </div>
-              </TableCell>
+                </TableCell>
 
-              {/* Ações */}
-              <TableCell className="text-right">
-                <Button
-                  onClick={() => handleDeleteItem(item.id)}
-                  variant="ghost"
-                  size="icon"
-                  disabled={isLoading === item.id}
-                  className="cursor-pointer border border-dashed text-gray-600 hover:text-red-600 hover:border-red-300"
-                  title="Deletar item"
-                >
-                  <Trash className="h-4 w-4" />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                {/* Status */}
+                <TableCell>
+                  <Select
+                    onValueChange={(value) => handleSelectChange(item, 'status', value as Status)}
+                    disabled={isLoading === item.id}
+                  >
+                    <SelectTrigger className={cn("]", colorStatus(item.status))} size="sm" >
+                      <SelectValue placeholder={statusMap[item.status]} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="DONE" className={colorStatus("DONE")}>
+                        CONCLUÍDO
+                      </SelectItem>
+                      <SelectItem value="IN_PROGRESS" className={colorStatus("IN_PROGRESS")}>
+                        EM ANDAMENTO
+                      </SelectItem>
+                      <SelectItem value="STOPPED" className={colorStatus("STOPPED")}>
+                        INTERROMPIDO
+                      </SelectItem>
+                      <SelectItem value="NOT_STARTED" className={colorStatus("NOT_STARTED")}>
+                        NÃO INICIADO
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </TableCell>
+
+                {/* Descrição */}
+                <TableCell className="max-w-65">
+                  <div className="max-w-65 overflow-hidden">
+                    {isEditing(item.id, 'description') && 'description' ? (
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          handleSaveField(item);
+                        }}
+                        className="flex items-start gap-2"
+                      >
+                        <Textarea
+                          value={editingData?.description || ''}
+                          onChange={(e) => setEditingData(prev =>
+                            prev ? { ...prev, description: e.target.value } : null
+                          )}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Escape') cancelEditing();
+                            if (e.key === 'Enter' && e.ctrlKey) handleSaveField(item);
+                          }}
+                          autoFocus
+                          disabled={isLoading === item.id}
+                          className="max-h-[120px] w-full"
+                          placeholder="Digite a descrição..."
+                        />
+                        <div className="flex flex-col gap-1">
+                          <Button
+                            type="submit"
+                            size="sm"
+                            variant="ghost"
+                            disabled={isLoading === item.id}
+                            className="text-green-600 hover:text-green-700"
+                            title="Salvar (Ctrl + Enter)"
+                          >
+                            <Check className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="ghost"
+                            onClick={cancelEditing}
+                            disabled={isLoading === item.id}
+                            className="text-red-600 hover:text-red-700"
+                            title="Cancelar (Esc)"
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </form>
+                    ) : (
+                      <div
+                        onClick={() => startEditing(item, 'description')}
+                        className="cursor-pointer hover:bg-accent p-2 rounded transition-colors min-h-[40px] group"
+                        title="Clique para editar"
+                      >
+                        {item.description ? (
+                          <div className="space-y-1">
+                            <p className="overflow-hidden text-ellipsis" style={{
+                              display: '-webkit-box',
+                              WebkitLineClamp: 2,
+                              WebkitBoxOrient: 'vertical',
+                              lineHeight: '1.4em',
+                              maxHeight: '2.8em'
+                            }}>
+                              {item.description}
+                            </p>
+                          </div>
+                        ) : (
+                          <span className="text-gray-400 italic">
+                            Clique para adicionar descrição
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }

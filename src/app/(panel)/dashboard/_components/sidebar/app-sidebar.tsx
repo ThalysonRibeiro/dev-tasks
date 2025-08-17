@@ -25,8 +25,8 @@ import {
   Home,
   Plus,
   Edit2,
-  Trash2,
-  MonitorSpeaker
+  MonitorSpeaker,
+  Trash
 } from "lucide-react"
 import Link from "next/link"
 import { DesktopForm } from "./desktop-form"
@@ -232,9 +232,10 @@ export function AppSidebar({ desktops, userData }: AppSidebarProps) {
                             <DropdownMenuItem
                               onClick={() => handleDeleteDesktop(desktop.id)}
                               disabled={isDesktopBeingDeleted(desktop.id)}
-                              className="cursor-pointer text-red-600 focus:text-red-600"
+                              className="cursor-pointer"
+                              variant="destructive"
                             >
-                              <Trash2 className="mr-2 h-4 w-4" />
+                              <Trash className="mr-2 h-4 w-4" />
                               {isDesktopBeingDeleted(desktop.id) ? "Deletando..." : "Deletar"}
                             </DropdownMenuItem>
                           </DropdownMenuContent>

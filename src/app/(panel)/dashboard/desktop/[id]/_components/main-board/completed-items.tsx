@@ -27,7 +27,7 @@ export function CompletedItems({ groupsData }: { groupsData: GroupWithItems[] })
   return (
     <div className="w-full mb-6">
       <div className="flex items-center gap-3 mb-4">
-        <h3 className="text-green-500 text-lg font-bold">Concluídos</h3>
+        <h3 className="text-green-500 text-lg font-bold">Concluídos: <span className="text-sm font-normal">({completedItems.length})</span></h3>
         <button className="cursor-pointer" onClick={() => setIsOpen(prev => !prev)}>
           <ChevronDown className={cn("cursor-pointer transition-all duration-300", isOpen && "-rotate-90")} />
         </button>
