@@ -24,8 +24,6 @@ interface DesktopFormProps {
 }
 
 
-
-
 export function DesktopForm({ setAddDesktop, desktopId, initialValues }: DesktopFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const formRef = useRef<HTMLDivElement>(null);

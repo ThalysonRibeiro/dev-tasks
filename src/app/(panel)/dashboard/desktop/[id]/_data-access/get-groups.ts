@@ -9,7 +9,14 @@ export async function getGroups({ desktopId }: { desktopId: string }) {
     const groupes = await prisma.group.findMany({
       where: { desktopId: desktopId },
       include: {
-        item: true
+        item: {
+          orderBy: {
+            createdAt: "desc"
+          }
+        }
+      },
+      orderBy: {
+        createdAt: "desc",
       }
     });
     return groupes

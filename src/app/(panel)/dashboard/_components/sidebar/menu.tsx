@@ -90,7 +90,8 @@ export function Menu({ userData }: MenuProps) {
         <DropdownMenuItem
           onClick={handleLogout}
           disabled={isLoggingOut}
-          className="cursor-pointer text-red-600 focus:text-red-600"
+          className="cursor-pointer"
+          variant="destructive"
         >
           {isLoggingOut ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />

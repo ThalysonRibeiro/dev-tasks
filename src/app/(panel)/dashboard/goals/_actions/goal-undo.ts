@@ -4,7 +4,7 @@ import { z } from "zod"
 import { revalidatePath } from "next/cache";
 
 const formSchema = z.object({
-  id: z.string().min(1, "o id é obrigatório"),
+  id: z.string().min(1, "O id é obrigatório"),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
@@ -24,7 +24,7 @@ export async function goalUndo(formData: FormSchema) {
     });
     if (!existingGoalCompletion) {
       return {
-        erro: "erro ao completar meta"
+        erro: "Erro ao completar meta"
       }
     }
     await prisma.goalCompletions.delete({
@@ -34,11 +34,11 @@ export async function goalUndo(formData: FormSchema) {
     });
     revalidatePath("/dashboard/desktop");
     return {
-      data: "mewta desfeita"
+      data: "Desfeita"
     }
   } catch (error) {
     return {
-      erro: "erro ao completar meta"
+      erro: "Erro ao completar meta"
     }
   }
 }

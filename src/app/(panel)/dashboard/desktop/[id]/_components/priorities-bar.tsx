@@ -10,8 +10,8 @@ export function PrioritiesBar({ priorities, label = true }: PrioritiesBarProps) 
 
   return (
     <div>
-      {label && <h3 className="font-semibold text-sm">Prooridade</h3>}
-      <div className="flex w-full h-6 rounded-md overflow-hidden">
+      {label && <h3 className="font-semibold text-sm">Prooridade geral</h3>}
+      <div className="flex w-full h-4 rounded-md overflow-hidden">
         {priorities.map((priority) => (
           <div
             key={priority.priority}

@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { endOfWeek, startOfWeek } from "date-fns";
 
 const formSchema = z.object({
-  goalId: z.string().min(1, "o id da meta é obrigatório"),
+  goalId: z.string().min(1, "O id da meta é obrigatório"),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
@@ -48,7 +48,7 @@ export async function goalCompletion(formData: FormSchema) {
       }
     });
     revalidatePath("/dashboard/desktop");
-    return { data: `parabêns você completou a meta ${existingGoal.title}.` };
+    return { data: `Parabêns você completou a meta ${existingGoal.title}.` };
   } catch (error) {
     return {
       error: "Erro ao completar meta."

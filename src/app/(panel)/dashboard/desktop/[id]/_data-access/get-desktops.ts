@@ -12,6 +12,9 @@ export async function getDesktops() {
       where: { userId: session.user.id },
       include: {
         groupe: true
+      },
+      orderBy: {
+        createdAt: "desc"
       }
     });
     return desktops;

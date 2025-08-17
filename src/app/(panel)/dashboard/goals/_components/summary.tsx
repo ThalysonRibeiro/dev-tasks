@@ -36,7 +36,7 @@ export function Summary({ data, summaryData }: SummaryProps) {
       if (response.erro) {
         toast.error(response.data)
       }
-      toast.success(response.data)
+      toast("🙄👀 " + response.data)
     } catch (error) {
       toast.error("Erro ao desfazer meta.");
     }

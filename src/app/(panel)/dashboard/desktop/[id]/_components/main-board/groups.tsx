@@ -107,7 +107,10 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
                       onClick={() => handleEditGroup(group)}
                       title="Clique para editar"
                     >
-                      {group.title}
+                      <span className="capitalize">
+                        {group.title[0]}
+                      </span>
+                      {group.title.slice(1)}
                     </h2>
                     <Button
                       size="icon"
@@ -121,7 +124,7 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
                     <button onClick={() => toggleDropdown(group.id)}>
                       <ChevronDown className={cn("cursor-pointer transition-all duration-300", isGroupOpen && "-rotate-90")} />
                     </button>
-                    <div className="w-full max-w-75 ml-auto">
+                    <div className="w-full max-w-40 ml-auto">
                       <GroupProgressBar items={group.item} />
                     </div>
                   </div>

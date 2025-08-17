@@ -4,7 +4,7 @@ import { z } from "zod"
 import { revalidatePath } from "next/cache";
 
 const formSchema = z.object({
-  goalId: z.string().min(1, "o id da meta é obrigatório"),
+  goalId: z.string().min(1, "O id da meta é obrigatório"),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
