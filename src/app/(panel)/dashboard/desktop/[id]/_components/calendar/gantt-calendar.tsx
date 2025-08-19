@@ -6,11 +6,16 @@ import { useState, useMemo } from 'react';
 import { GroupWithItems } from '../main-board/group-content';
 import { Item } from '@/generated/prisma';
 import { colorStatus, statusMap } from '@/utils/colorStatus-priority';
+import { Sheet, SheetTrigger } from '@/components/ui/sheet';
+import { InfoItem } from '../main-board/info-item';
 
 export function GanttCalendar({ groupsData }: { groupsData?: GroupWithItems[] }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<'week' | 'month'>('week');
   const [showTaskList, setShowTaskList] = useState(true);
+  const [selectedItem, setSelectedItem] = useState<Item>();
+
+
 
   // Navigation functions
   const goToPrevious = () => {
@@ -209,45 +214,50 @@ export function GanttCalendar({ groupsData }: { groupsData?: GroupWithItems[] })
             </div>
           </div>
           <div className="flex-1 overflow-y-auto">
-            {itemsInView.map((item, index) => (
-              <div
-                key={item.id}
-                className={cn(
-                  "p-3 border-l-4 border-b border-zinc-700 hover:bg-zinc-700/50 cursor-pointer",
-                  getPriorityColor(item.priority)
-                )}
-                style={{ backgroundColor: `rgba(59, 130, 246, ${0.1 + (index % 2) * 0.05})` }}
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="font-medium text-sm truncate">{item.title}</span>
-                  <span className={cn(
-                    "px-2 py-1 rounded-full text-xs font-medium",
-                    item.status === 'DONE' && "bg-green-500/20 text-green-400",
-                    item.status === 'IN_PROGRESS' && "bg-blue-500/20 text-blue-400",
-                    item.status === 'STOPPED' && "bg-red-500/20 text-red-400",
-                    item.status === 'NOT_STARTED' && "bg-gray-500/20 text-gray-400"
-                  )}>
-                    {statusMap[item.status as keyof typeof statusMap] || item.status}
-                  </span>
-                </div>
-                <div className="text-xs text-zinc-400 mb-2">
-                  {new Date(item.createdAt).toLocaleDateString('pt-BR')} - {new Date(item.term).toLocaleDateString('pt-BR')}
-                  <span className="ml-2">({getDurationInDays(item.createdAt, item.term)} dias)</span>
-                </div>
-                <div className="w-full bg-zinc-700 rounded-full h-2">
-                  <div
-                    className={cn(
-                      "h-2 rounded-full transition-all duration-300",
-                      item.status === 'DONE' && "bg-green-500",
-                      item.status === 'IN_PROGRESS' && "bg-blue-500",
-                      item.status === 'STOPPED' && "bg-red-500",
-                      item.status === 'NOT_STARTED' && "bg-gray-500"
-                    )}
-                    style={{ width: `${getProgress(item)}%` }}
-                  />
-                </div>
-              </div>
-            ))}
+
+            <Sheet>
+              {itemsInView.map((item, index) => (
+                <SheetTrigger
+                  key={item.id}
+                  className={cn(
+                    "w-full p-3 border-l-4 border-b border-zinc-700 hover:bg-zinc-700/50 cursor-pointer",
+                    getPriorityColor(item.priority)
+                  )}
+                  style={{ backgroundColor: `rgba(59, 130, 246, ${0.1 + (index % 2) * 0.05})` }}
+                  onClick={() => setSelectedItem(item)}
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="font-medium text-sm truncate">{item.title}</span>
+                    <span className={cn(
+                      "px-2 py-1 rounded-full text-xs font-medium",
+                      item.status === 'DONE' && "bg-green-500/20 text-green-400",
+                      item.status === 'IN_PROGRESS' && "bg-blue-500/20 text-blue-400",
+                      item.status === 'STOPPED' && "bg-red-500/20 text-red-400",
+                      item.status === 'NOT_STARTED' && "bg-gray-500/20 text-gray-400"
+                    )}>
+                      {statusMap[item.status as keyof typeof statusMap] || item.status}
+                    </span>
+                  </div>
+                  <div className="text-xs text-zinc-400 mb-2">
+                    {new Date(item.createdAt).toLocaleDateString('pt-BR')} - {new Date(item.term).toLocaleDateString('pt-BR')}
+                    <span className="ml-2">({getDurationInDays(item.createdAt, item.term)} dias)</span>
+                  </div>
+                  <div className="w-full bg-zinc-700 rounded-full h-2">
+                    <div
+                      className={cn(
+                        "h-2 rounded-full transition-all duration-300",
+                        item.status === 'DONE' && "bg-green-500",
+                        item.status === 'IN_PROGRESS' && "bg-blue-500",
+                        item.status === 'STOPPED' && "bg-red-500",
+                        item.status === 'NOT_STARTED' && "bg-gray-500"
+                      )}
+                      style={{ width: `${getProgress(item)}%` }}
+                    />
+                  </div>
+                </SheetTrigger>
+              ))}
+              {selectedItem && <InfoItem data={selectedItem} />}
+            </Sheet>
           </div>
         </div>
       )}

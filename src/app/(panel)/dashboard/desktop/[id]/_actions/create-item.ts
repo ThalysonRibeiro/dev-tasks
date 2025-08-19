@@ -11,10 +11,10 @@ const formSchema = z.object({
   status: z.enum(["DONE", "IN_PROGRESS", "STOPPED", "NOT_STARTED"]),
   notes: z.string()
     .min(1, "Notas é obrigatória")
-    .max(300, "A nota da item deve ter no máximo 300 caracteres."),
+    .max(500, "A nota da item deve ter no máximo 500 caracteres."),
   description: z.string()
     .min(1, "A descrição é obrigatória")
-    .max(500, "A descrição da item deve ter no máximo 500 caracteres."),
+    .max(1000, "A descrição da item deve ter no máximo 1000 caracteres."),
 });
 
 type FormSchema = z.infer<typeof formSchema>;

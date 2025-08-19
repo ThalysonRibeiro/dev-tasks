@@ -5,14 +5,22 @@ import { useState } from "react";
 import { GroupWithItems } from "./group-content";
 import { GroupForm } from "./group-form";
 import { toast } from "react-toastify";
-import { CreateItemsForm } from "./create-item-form";
+import { CreateOrEditItemForm } from "./create-or-edit-item-form";
 import { ItemsTables } from "./items-tables";
 import { deleteGroup } from "../../_actions/delete-group";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { GroupProgressBar } from "./group-progress-bar";
 import { CompletedItems } from "./completed-items";
@@ -20,8 +28,9 @@ import { CompletedItems } from "./completed-items";
 export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[], desktopId: string }) {
   const [isAddingGroup, setIsAddingGroup] = useState(false);
   const [editingGroupId, setEditingGroupId] = useState<string | null>(null);
-  const [addingItemToGroupId, setAddingItemToGroupId] = useState<string | null>(null);
   const [openGroups, setOpenGroups] = useState<Set<string>>(new Set());
+  const [closedDialog, setClosedDialog] = useState<boolean>(false);
+
 
   const toggleDropdown = (groupId: string) => {
     setOpenGroups(prev => {
@@ -39,10 +48,6 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
     setEditingGroupId(group.id);
   }
 
-  function handleAddItem(groupId: string) {
-    setAddingItemToGroupId(groupId);
-  }
-
   function closeEditForm(value: boolean) {
     if (!value) {
       setEditingGroupId(null);
@@ -52,13 +57,6 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
 
   function closeAddGroupForm(value: boolean) {
     setIsAddingGroup(value);
-    return value;
-  }
-
-  function closeAddItemForm(value: boolean) {
-    if (!value) {
-      setAddingItemToGroupId(null);
-    }
     return value;
   }
 
@@ -138,23 +136,29 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
                     <CollapsibleContent>
                       <ItemsTables items={unfinishedItems} />
 
-                      {/* Formulário de adicionar item */}
-                      {addingItemToGroupId === group.id ? (
-                        <CreateItemsForm
-                          groupId={group.id}
-                          closeForm={closeAddItemForm}
-                        />
-                      ) : (
-                        <Button
-                          onClick={() => handleAddItem(group.id)}
-                          variant="outline"
-                          className="border-dashed text-gray-600 hover:text-blue-600 hover:border-blue-300 cursor-pointer"
-                          size="sm"
-                        >
-                          <Plus className="h-4 w-4 mr-2" />
-                          Novo item
-                        </Button>
-                      )}
+                      <Dialog open={closedDialog} onOpenChange={setClosedDialog}>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="border-dashed text-gray-600 hover:text-blue-600 hover:border-blue-300 cursor-pointer"
+                            size="sm"
+                          >
+                            <Plus className="h-4 w-4 mr-2" />
+                            Novo item
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="min-h-[400px] max-h-[calc(100dvh-3rem)] min-w-[calc(100dvw-20rem)] overflow-y-scroll border-violet-900">
+                          <DialogHeader>
+                            <DialogTitle>Cadastrar novo item</DialogTitle>
+                          </DialogHeader>
+                          <CreateOrEditItemForm
+                            groupId={group.id}
+                            closeForm={() => setClosedDialog(false)}
+                            editingItem={false}
+                          />
+                        </DialogContent>
+                      </Dialog>
+
                     </CollapsibleContent>
                   </Collapsible>
                 </>
