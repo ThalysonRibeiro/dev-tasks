@@ -1,7 +1,6 @@
 "use client"
 
-import { ChevronDownIcon } from "lucide-react"
-
+import { ChevronDownIcon, CalendarIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import {
@@ -19,7 +18,7 @@ export function CalendarTerm({
   initialDate?: Date;
 }) {
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState<Date | undefined>(initialDate);
+  const [date, setDate] = useState<Date | undefined>(initialDate || new Date());
 
   useEffect(() => {
     if (initialDate) {
@@ -27,28 +26,44 @@ export function CalendarTerm({
     }
   }, [initialDate]);
 
+  const handleDateSelect = (selectedDate: Date | undefined) => {
+    if (selectedDate) {
+      setDate(selectedDate);
+      onChange(selectedDate);
+      setOpen(false);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-3">
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover open={open} onOpenChange={setOpen} modal={true}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            id="date"
-            className="w-48 justify-between font-normal"
+            className="w-48 justify-start text-left font-normal"
+            type="button"
           >
-            {date ? date.toLocaleDateString() : "Selecione a data"}
-            <ChevronDownIcon />
+            <CalendarIcon className="mr-2 h-4 w-4" />
+            {date ? (
+              date.toLocaleDateString('pt-BR')
+            ) : (
+              <span>Selecione a data</span>
+            )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+        <PopoverContent
+          className="w-auto p-0"
+          align="start"
+          side="bottom"
+          sideOffset={4}
+          style={{ zIndex: 9999 }}
+          onOpenAutoFocus={(e) => e.preventDefault()}
+        >
           <Calendar
             mode="single"
             selected={date}
-            onSelect={(newDate) => {
-              setDate(newDate);
-              onChange(newDate || new Date());
-              setOpen(false);
-            }}
+            onSelect={handleDateSelect}
+            defaultMonth={date}
           />
         </PopoverContent>
       </Popover>

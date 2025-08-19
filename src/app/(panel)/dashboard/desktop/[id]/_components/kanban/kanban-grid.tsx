@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card"
 import { KanbanProps } from "./kanbam-content";
 import { Item, Status } from "@/generated/prisma";
-import { Plus } from "lucide-react";
+import { Eye, Info, Plus } from "lucide-react";
 import { format } from "date-fns";
 import { useState } from "react";
 import { updateItem } from "../../_actions/update-item";
@@ -17,6 +17,9 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { DialogContentNewItem } from "./dialog-new-item";
 import { Button } from "@/components/ui/button";
 import { borderColorPriority, borderColorStatus, priorityMap, statusMap } from "@/utils/colorStatus-priority";
+import { Sheet, SheetTrigger } from "@/components/ui/sheet";
+import { InfoItem } from "../main-board/info-item";
+import { cn } from "@/lib/utils";
 
 export function KanbanGrid({ groupsData }: KanbanProps) {
   const [draggedItem, setDraggedItem] = useState<Item | null>(null);
@@ -37,17 +40,30 @@ export function KanbanGrid({ groupsData }: KanbanProps) {
 
     // Criar preview customizado
     const dragPreview = document.createElement('div');
-    dragPreview.className = 'bg-zinc-950 border-1 border-violet-500 rounded-lg p-3 shadow-lg max-w-xs opacity-90';
+    const statusClass = `text-xs border-l-4 pl-1 ${borderColorStatus(item.status)}`;
+    const priorityClass = `text-xs border-l-4 pl-1 ${borderColorPriority(item.priority)}`;
+    dragPreview.className = 'h-35 w-60 bg-zinc-950 border-1 border-violet-500 rounded-lg p-3 shadow-lg opacity-90 space-y-1';
     dragPreview.innerHTML = `
-      <div class="font-medium text-gray-200">${item.title}</div>
-      <div class="text-sm text-gray-300 mt-1">${item.status}</div>
-      <div class="text-sm text-gray-300">${format(new Date(item.term), "dd/MM/yyyy")}</div>
+      <div class="font-medium text-gray-200 truncate">${item.title}</div>
+      <div class="text-sm text-gray-300">
+        ${format(new Date(item.term), "dd/MM/yyyy")}
+      </div>
+      <div class="flex gap-4 text-muted-foreground">
+        <p class="${statusClass}">
+          ${statusMap[item.status]}
+        </p>
+        <p class="${priorityClass}">
+          ${priorityMap[item.priority]}
+        </p>
+      </div>
+      <div class="text-gray-200 text-sm truncate">${item.notes}</div>
     `;
 
     // Posicionar fora da tela
     dragPreview.style.position = 'absolute';
     dragPreview.style.top = '-1000px';
     dragPreview.style.left = '-1000px';
+
 
     document.body.appendChild(dragPreview);
     e.dataTransfer.setDragImage(dragPreview, 0, 0);
@@ -151,18 +167,26 @@ export function KanbanGrid({ groupsData }: KanbanProps) {
               .map(item => (
                 <div
                   key={item.id}
-                  className={`space-y-1 text-sm border rounded bg-background p-2 cursor-move kanban-item hover:shadow-md transition-all duration-200 ${draggedItem?.id === item.id ? 'opacity-50 scale-95 rotate-2' : ''
+                  className={`space-y-1 text-sm border rounded bg-background p-2 cursor-move kanban-item hover:shadow-md transition-all duration-200 ${draggedItem?.id === item.id ? 'opacity-50 scale-95 rotate-2 border border-dashed border-violet-500' : ''
                     }`}
                   draggable
                   onDragStart={(e) => handleDragStart(e, item)}
                 >
-                  <h3 className="font-medium">{item.title}</h3>
+                  <h3 className="font-medium truncate">{item.title}</h3>
                   <div className="flex gap-4 text-muted-foreground">
                     <p className={`text-xs border-l-4 pl-1 ${borderColorStatus(item.status)}`}>{statusMap[item.status]}</p>
                     <p className={`text-xs border-l-4 pl-1 ${borderColorPriority(item.priority)}`}>{priorityMap[item.priority]}</p>
                   </div>
                   <p className="text-xs">{format(new Date(item.term), "dd/MM/yyyy")}</p>
-                  {item.notes && <h4 className="text-sm mt-2">{item.notes}</h4>}
+                  {<h4 className="text-sm mt-2 truncate">{item.notes}</h4>}
+                  <div>
+                    <Sheet>
+                      <SheetTrigger className="cursor-pointer flex items-center gap-2 hover:bg-accent py-1 px-2 rounded transition-colors border border-dashed">
+                        <Eye className="h-4 w-4" /> Visualizar
+                      </SheetTrigger>
+                      <InfoItem data={item} />
+                    </Sheet>
+                  </div>
                 </div>
               ))}
           </CardContent>

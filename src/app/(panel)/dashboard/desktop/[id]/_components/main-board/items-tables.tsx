@@ -28,13 +28,15 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import { Input } from "@/components/ui/input"
 import { toast } from "react-toastify"
 import { colorPriority, colorStatus, priorityMap, statusMap } from "@/utils/colorStatus-priority"
-import { Trash, Check, X, CircleAlert, MoreHorizontal, Info } from "lucide-react"
+import { Trash, Check, X, CircleAlert, MoreHorizontal, Info, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { CalendarTerm } from "./calendar-term"
 import { Textarea } from "@/components/ui/textarea"
 import { updateItem } from "../../_actions/update-item"
 import { deleteItem } from "../../_actions/delete-item"
 import { cn } from "@/lib/utils"
+import { InfoItem } from "./info-item"
+import { Sheet, SheetTrigger } from "@/components/ui/sheet"
 
 type EditingField = 'title' | 'notes' | 'description' | 'term' | null;
 
@@ -48,6 +50,7 @@ export function ItemsTables({ items }: { items: Item[] }) {
   const [editingData, setEditingData] = useState<Item | null>(null);
   const [isLoading, setIsLoading] = useState<string | null>(null);
   const formRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const isEditing = (itemId: string, field: EditingField) =>
     editing.itemId === itemId && editing.field === field;
@@ -201,7 +204,7 @@ export function ItemsTables({ items }: { items: Item[] }) {
         className="cursor-pointer hover:bg-accent p-1 rounded transition-colors overflow-auto"
         title="Clique para editar"
       >
-        <p className="overflow-hidden text-ellipsis" style={{
+        <p className="overflow-hidden max-w-65 text-ellipsis truncate" style={{
           display: '-webkit-box',
           WebkitLineClamp: 2,
           WebkitBoxOrient: 'vertical',
@@ -223,41 +226,57 @@ export function ItemsTables({ items }: { items: Item[] }) {
   }
 
   return (
-    <div ref={formRef} className="flex items-center">
-      <div className="border-y border-l rounded-l-lg flex flex-col mt-2.5">
-        {items.map(item => (
-          <div
-            key={item.id}
-            className={cn("h-14 min-w-30 md:min-w-75 w-full border-b flex items-center justify-between p-2 rounded",
-              items.slice(-1).includes(item) && 'border-b-0',
-            )}
-          >
-            {renderEditableCell(item, 'title', item.title)}
+    <div ref={formRef} className="w-full flex items-center">
+      <div className="border-y border-l rounded-l-lg flex flex-col mt-[17px]">
+        {items.map(item => {
+          const titleCaptalized = item.title[0].toUpperCase() + item.title.slice(1);
+          return (
+            <div
+              key={item.id}
+              className={cn("h-[41px] min-w-30 md:min-w-75 w-full border-b flex items-center justify-between p-1 rounded",
+                items.slice(-1).includes(item) && 'border-b-0',
+              )}
+            >
+              {renderEditableCell(item, 'title', titleCaptalized)}
 
-            <DropdownMenu>
-              <DropdownMenuTrigger className="cursor-pointer">
-                <MoreHorizontal className="h-4 w-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="space-y-1">
-                <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer">
-                  <Info className="h-4 w-4" /> Visualizar
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  variant="destructive"
-                  disabled={isLoading === item.id}
-                  onClick={() => handleDeleteItem(item.id)}
-                  className="cursor-pointer"
-                >
-                  <Trash className="h-4 w-4" /> Deletar
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        ))}
+              <DropdownMenu>
+                <DropdownMenuTrigger className="cursor-pointer">
+                  <MoreHorizontal className="h-4 w-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="space-y-1">
+                  <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <Sheet>
+                    <DropdownMenuItem
+                      asChild
+                      onSelect={(e) => e.preventDefault()}
+                    >
+                      <SheetTrigger className="flex items-center gap-2 cursor-pointer">
+                        <Eye className="h-4 w-4" /> Visualizar
+                      </SheetTrigger>
+                    </DropdownMenuItem>
+                    <InfoItem data={item} />
+                  </Sheet>
+                  <DropdownMenuItem
+                    variant="destructive"
+                    disabled={isLoading === item.id}
+                    onClick={() => handleDeleteItem(item.id)}
+                    className="cursor-pointer"
+                  >
+                    <Trash className="h-4 w-4" /> Deletar
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <Sheet open={isOpen} onOpenChange={setIsOpen}>
+                {/* <SheetTrigger>Open</SheetTrigger> */}
+                <InfoItem data={item} />
+              </Sheet>
+            </div>
+          )
+        })}
       </div>
-      <div className="max-w-[56.4dvw] w-full overflow-scroll border rounded-lg">
+      <div className="max-w-[calc(100dvw-15rem)] w-full overflow-scroll border rounded-lg">
         <Table className="border-b mb-4">
           <TableHeader>
             <TableRow>
@@ -282,20 +301,38 @@ export function ItemsTables({ items }: { items: Item[] }) {
                         }}
                         className="flex items-start gap-2"
                       >
-                        <Textarea
-                          value={editingData?.notes || ''}
-                          onChange={(e) => setEditingData(prev =>
-                            prev ? { ...prev, notes: e.target.value } : null
-                          )}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Escape') cancelEditing();
-                            if (e.key === 'Enter' && e.ctrlKey) handleSaveField(item);
-                          }}
-                          autoFocus
-                          disabled={isLoading === item.id}
-                          className="max-h-[120px] w-full"
-                          placeholder="Digite as notas..."
-                        />
+                        <div className="flex-1 space-y-2">
+                          <Textarea
+                            value={editingData?.notes || ''}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              if (value.length <= 500) {
+                                setEditingData(prev =>
+                                  prev ? { ...prev, notes: value } : null
+                                );
+                              }
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Escape') cancelEditing();
+                              if (e.key === 'Enter' && e.ctrlKey) handleSaveField(item);
+                            }}
+                            autoFocus
+                            disabled={isLoading === item.id}
+                            className="max-h-[120px] w-full"
+                            placeholder="Digite as notas..."
+                            maxLength={500}
+                          />
+                          <div className="flex justify-end">
+                            <span className={`text-xs ${(editingData?.notes || '').length > 450
+                              ? 'text-red-500'
+                              : (editingData?.notes || '').length > 400
+                                ? 'text-yellow-500'
+                                : 'text-gray-500'
+                              }`}>
+                              {(editingData?.notes || '').length}/500
+                            </span>
+                          </div>
+                        </div>
                         <div className="flex flex-col gap-1">
                           <Button
                             type="submit"
@@ -323,7 +360,7 @@ export function ItemsTables({ items }: { items: Item[] }) {
                     ) : (
                       <div
                         onClick={() => startEditing(item, 'notes')}
-                        className="cursor-pointer hover:bg-accent p-2 rounded transition-colors min-h-[40px] group"
+                        className="cursor-pointer hover:bg-accent p-1 rounded transition-colors group"
                         title="Clique para editar"
                       >
                         {item.notes ? (
@@ -470,20 +507,38 @@ export function ItemsTables({ items }: { items: Item[] }) {
                         }}
                         className="flex items-start gap-2"
                       >
-                        <Textarea
-                          value={editingData?.description || ''}
-                          onChange={(e) => setEditingData(prev =>
-                            prev ? { ...prev, description: e.target.value } : null
-                          )}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Escape') cancelEditing();
-                            if (e.key === 'Enter' && e.ctrlKey) handleSaveField(item);
-                          }}
-                          autoFocus
-                          disabled={isLoading === item.id}
-                          className="max-h-[120px] w-full"
-                          placeholder="Digite a descrição..."
-                        />
+                        <div className="flex-1 space-y-2">
+                          <Textarea
+                            value={editingData?.description || ''}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              if (value.length <= 1000) {
+                                setEditingData(prev =>
+                                  prev ? { ...prev, description: value } : null
+                                );
+                              }
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Escape') cancelEditing();
+                              if (e.key === 'Enter' && e.ctrlKey) handleSaveField(item);
+                            }}
+                            autoFocus
+                            disabled={isLoading === item.id}
+                            className="max-h-[120px] w-full"
+                            placeholder="Digite a descrição..."
+                            maxLength={1000}
+                          />
+                          <div className="flex justify-end">
+                            <span className={`text-xs ${(editingData?.description || '').length > 900
+                              ? 'text-red-500'
+                              : (editingData?.description || '').length > 800
+                                ? 'text-yellow-500'
+                                : 'text-gray-500'
+                              }`}>
+                              {(editingData?.description || '').length}/1000
+                            </span>
+                          </div>
+                        </div>
                         <div className="flex flex-col gap-1">
                           <Button
                             type="submit"
@@ -511,7 +566,7 @@ export function ItemsTables({ items }: { items: Item[] }) {
                     ) : (
                       <div
                         onClick={() => startEditing(item, 'description')}
-                        className="cursor-pointer hover:bg-accent p-2 rounded transition-colors min-h-[40px] group"
+                        className="cursor-pointer hover:bg-accent p-1 rounded transition-colors group"
                         title="Clique para editar"
                       >
                         {item.description ? (

@@ -37,6 +37,7 @@ interface DialogContentNewItemProps {
     title: string;
     term: Date;
     priority: Priority;
+    status: Status;
     notes: string;
     description: string;
   }

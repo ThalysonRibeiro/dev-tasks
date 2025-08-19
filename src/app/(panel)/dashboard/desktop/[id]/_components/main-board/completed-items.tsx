@@ -32,7 +32,9 @@ export function CompletedItems({ groupsData }: { groupsData: GroupWithItems[] })
           <ChevronDown className={cn("cursor-pointer transition-all duration-300", isOpen && "-rotate-90")} />
         </button>
       </div>
-      <Collapsible open={isOpen}>
+      <Collapsible
+        open={isOpen}
+        className="ml-6 space-y-4 border-l border-green-500 pl-4">
         <CollapsibleContent>
           <ItemsTables items={completedItems} />
         </CollapsibleContent>
