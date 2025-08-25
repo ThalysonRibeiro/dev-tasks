@@ -65,6 +65,8 @@ export default function AccountStats({ detailUser }: { detailUser: UserWithCount
     }
   };
 
+  const goalCompleted = detailUser.goals.filter(goal => goal.goalCompletions).length;
+
   return (
     <div className="space-y-4 w-full max-w-sm mx-auto">
       <h2 className="text-xl font-bold mb-4">Informações da conta</h2>
@@ -109,7 +111,7 @@ export default function AccountStats({ detailUser }: { detailUser: UserWithCount
 
         <div className="grid grid-cols-2 gap-4 text-center">
           <div className="p-3 rounded-lg">
-            <div className="text-2xl font-bold">0</div>
+            <div className="text-2xl font-bold">{goalCompleted}</div>
             <div className="text-sm">Metas</div>
           </div>
           <div className="p-3 rounded-lg">
