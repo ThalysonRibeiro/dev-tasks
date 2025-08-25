@@ -2,6 +2,7 @@
 
 import { Calendar, Clock, Database, TrendingUp } from "lucide-react";
 import { UserWithCounts } from "../types/profile-types";
+import { GoalCompletions } from "@/generated/prisma";
 
 
 export default function AccountStats({ detailUser }: { detailUser: UserWithCounts }) {
@@ -65,7 +66,11 @@ export default function AccountStats({ detailUser }: { detailUser: UserWithCount
     }
   };
 
-  const goalCompleted = detailUser.goals.filter(goal => goal.goalCompletions).length;
+  let goalCompleted: number = 0;
+  for (let i = 0; i < detailUser.goals.length; i++) {
+    goalCompleted += detailUser.goals[i].goalCompletions.length;
+  }
+
 
   return (
     <div className="space-y-4 w-full max-w-sm mx-auto">
@@ -112,7 +117,7 @@ export default function AccountStats({ detailUser }: { detailUser: UserWithCount
         <div className="grid grid-cols-2 gap-4 text-center">
           <div className="p-3 rounded-lg">
             <div className="text-2xl font-bold">{goalCompleted}</div>
-            <div className="text-sm">Metas</div>
+            <div className="text-sm">Metas concluídas</div>
           </div>
           <div className="p-3 rounded-lg">
             <div className="text-2xl font-bold">{detailUser._count.sessions}</div>
