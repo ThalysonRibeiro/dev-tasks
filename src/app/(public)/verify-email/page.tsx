@@ -1,4 +1,4 @@
-import { ConfirmEmailConmponent } from "@/app/api/verify-email/_components/confirme-email";
+import { ConfirmEmailConmponent } from "@/app/(public)/verify-email/_components/confirme-email";
 
 export default function VerifyEmailPage() {
   return (
