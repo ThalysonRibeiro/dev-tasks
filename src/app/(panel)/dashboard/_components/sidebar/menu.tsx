@@ -14,6 +14,7 @@ import { useState } from "react";
 import { Session } from "next-auth";
 import { Button } from "@/components/ui/button";
 import { ChevronsUpDown, User, LogOut, Loader2 } from "lucide-react";
+import Link from "next/link";
 
 interface MenuProps {
   userData: Session;
@@ -83,8 +84,10 @@ export function Menu({ userData }: MenuProps) {
         <DropdownMenuSeparator />
 
         <DropdownMenuItem className="cursor-pointer">
-          <User className="mr-2 h-4 w-4" />
-          Perfil
+          <Link href="/dashboard/profile" className="flex items-center gap-2">
+            <User className="mr-2 h-4 w-4" />
+            Perfil
+          </Link>
         </DropdownMenuItem>
 
         <DropdownMenuItem

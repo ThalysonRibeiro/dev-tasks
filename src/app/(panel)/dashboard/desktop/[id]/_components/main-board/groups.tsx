@@ -29,7 +29,7 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
   const [isAddingGroup, setIsAddingGroup] = useState(false);
   const [editingGroupId, setEditingGroupId] = useState<string | null>(null);
   const [openGroups, setOpenGroups] = useState<Set<string>>(new Set());
-  const [closedDialog, setClosedDialog] = useState<boolean>(false);
+  const [openDialogs, setOpenDialogs] = useState<Set<string>>(new Set());
 
 
   const toggleDropdown = (groupId: string) => {
@@ -44,8 +44,8 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
     });
   };
 
-  function handleEditGroup(group: GroupWithItems) {
-    setEditingGroupId(group.id);
+  function handleEditGroup(groupId: string) {
+    setEditingGroupId(groupId);
   }
 
   function closeEditForm(value: boolean) {
@@ -102,7 +102,7 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
                     <h2
                       className="font-bold cursor-pointer hover:opacity-80 transition-opacity"
                       style={{ color: group.textColor }}
-                      onClick={() => handleEditGroup(group)}
+                      onClick={() => handleEditGroup(group.id)}
                       title="Clique para editar"
                     >
                       <span className="capitalize">
@@ -136,7 +136,20 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
                     <CollapsibleContent>
                       <ItemsTables items={unfinishedItems} />
 
-                      <Dialog open={closedDialog} onOpenChange={setClosedDialog}>
+                      <Dialog
+                        open={openDialogs.has(group.id)}
+                        onOpenChange={(open) => {
+                          setOpenDialogs(prev => {
+                            const newSet = new Set(prev);
+                            if (open) {
+                              newSet.add(group.id);
+                            } else {
+                              newSet.delete(group.id);
+                            }
+                            return newSet;
+                          });
+                        }}
+                      >
                         <DialogTrigger asChild>
                           <Button
                             variant="outline"
@@ -153,7 +166,13 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
                           </DialogHeader>
                           <CreateOrEditItemForm
                             groupId={group.id}
-                            closeForm={() => setClosedDialog(false)}
+                            closeForm={() => {
+                              setOpenDialogs(prev => {
+                                const newSet = new Set(prev);
+                                newSet.delete(group.id);
+                                return newSet;
+                              });
+                            }}
                             editingItem={false}
                           />
                         </DialogContent>
@@ -162,8 +181,7 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
                     </CollapsibleContent>
                   </Collapsible>
                 </>
-              )
-              }
+              )}
             </div>
           );
         })}

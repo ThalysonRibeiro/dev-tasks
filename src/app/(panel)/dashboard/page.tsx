@@ -47,7 +47,7 @@ export default async function Dashboard() {
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-size-[56px_56px]" />
                 <CardHeader className="p-2">
                   <CardTitle>{desktop.title}</CardTitle>
-                  <CardDescription>Total itens: {desktop.groupe.length}</CardDescription>
+                  <CardDescription>Total grupos: {desktop.groupe.length}</CardDescription>
                 </CardHeader>
                 <CardContent className="mt-auto w-full p-2">
                   <Priorities desktopId={desktop.id} />

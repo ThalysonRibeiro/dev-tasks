@@ -81,11 +81,16 @@ model Item {
 }
 
 model User {
-  id            String          @id @default(cuid())
-  name          String?
-  email         String          @unique
-  emailVerified DateTime?
-  image         String?
+  id    String  @id @default(cuid())
+  name  String?
+  email String  @unique
+  image String?
+
+  emailVerified          DateTime?
+  emailVerificationToken String?
+  verificationExpiresAt  DateTime?
+  acceptTerms            Boolean?  @default(true)
+
   desktop       Desktop[]
   accounts      Account[]
   sessions      Session[]

@@ -269,7 +269,6 @@ export function ItemsTables({ items }: { items: Item[] }) {
               </DropdownMenu>
 
               <Sheet open={isOpen} onOpenChange={setIsOpen}>
-                {/* <SheetTrigger>Open</SheetTrigger> */}
                 <InfoItem data={item} />
               </Sheet>
             </div>
