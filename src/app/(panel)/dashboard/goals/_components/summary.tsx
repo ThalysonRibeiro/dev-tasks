@@ -48,12 +48,19 @@ export function Summary({ data, summaryData }: SummaryProps) {
     <article className="space-y-4">
       <div className="flex items-center justify-between">
         <span className="text-lg font-semibold capitalize">{firstDayOfWeek} - {lastDayOfWeek}</span>
-        <DialogTrigger asChild>
-          <Button size="sm">
-            <Plus size={16} />
-            Cadastrar meta
-          </Button>
-        </DialogTrigger>
+        <div className="flex gap-2">
+          <DialogTrigger asChild>
+            <Button size="sm">
+              <Plus size={16} />
+              Cadastrar meta
+            </Button>
+          </DialogTrigger>
+          <a href="/dashboard/goals/metrics">
+            <Button size="sm" variant="outline">
+              Métricas
+            </Button>
+          </a>
+        </div>
       </div>
 
       <div className="flex flex-col gap-4">
