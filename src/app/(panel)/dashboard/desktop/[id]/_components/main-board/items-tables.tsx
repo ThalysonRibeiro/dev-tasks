@@ -279,7 +279,6 @@ export function ItemsTables({ items }: { items: Item[] }) {
         <Table className="border-b mb-4">
           <TableHeader>
             <TableRow>
-              <TableHead>Notas</TableHead>
               <TableHead>Prioridade</TableHead>
               <TableHead>Prazo</TableHead>
               <TableHead>Status</TableHead>
@@ -289,101 +288,6 @@ export function ItemsTables({ items }: { items: Item[] }) {
           <TableBody>
             {items.map(item => (
               <TableRow key={item.id} className={isLoading === item.id ? 'opacity-50' : ''}>
-                {/* Notas */}
-                <TableCell className="max-w-65">
-                  <div className="max-w-65 overflow-hidden">
-                    {isEditing(item.id, 'notes') && 'notes' ? (
-                      <form
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          handleSaveField(item);
-                        }}
-                        className="flex items-start gap-2"
-                      >
-                        <div className="flex-1 space-y-2">
-                          <Textarea
-                            value={editingData?.notes || ''}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              if (value.length <= 500) {
-                                setEditingData(prev =>
-                                  prev ? { ...prev, notes: value } : null
-                                );
-                              }
-                            }}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Escape') cancelEditing();
-                              if (e.key === 'Enter' && e.ctrlKey) handleSaveField(item);
-                            }}
-                            autoFocus
-                            disabled={isLoading === item.id}
-                            className="max-h-[120px] w-full"
-                            placeholder="Digite as notas..."
-                            maxLength={500}
-                          />
-                          <div className="flex justify-end">
-                            <span className={`text-xs ${(editingData?.notes || '').length > 450
-                              ? 'text-red-500'
-                              : (editingData?.notes || '').length > 400
-                                ? 'text-yellow-500'
-                                : 'text-gray-500'
-                              }`}>
-                              {(editingData?.notes || '').length}/500
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex flex-col gap-1">
-                          <Button
-                            type="submit"
-                            size="sm"
-                            variant="ghost"
-                            disabled={isLoading === item.id}
-                            className="text-green-600 hover:text-green-700"
-                            title="Salvar (Ctrl + Enter)"
-                          >
-                            <Check className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="ghost"
-                            onClick={cancelEditing}
-                            disabled={isLoading === item.id}
-                            className="text-red-600 hover:text-red-700"
-                            title="Cancelar (Esc)"
-                          >
-                            <X className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </form>
-                    ) : (
-                      <div
-                        onClick={() => startEditing(item, 'notes')}
-                        className="cursor-pointer hover:bg-accent p-1 rounded transition-colors group"
-                        title="Clique para editar"
-                      >
-                        {item.notes ? (
-                          <div className="space-y-1">
-                            <p className="overflow-hidden text-ellipsis" style={{
-                              display: '-webkit-box',
-                              WebkitLineClamp: 2,
-                              WebkitBoxOrient: 'vertical',
-                              lineHeight: '1.4em',
-                              maxHeight: '2.8em'
-                            }}>
-                              {item.notes}
-                            </p>
-                          </div>
-                        ) : (
-                          <span className="text-gray-400 italic">
-                            Clique para adicionar notas
-                          </span>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </TableCell>
-
                 {/* Prioridade */}
                 <TableCell>
                   <Select
@@ -496,8 +400,8 @@ export function ItemsTables({ items }: { items: Item[] }) {
                 </TableCell>
 
                 {/* Descrição */}
-                <TableCell className="max-w-65">
-                  <div className="max-w-65 overflow-hidden">
+                <TableCell className="max-w-90">
+                  <div className="overflow-hidden">
                     {isEditing(item.id, 'description') && 'description' ? (
                       <form
                         onSubmit={(e) => {
