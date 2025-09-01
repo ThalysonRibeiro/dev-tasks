@@ -18,6 +18,17 @@ export async function updateGroup(formData: FormSchema) {
       error: schema.error.issues[0].message
     }
   }
+
+  const existingGroup = await prisma.group.findUnique({
+    where: { id: formData.id }
+  });
+
+  if (!existingGroup) {
+    return {
+      error: "Grupo não encontrado"
+    }
+  }
+
   try {
     await prisma.group.update({
       where: { id: formData.id },

@@ -11,12 +11,10 @@ import { deleteGroup } from "../../_actions/delete-group";
 import {
   Collapsible,
   CollapsibleContent,
-  CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,

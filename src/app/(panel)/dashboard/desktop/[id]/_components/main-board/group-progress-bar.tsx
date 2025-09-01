@@ -16,7 +16,7 @@ export function GroupProgressBar({ items }: GroupProgressBarProps) {
   }, {} as Record<Status, number>);
 
   return (
-    <div className="flex w-full max-w-75 h-4 rounded-md overflow-hidden">
+    <div className="flex w-full max-w-75 h-2 rounded-md overflow-hidden">
       {Object.entries(statusCounts).map(([status, count]) => (
         <div
           key={status}

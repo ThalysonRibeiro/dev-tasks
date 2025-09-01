@@ -77,7 +77,7 @@ export default function AccountSecurity({ detailUser }: { detailUser: User }) {
                 <span className="font-medium">Two-Factor Authentication</span>
               </div>
               <button className="text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200">
-                Enable
+                Desabilitado
               </button>
             </div>
             <div className="border flex items-center justify-between py-3 px-4 rounded-lg">
@@ -86,7 +86,7 @@ export default function AccountSecurity({ detailUser }: { detailUser: User }) {
                 <span className="font-medium">Login Alerts</span>
               </div>
               <button className="text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200">
-                Manage
+                Gerenciar
               </button>
             </div>
           </div>
