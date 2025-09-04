@@ -1,6 +1,6 @@
 # Dev Tasks
 
-Uma aplicação moderna de gerenciamento de tarefas para desenvolvedores, construída com Next.js 15 e as melhores práticas de desenvolvimento web.
+Clone parcial do Monday.com - Sistema de gestão de projetos e metas
 
 ## 🚀 Tecnologias
 

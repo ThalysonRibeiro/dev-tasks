@@ -54,7 +54,9 @@ export function PedingGoals({ data }: { data: PendingGoal[] }) {
             onClick={() => handleCompleteGoal(goal.id)}
           >
             <Plus />
-            {goal.title}  ({goal.completionCount}/{goal.desiredWeeklyFrequency})
+            <p className="truncate text-ellipsis max-w-[calc(100dvw-9.5rem)]">
+              <span className="capitalize">{goal.title.slice(0, 1)}</span>{goal.title.slice(1)} ({goal.completionCount}/{goal.desiredWeeklyFrequency})
+            </p>
           </Button>
           <Button
             size={"icon"}

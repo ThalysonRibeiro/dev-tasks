@@ -86,16 +86,20 @@ export function Summary({ data, summaryData }: SummaryProps) {
                   <span className="text-xs">({formattedDate})</span>
                 </h3>
                 <ul className="flex flex-col gap-3">
-                  {goals.map(goal => {
+                  {goals.sort((a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime()).map(goal => {
                     const time = format(new Date(goal.completedAt), 'HH:mm')
                     return (
-                      <li key={goal.id} className="flex items-center gap-2 justify-between">
+                      <li key={goal.id} className="flex items-center gap-2 justify-between border-b">
                         <div className="flex gap-2">
                           <CheckCircle2 className="size-4 text-primary" />
-                          <span className="text-sm inline-flex">
-                            Você completou &ldquo;<span className="truncate inline-block max-w-[120px] md:text-clip md:max-w-[470px] font-semibold">{goal.title}</span>&ldquo; às
-                            <span className="font-semibold text-primary ml-1">{time}</span>
-                          </span>
+                          <p className="text-sm inline-flex">
+                            &ldquo;
+                            <span className="truncate text-ellipsis max-w-60 inline-block font-semibold">
+                              <span className="capitalize">{goal.title.slice(0, 1)}</span>
+                              {goal.title.slice(1)}</span>
+                            &ldquo; -
+                            <span className="font-thin text-primary ml-1">{time}</span>
+                          </p>
                         </div>
                         <button
                           className="text-sm cursor-pointer underline"
