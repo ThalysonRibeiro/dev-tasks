@@ -12,6 +12,7 @@ export function CardSignIn() {
   async function handleSignIn(provider: SigInType) {
     await handleRegister(provider);
   }
+
   return (
     <Card className="max-w-100 w-full">
       <CardHeader>
