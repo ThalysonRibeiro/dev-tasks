@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "dev:test": "dotenv -e .env.test -- next dev --turbopack",
-    "build": "prisma generate && npx prisma migrate deploy && next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
@@ -30,7 +30,9 @@
     "test:e2e:headed": "dotenv -e .env.test -- playwright test --headed",
     "test:all": "npm run test:unit && npm run test:e2e",
     "test:ci": "npm run lint && npm run type-check && npm run test:all",
-    "clean": "rm -rf .next coverage playwright-report test-results"
+    "clean": "rm -rf .next coverage playwright-report test-results",
+    "vercel-build": "prisma generate && prisma migrate deploy && next build",
+    "post-deploy": "chmod +x scripts/post-deploy.sh && ./scripts/post-deploy.sh"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.9.1",
