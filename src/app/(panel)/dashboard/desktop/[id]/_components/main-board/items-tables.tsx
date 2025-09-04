@@ -37,6 +37,7 @@ import { deleteItem } from "../../_actions/delete-item"
 import { cn } from "@/lib/utils"
 import { InfoItem } from "./info-item"
 import { Sheet, SheetTrigger } from "@/components/ui/sheet"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 type EditingField = 'title' | 'notes' | 'description' | 'term' | null;
 
@@ -46,6 +47,7 @@ interface EditingState {
 }
 
 export function ItemsTables({ items }: { items: Item[] }) {
+  const isMobile = useIsMobile();
   const [editing, setEditing] = useState<EditingState>({ itemId: null, field: null });
   const [editingData, setEditingData] = useState<Item | null>(null);
   const [isLoading, setIsLoading] = useState<string | null>(null);
@@ -227,7 +229,9 @@ export function ItemsTables({ items }: { items: Item[] }) {
 
   return (
     <div ref={formRef} className="w-full flex items-center">
-      <div className="border-y border-l rounded-l-lg flex flex-col mt-[17px]">
+      <div className={cn("flex flex-col mt-[17px]",
+        isMobile ? "w-full border rounded-lg" : "border-y border-l rounded-l-lg"
+      )}>
         {items.map(item => {
           const titleCaptalized = item.title[0].toUpperCase() + item.title.slice(1);
           return (
@@ -238,7 +242,6 @@ export function ItemsTables({ items }: { items: Item[] }) {
               )}
             >
               {renderEditableCell(item, 'title', titleCaptalized)}
-
               <DropdownMenu>
                 <DropdownMenuTrigger className="cursor-pointer">
                   <MoreHorizontal className="h-4 w-4" />
@@ -275,7 +278,7 @@ export function ItemsTables({ items }: { items: Item[] }) {
           )
         })}
       </div>
-      <div className="max-w-[calc(100dvw-15rem)] w-full overflow-scroll border rounded-lg">
+      <div className="hidden md:block max-w-[calc(100dvw-15rem)] w-full overflow-scroll border rounded-lg">
         <Table className="border-b mb-4">
           <TableHeader>
             <TableRow>

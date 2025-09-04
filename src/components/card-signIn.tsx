@@ -19,13 +19,15 @@ export function CardSignIn() {
       </CardHeader>
       <CardContent className="space-y-4">
         <Button
+          variant={"outline"}
           onClick={() => handleSignIn("github")}
-          className="w-full cursor-pointer bg-background hover:bg-background border hover:border-primary">
+          className="w-full cursor-pointer">
           <FaGithub /> GitHub
         </Button>
         <Button
+          variant={"outline"}
           onClick={() => handleSignIn("google")}
-          className="w-full cursor-pointer bg-background hover:bg-background border hover:border-primary">
+          className="w-full cursor-pointer">
           <FcGoogle /> Google
         </Button>
       </CardContent>

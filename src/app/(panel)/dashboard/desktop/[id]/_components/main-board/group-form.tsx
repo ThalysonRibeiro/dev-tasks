@@ -83,7 +83,7 @@ export function GroupForm({ setAddGroup, initialValues, groupId, desktopId }: Cr
   return (
     <div ref={formRef}>
       <Form {...form}>
-        <form className="flex gap-4 max-w-100" onSubmit={form.handleSubmit(onSubmit)}>
+        <form className="flex items-center gap-2 max-w-100" onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
             name="title"
@@ -96,6 +96,7 @@ export function GroupForm({ setAddGroup, initialValues, groupId, desktopId }: Cr
                     placeholder="Digite o nome do grupo"
                     aria-describedby="group-name-error"
                     aria-required="true"
+                    className="mt-2"
                   />
                 </FormControl>
                 <FormDescription />
@@ -107,7 +108,7 @@ export function GroupForm({ setAddGroup, initialValues, groupId, desktopId }: Cr
             control={form.control}
             name="textColor"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="rounded-full overflow-hidden border-2 w-8 h-8 relative">
                 <FormControl>
                   <Input
                     {...field}
@@ -115,7 +116,7 @@ export function GroupForm({ setAddGroup, initialValues, groupId, desktopId }: Cr
                     type="color"
                     aria-describedby="group-name-error"
                     aria-required="true"
-                    className="w-8 border-0 p-0"
+                    className="border-0 p-0 cursor-pointer w-15  h-15 absolute -top-1 -left-1 "
                   />
                 </FormControl>
                 <FormDescription />

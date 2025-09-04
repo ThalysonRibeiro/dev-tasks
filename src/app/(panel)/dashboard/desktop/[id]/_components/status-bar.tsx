@@ -1,7 +1,6 @@
 import { colorStatus, statusKeys, statusMap } from "@/utils/colorStatus-priority";
 import { StatusCount } from "../_data-access/get-status";
 import { Status } from "@/generated/prisma";
-import { cn } from "@/lib/utils";
 
 interface StatusBarProps {
   status: StatusCount[];
@@ -23,14 +22,6 @@ export function StatusBar({ status }: StatusBarProps) {
               backgroundColor: getStatusColor(s.status as Status),
             }}
           />
-        ))}
-      </div>
-      <div className="flex justify-between gap-2 capitalize text-xs bg-zinc-900 rounded-lg border border-primary p-2.5 w-full absolute top-5 inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        {statusKeys.map(key => (
-          <div key={key} className="flex items-center">
-            <div className={cn("w-3 h-3 rounded mr-1", colorStatus(key))} />
-            {statusMap[key as keyof typeof statusMap].toLowerCase()}
-          </div>
         ))}
       </div>
     </div>

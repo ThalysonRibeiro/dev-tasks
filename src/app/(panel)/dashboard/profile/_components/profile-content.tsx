@@ -13,7 +13,7 @@ import { UserWithCounts } from "../types/profile-types"
 export function ProfileContent({ sessionUser, detailUser }: { sessionUser: User, detailUser: UserWithCounts }) {
   return (
     <div className="space-y-6 mt-6 mb-10">
-      <Card className="bg-gradient-to-t from-zinc-900 to-zinc-950">
+      <Card>
         <CardHeader>
           <CardTitle>Perfil</CardTitle>
           <CardDescription>Gerencie suas informações de perfil</CardDescription>
@@ -35,7 +35,7 @@ export function ProfileContent({ sessionUser, detailUser }: { sessionUser: User,
           </div>
         </CardContent>
       </Card>
-      <Card className="bg-gradient-to-b from-zinc-900 to-zinc-950">
+      <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-3">
             <Shield className="w-6 h-6 text-green-600" />

@@ -83,7 +83,7 @@ export function Summary({ data, summaryData }: SummaryProps) {
               <div key={date} className="flex flex-col gap-4">
                 <h3 className="font-medium">
                   <span className="capitalize">{dayOfWeek}</span>{' '}
-                  <span className="text-zinc-400 text-xs">({formattedDate})</span>
+                  <span className="text-xs">({formattedDate})</span>
                 </h3>
                 <ul className="flex flex-col gap-3">
                   {goals.map(goal => {
@@ -92,13 +92,13 @@ export function Summary({ data, summaryData }: SummaryProps) {
                       <li key={goal.id} className="flex items-center gap-2 justify-between">
                         <div className="flex gap-2">
                           <CheckCircle2 className="size-4 text-primary" />
-                          <span className="text-zinc-400 text-sm inline-flex">
-                            Você completou &ldquo;<span className="text-zinc-100 truncate inline-block max-w-[120px] md:text-clip md:max-w-[470px]">{goal.title}</span>&ldquo; às
-                            <span className="text-zinc-100 ml-1">{time}</span>
+                          <span className="text-sm inline-flex">
+                            Você completou &ldquo;<span className="truncate inline-block max-w-[120px] md:text-clip md:max-w-[470px] font-semibold">{goal.title}</span>&ldquo; às
+                            <span className="font-semibold text-primary ml-1">{time}</span>
                           </span>
                         </div>
                         <button
-                          className="text-zinc-400 hover:text-primary text-sm border-b border-b-zinc-400 cursor-pointer"
+                          className="text-sm cursor-pointer underline"
                           onClick={() => handleUndo(goal.id)}
                         >Desfazer
                         </button>
@@ -132,8 +132,8 @@ export function ProgressGoals({
       <Progress max={total} value={completed}>
         <ProgressIndicator style={{ width: `${completedPercentage}%` }} />
       </Progress>
-      <div className="flex items-center justify-between text-xs text-zinc-400">
-        <span>Você completou <span className="text-zinc-100">{completed}</span> de <span className="text-zinc-100">{total}</span> metas nessa semana.</span>
+      <div className="flex items-center justify-between text-xs">
+        <span>Você completou <span>{completed}</span> de <span>{total}</span> metas nessa semana.</span>
         <span>{completedPercentage}%</span>
       </div>
     </div>
