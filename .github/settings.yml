@@ -1,0 +1,55 @@
+# GitHub Repository Settings
+# https://docs.github.com/en/rest/reference/repos#update-branch-protection
+
+repository:
+  # Configurações gerais do repositório
+  name: dev-tasks
+  description: "Aplicação moderna de gerenciamento de tarefas para desenvolvedores"
+  homepage: "https://dev-tasks.vercel.app"
+  topics: "nextjs,typescript,tailwindcss,prisma,vercel"
+  private: false
+  has_issues: true
+  has_wiki: false
+  has_downloads: false
+  default_branch: "main"
+  allow_squash_merge: true
+  allow_merge_commit: true
+  allow_rebase_merge: false
+  delete_branch_on_merge: true
+
+branches:
+  - name: main
+    protection:
+      required_status_checks:
+        strict: true
+        contexts:
+          - "PR Checks"
+      enforce_admins: false
+      required_pull_request_reviews:
+        required_approving_review_count: 1
+        dismiss_stale_reviews: true
+        require_code_owner_reviews: false
+      restrictions: null
+      required_linear_history: false
+      allow_force_pushes: false
+      allow_deletions: false
+      block_creations: false
+      required_conversation_resolution: true
+
+  - name: develop
+    protection:
+      required_status_checks:
+        strict: true
+        contexts:
+          - "PR Checks"
+      enforce_admins: false
+      required_pull_request_reviews:
+        required_approving_review_count: 1
+        dismiss_stale_reviews: true
+        require_code_owner_reviews: false
+      restrictions: null
+      required_linear_history: false
+      allow_force_pushes: false
+      allow_deletions: false
+      block_creations: false
+      required_conversation_resolution: true
