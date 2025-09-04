@@ -27,7 +27,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { colorPriority, colorStatus, priorityMap, statusMap } from "@/utils/colorStatus-priority";
 import { cn } from "@/lib/utils";
 import { updateItem } from "../../_actions/update-item";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useMobile } from "@/hooks/use-mobile";
 
 interface CreateItemFormProps {
   closeForm: (value: boolean) => void;
@@ -47,7 +47,7 @@ interface CreateItemFormProps {
 export function CreateOrEditItemForm({ closeForm, initialValues, groupId, itemId, editingItem }: CreateItemFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const form = UseItemForm({ initialValues });
-  const isMobile = useIsMobile(1024);
+  const isMobile = useMobile();
 
 
   async function onSubmit(formData: ItemFormData) {

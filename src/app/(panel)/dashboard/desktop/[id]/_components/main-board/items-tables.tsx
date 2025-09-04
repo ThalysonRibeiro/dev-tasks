@@ -37,7 +37,7 @@ import { deleteItem } from "../../_actions/delete-item"
 import { cn } from "@/lib/utils"
 import { InfoItem } from "./info-item"
 import { Sheet, SheetTrigger } from "@/components/ui/sheet"
-import { useIsMobile } from "@/hooks/use-mobile"
+import { useMobile } from "@/hooks/use-mobile"
 
 type EditingField = 'title' | 'notes' | 'description' | 'term' | null;
 
@@ -47,7 +47,7 @@ interface EditingState {
 }
 
 export function ItemsTables({ items }: { items: Item[] }) {
-  const isMobile = useIsMobile();
+  const isMobile = useMobile();
   const [editing, setEditing] = useState<EditingState>({ itemId: null, field: null });
   const [editingData, setEditingData] = useState<Item | null>(null);
   const [isLoading, setIsLoading] = useState<string | null>(null);

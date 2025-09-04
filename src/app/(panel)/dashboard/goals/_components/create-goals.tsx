@@ -23,7 +23,7 @@ import { useState } from "react";
 import { RadioGroup, RadioGroupIndicator, RadioGroupItem } from "@/components/ui/radio-group";
 import { createGoal } from "../_actions/create-goal";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useMobile } from "@/hooks/use-mobile";
 
 interface CreateGoalProps {
   initialValues?: {
@@ -34,7 +34,7 @@ interface CreateGoalProps {
 
 export function CreateGoals({ initialValues }: CreateGoalProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const isMobile = useIsMobile()
+  const isMobile = useMobile()
   const form = UseCreateGoalForm({ initialValues });
 
   async function onSubmit(formData: CreateGoalForm) {
