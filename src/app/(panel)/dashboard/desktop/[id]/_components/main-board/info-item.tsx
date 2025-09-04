@@ -17,22 +17,8 @@ export function InfoItem({ data }: { data: Item }) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const shetRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (shetRef.current && !shetRef.current.contains(event.target as Node)) {
-        setIsEditing(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isEditing])
-
   return (
-    <SheetContent ref={shetRef} className="overflow-y-scroll min-w-100 md:min-w-150 w-full">
+    <SheetContent ref={shetRef} className="overflow-y-scroll ">
       <Button className="w-fit ml-4 mt-4 border-dashed" variant={"outline"}
         onClick={() => setIsEditing(prev => !prev)}
       >
@@ -70,8 +56,8 @@ export function InfoItem({ data }: { data: Item }) {
           </SheetHeader>
           <div className="p-4 space-y-4">
 
-            <div className="flex justify-between">
-              <div className="flex items-center gap-2 text-sm">
+            <div className="flex flex-wrap gap-2 items-center justify-between">
+              <div className="flex flex-col text-sm">
                 <span>
                   Prioridade:
                 </span>
@@ -79,12 +65,25 @@ export function InfoItem({ data }: { data: Item }) {
                   {priorityMap[data.priority]}
                 </span>
               </div>
-              <div className="flex items-center gap-2 text-sm">
+              <div className="flex flex-col text-sm">
                 <span>
                   Status:
                 </span>
                 <span className={cn("px-2 py-1 w-fit rounded-lg", colorStatus(data.status))}>
                   {statusMap[data.status]}
+                </span>
+              </div>
+              <div className="flex flex-col text-sm">
+                <span>
+                  Prazo:
+                </span>
+                <span className={cn(
+                  "px-2 py-1 w-fit rounded-lg",
+                  new Date(data.term).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)
+                    ? "bg-red-500 text-white"
+                    : "bg-green-500 text-white"
+                )}>
+                  {data.term ? new Date(data.term).toLocaleDateString() : "Não definido"}
                 </span>
               </div>
             </div>
@@ -93,7 +92,7 @@ export function InfoItem({ data }: { data: Item }) {
               <span>
                 Descrição:
               </span>
-              <p className="mt-1 text-zinc-400 italic bg-zinc-900 p-2 rounded-lg border">
+              <p className="mt-1 italic bg-accent p-2 rounded-lg border">
                 {data.description}
               </p>
             </div>

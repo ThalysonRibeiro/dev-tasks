@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Header } from "../../_components/header";
-import { CalendarContent } from "./calendar/calendar-content";
 import { GroupContent, GroupWithItems } from "./main-board/group-content";
 import { KanbanContent } from "./kanban/kanbam-content";
 import { PrioritiesCount } from "../_data-access/get-priorities";
@@ -31,13 +30,6 @@ export function DesktopContent({ groupsData, desktopId, prioritiesData, statusDa
       label:
         "Kanban",
       component: groupsData.length === 0 ? <p>Nenhum item encontrado</p> : <KanbanContent groupsData={groupsData} />
-    },
-    {
-      key:
-        "calendar",
-      label:
-        "Calendário",
-      component: groupsData.length === 0 ? <p>Nenhum item encontrado</p> : <CalendarContent groupsData={groupsData} />
     },
   ];
   return (

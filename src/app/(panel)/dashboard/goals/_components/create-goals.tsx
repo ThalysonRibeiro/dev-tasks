@@ -103,31 +103,31 @@ export function CreateGoals({ initialValues }: CreateGoalProps) {
 
                       <SelectContent>
                         <SelectItem value="1">
-                          <span className="text-zinc-300 text-sm font-medium leading-none">1x na semana</span>
+                          <span className="text-sm font-medium leading-none">1x na semana</span>
                           <span className="text-lg leading-none">🥱</span>
                         </SelectItem>
                         <SelectItem value="2">
-                          <span className="text-zinc-300 text-sm font-medium leading-none">2x na semana</span>
+                          <span className="text-sm font-medium leading-none">2x na semana</span>
                           <span className="text-lg leading-none">🙂</span>
                         </SelectItem>
                         <SelectItem value="3">
-                          <span className="text-zinc-300 text-sm font-medium leading-none">3x na semana</span>
+                          <span className="text-sm font-medium leading-none">3x na semana</span>
                           <span className="text-lg leading-none">😎</span>
                         </SelectItem>
                         <SelectItem value="4">
-                          <span className="text-zinc-300 text-sm font-medium leading-none">4x na semana</span>
+                          <span className="text-sm font-medium leading-none">4x na semana</span>
                           <span className="text-lg leading-none">😜</span>
                         </SelectItem>
                         <SelectItem value="5">
-                          <span className="text-zinc-300 text-sm font-medium leading-none">5x na semana</span>
+                          <span className="text-sm font-medium leading-none">5x na semana</span>
                           <span className="text-lg leading-none">🤨</span>
                         </SelectItem>
                         <SelectItem value="6">
-                          <span className="text-zinc-300 text-sm font-medium leading-none">6x na semana</span>
+                          <span className="text-sm font-medium leading-none">6x na semana</span>
                           <span className="text-lg leading-none">🤯</span>
                         </SelectItem>
                         <SelectItem value="7">
-                          <span className="text-zinc-300 text-sm font-medium leading-none">Todos os dias da semana</span>
+                          <span className="text-sm font-medium leading-none">Todos os dias da semana</span>
                           <span className="text-lg leading-none">🔥</span>
                         </SelectItem>
                       </SelectContent>
@@ -149,37 +149,37 @@ export function CreateGoals({ initialValues }: CreateGoalProps) {
                     <RadioGroup onValueChange={field.onChange} value={String(field.value)}>
                       <RadioGroupItem value="1">
                         <RadioGroupIndicator />
-                        <span className="text-zinc-300 text-sm font-medium leading-none">1x na semana</span>
+                        <span className="text-sm font-medium leading-none">1x na semana</span>
                         <span className="text-lg leading-none">🥱</span>
                       </RadioGroupItem>
                       <RadioGroupItem value="2">
                         <RadioGroupIndicator />
-                        <span className="text-zinc-300 text-sm font-medium leading-none">2x na semana</span>
+                        <span className="text-sm font-medium leading-none">2x na semana</span>
                         <span className="text-lg leading-none">🙂</span>
                       </RadioGroupItem>
                       <RadioGroupItem value="3">
                         <RadioGroupIndicator />
-                        <span className="text-zinc-300 text-sm font-medium leading-none">3x na semana</span>
+                        <span className="text-sm font-medium leading-none">3x na semana</span>
                         <span className="text-lg leading-none">😎</span>
                       </RadioGroupItem>
                       <RadioGroupItem value="4">
                         <RadioGroupIndicator />
-                        <span className="text-zinc-300 text-sm font-medium leading-none">4x na semana</span>
+                        <span className="text-sm font-medium leading-none">4x na semana</span>
                         <span className="text-lg leading-none">😜</span>
                       </RadioGroupItem>
                       <RadioGroupItem value="5">
                         <RadioGroupIndicator />
-                        <span className="text-zinc-300 text-sm font-medium leading-none">5x na semana</span>
+                        <span className="text-sm font-medium leading-none">5x na semana</span>
                         <span className="text-lg leading-none">🤨</span>
                       </RadioGroupItem>
                       <RadioGroupItem value="6">
                         <RadioGroupIndicator />
-                        <span className="text-zinc-300 text-sm font-medium leading-none">6x na semana</span>
+                        <span className="text-sm font-medium leading-none">6x na semana</span>
                         <span className="text-lg leading-none">🤯</span>
                       </RadioGroupItem>
                       <RadioGroupItem value="7">
                         <RadioGroupIndicator />
-                        <span className="text-zinc-300 text-sm font-medium leading-none">Todos os dias da semana</span>
+                        <span className="text-sm font-medium leading-none">Todos os dias da semana</span>
                         <span className="text-lg leading-none">🔥</span>
                       </RadioGroupItem>
 
@@ -191,7 +191,6 @@ export function CreateGoals({ initialValues }: CreateGoalProps) {
               )}
             />
           )}
-
 
           <div className="flex justify-between">
             <SheetTrigger asChild>

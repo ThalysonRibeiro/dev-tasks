@@ -43,7 +43,7 @@ export default async function Dashboard() {
               href={`/dashboard/desktop/${desktop.id}`}
               key={desktop.id}
             >
-              <Card className="relative rounded-none hover:border-primary/50 bg-gradient-to-t from-slate-900/50 via-transparent to-slate-900/20 hover:bg-violet-900/10 transition-all duration-300 ease-in-out capitalize">
+              <Card className="relative rounded-none hover:border-primary/50 hover:bg-primary/10 transition-all duration-300 ease-in-out capitalize">
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-size-[56px_56px]" />
                 <CardHeader className="p-2">
                   <CardTitle>{desktop.title}</CardTitle>

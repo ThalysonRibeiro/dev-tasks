@@ -7,7 +7,7 @@ export default async function GoalsPage() {
   const weekSummaryDate = await GetWeekSummary();
 
   return (
-    <main className="container mx-auto px-6 pt-6">
+    <main className="container mx-auto px-6 pt-10">
       <GoalsContent data={pedingGoals} summaryData={weekSummaryDate} />
     </main>
   )

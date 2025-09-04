@@ -27,6 +27,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { colorPriority, colorStatus, priorityMap, statusMap } from "@/utils/colorStatus-priority";
 import { cn } from "@/lib/utils";
 import { updateItem } from "../../_actions/update-item";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface CreateItemFormProps {
   closeForm: (value: boolean) => void;
@@ -46,6 +47,7 @@ interface CreateItemFormProps {
 export function CreateOrEditItemForm({ closeForm, initialValues, groupId, itemId, editingItem }: CreateItemFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const form = UseItemForm({ initialValues });
+  const isMobile = useIsMobile(1024);
 
 
   async function onSubmit(formData: ItemFormData) {
@@ -103,7 +105,7 @@ export function CreateOrEditItemForm({ closeForm, initialValues, groupId, itemId
 
   return (
     <Form {...form}>
-      <form className={cn("grid grid-cols-1  gap-4 w-full",
+      <form className={cn("grid grid-cols-1 gap-4 w-full",
         editingItem ? "lg:grid-cols-1" : "lg:grid-cols-2"
       )}
         onSubmit={form.handleSubmit(onSubmit)}
@@ -147,7 +149,7 @@ export function CreateOrEditItemForm({ closeForm, initialValues, groupId, itemId
               </FormItem>
             )}
           />
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <FormField
               control={form.control}
               name="priority"
@@ -247,7 +249,7 @@ export function CreateOrEditItemForm({ closeForm, initialValues, groupId, itemId
                 <Textarea
                   {...field}
                   placeholder="Descreva seu item aqui..."
-                  className="max-h-[820px] min-h-[400px] w-full"
+                  className="max-h-[500px] min-h-[400px] w-full"
                 />
               </FormControl>
               <FormDescription />
@@ -255,8 +257,7 @@ export function CreateOrEditItemForm({ closeForm, initialValues, groupId, itemId
             </FormItem>
           )}
         />
-        <Button type="submit" className={cn("mt-3.5 w-full col-span-1",
-          editingItem ? "col-span-1" : "col-span-2"
+        <Button type="submit" className={cn("mt-3.5 w-fit px-10"
         )}>
           {editingItem ? 'Salvar' : 'Cadastrar'}
         </Button>

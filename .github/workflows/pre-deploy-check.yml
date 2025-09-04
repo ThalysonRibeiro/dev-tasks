@@ -1,0 +1,111 @@
+name: Pre-Deploy Check
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  pre-deploy-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: myuser
+          POSTGRES_PASSWORD: mypassword
+          POSTGRES_DB: mydb_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Generate Prisma client
+      run: npx prisma generate
+    
+    - name: Run database migrations
+      run: npm run db:test:migrate
+      env:
+        DATABASE_URL: postgresql://myuser:mypassword@localhost:5432/mydb_test
+        NEXTAUTH_URL: http://localhost:3000
+        NEXTAUTH_SECRET: test-secret-key
+        EMAIL_SERVER_HOST: localhost
+        EMAIL_SERVER_PORT: 1025
+        EMAIL_FROM: test@example.com
+    
+    - name: Run lint and type check
+      run: |
+        npm run lint
+        npm run type-check
+    
+    - name: Run unit tests
+      run: npm run test:unit:coverage
+      env:
+        DATABASE_URL: postgresql://myuser:mypassword@localhost:5432/mydb_test
+        NEXTAUTH_URL: http://localhost:3000
+        NEXTAUTH_SECRET: test-secret-key
+        EMAIL_SERVER_HOST: localhost
+        EMAIL_SERVER_PORT: 1025
+        EMAIL_FROM: test@example.com
+    
+    - name: Build application
+      run: npm run build
+      env:
+        DATABASE_URL: postgresql://myuser:mypassword@localhost:5432/mydb_test
+        NEXTAUTH_URL: http://localhost:3000
+        NEXTAUTH_SECRET: test-secret-key
+        EMAIL_SERVER_PORT: 1025
+        EMAIL_FROM: test@example.com
+    
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+    
+    - name: Run E2E tests
+      run: npm run test:e2e
+      env:
+        DATABASE_URL: postgresql://myuser:mypassword@localhost:5432/mydb_test
+        NEXTAUTH_URL: http://localhost:3000
+        NEXTAUTH_SECRET: test-secret-key
+        EMAIL_SERVER_HOST: localhost
+        EMAIL_SERVER_PORT: 1025
+        EMAIL_FROM: test@example.com
+    
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: test-results
+        path: |
+          coverage/
+          playwright-report/
+          test-results/
+        retention-days: 30
+    
+    - name: Deploy Check Passed
+      if: success()
+      run: |
+        echo "✅ All checks passed! Deploy can proceed."
+        echo "🚀 Vercel will automatically deploy this branch."
+    
+    - name: Deploy Check Failed
+      if: failure()
+      run: |
+        echo "❌ Pre-deploy checks failed!"
+        echo "🚫 Deploy will be blocked until issues are resolved."
+        exit 1

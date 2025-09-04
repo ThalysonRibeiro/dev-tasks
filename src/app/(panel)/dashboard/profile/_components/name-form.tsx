@@ -34,24 +34,19 @@ export function NameForme({ user }: { user: User }) {
   }
 
   return (
-    <div className={cn("border rounded-lg relative w-full", isAdding ? "p-0" : "p-4")}>
-
+    <div className="border rounded-lg relative w-full hover:border-gray-700">
       <button
         onClick={() => setIsAdding(!isAdding)}
+        className="w-full p-4 cursor-pointer flex justify-start items-center"
       >
         {isAdding ? (
-          <span className="absolute bottom-2 right-2 px-2 py-1 border border-dashed border-red-400 text-red-400 rounded-md text-center text-sm">
+          <span className="absolute bottom-2 right-2 px-2 py-1 border border-dashed border-red-400 text-red-400 rounded-md text-sm">
             Cancelar
           </span>
         ) : (
-          <div className="space-x-1">
-            <label className="label">
-              <span className="label-text">Nome:</span>
-            </label>
-            <span title="Nome do usuário clique para editar" className="text-center text-sm cursor-pointer">
-              {user.name}
-            </span>
-          </div>
+          <span title="Nome do usuário clique para editar" className="text-sm">
+            {user.name}
+          </span>
         )}
       </button>
       {isAdding && (
@@ -65,7 +60,7 @@ export function NameForme({ user }: { user: User }) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nome</FormLabel>
+                  <FormLabel>Editar nome</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="Digite seu nome"

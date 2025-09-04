@@ -84,14 +84,166 @@ dev-tasks/
 3. **Estilos**: Utilize classes do Tailwind CSS para estilização
 4. **Rotas**: Crie novas páginas na pasta `app/` seguindo a estrutura do App Router
 
+## 🚀 Quick Start
+
+### Setup Automático
+```bash
+npm run setup
+```
+
+### Setup Manual
+```bash
+# 1. Instalar dependências
+npm install
+
+# 2. Iniciar bancos de dados
+npm run db:up
+
+# 3. Executar migrações
+npm run db:migrate
+
+# 4. Iniciar servidor de desenvolvimento
+npm run dev
+```
+
 ## 📚 Scripts Disponíveis
 
+### 🛠️ Desenvolvimento
 ```bash
-npm run dev      # Inicia o servidor de desenvolvimento
-npm run build    # Cria a build de produção
-npm run start    # Inicia o servidor de produção
-npm run lint     # Executa o linter
+npm run dev              # Servidor de desenvolvimento
+npm run dev:test         # Servidor com ambiente de teste
+npm run build            # Build de produção
+npm run start            # Servidor de produção
+npm run lint             # Executar ESLint
+npm run lint:fix         # Executar ESLint com auto-fix
+npm run type-check       # Verificar tipos TypeScript
 ```
+
+### 🗄️ Banco de Dados
+```bash
+npm run db:up            # Iniciar bancos de dados
+npm run db:down          # Parar bancos de dados
+npm run db:reset         # Resetar bancos de dados
+npm run db:migrate       # Executar migrações
+npm run db:test:migrate  # Executar migrações de teste
+npm run db:studio        # Abrir Prisma Studio
+npm run db:studio:test   # Abrir Prisma Studio (teste)
+```
+
+### 🧪 Testes
+```bash
+npm run test:unit        # Testes unitários (Jest)
+npm run test:e2e         # Testes E2E (Playwright)
+npm run test:all         # Todos os testes
+npm run test:ci          # Testes para CI/CD
+npm run test:coverage    # Cobertura de testes
+```
+
+### 🚀 Deploy
+```bash
+npm run build            # Build para produção
+vercel                   # Deploy para Vercel (preview)
+vercel --prod           # Deploy para produção
+```
+
+### 🧹 Utilitários
+```bash
+npm run clean            # Limpar arquivos temporários
+npm run setup            # Setup completo do ambiente
+```
+
+## 🧪 Testes
+
+Este projeto possui uma suite completa de testes:
+
+### Testes Unitários (Jest)
+- **Componentes**: Testes de componentes React isolados
+- **Utilitários**: Testes de funções e lógica de negócio
+- **Cobertura**: Relatórios detalhados de cobertura
+
+### Testes E2E (Playwright)
+- **Fluxos de usuário**: Testes de autenticação e dashboard
+- **Integração**: Testes de componentes conectados
+- **Relatórios**: Screenshots, vídeos e traces em falhas
+
+### Estrutura de Testes
+```
+src/
+├── __tests__/                    # Testes unitários
+│   ├── components/              # Testes de componentes
+│   └── utils/                   # Testes de utilitários
+tests/                           # Testes E2E
+├── auth.spec.ts                 # Testes de autenticação
+└── dashboard.spec.ts            # Testes do dashboard
+```
+
+## 🚀 Deploy
+
+Este projeto está configurado para deploy automático na **Vercel** com **pre-deploy checks**:
+
+### Fluxo de Deploy
+1. **Push para `main`** → GitHub Actions roda testes
+2. **Testes passam** → Vercel faz deploy automático
+3. **Testes falham** → Deploy é bloqueado
+
+### Pre-Deploy Checks
+- ✅ **Lint & Type Check** - Verifica qualidade do código
+- ✅ **Testes Unitários** - Valida componentes e lógica
+- ✅ **Build Test** - Garante que a aplicação compila
+- ✅ **Testes E2E** - Valida fluxos completos
+- ✅ **Database Migrations** - Verifica migrações
+
+### Configuração
+- **Framework**: Next.js 15
+- **Build Command**: `npm run build`
+- **Environment**: Production otimizada
+- **CDN**: Global edge network
+- **Pre-Deploy**: GitHub Actions
+
+### Links
+- **Produção**: [https://dev-tasks.vercel.app](https://dev-tasks.vercel.app)
+- **Documentação**: [DEPLOY.md](./DEPLOY.md)
+
+## 📋 Pull Requests
+
+Templates disponíveis para diferentes tipos de PR:
+
+- **[Template Geral](./.github/pull_request_template.md)** - Para mudanças gerais
+- **[Bug Fix](./.github/pull_request_template_bugfix.md)** - Para correções
+- **[Feature](./.github/pull_request_template_feature.md)** - Para novas funcionalidades
+- **[Refactor](./.github/pull_request_template_refactor.md)** - Para refatorações
+
+### Ambiente de Teste
+
+Os testes E2E rodam em um ambiente isolado utilizando Docker, com um banco de dados PostgreSQL dedicado para não interferir com os dados de desenvolvimento.
+
+### Como Executar os Testes
+
+Siga os passos abaixo para executar os testes E2E localmente:
+
+1. **Inicie os contêineres do Docker**
+
+   Certifique-se de que o Docker está em execução e rode o comando abaixo para iniciar os bancos de dados de desenvolvimento e de teste.
+
+   ```bash
+   docker-compose up -d
+   ```
+
+2. **Prepare o Banco de Dados de Teste (Primeira Execução)**
+
+   Antes de rodar os testes pela primeira vez, você precisa aplicar as migrações do Prisma no banco de dados de teste.
+
+   ```bash
+   npm run db:test:migrate
+   ```
+
+3. **Execute os Testes E2E**
+
+   Este comando irá iniciar o servidor de desenvolvimento (conectado ao banco de teste), rodar todos os testes do Playwright e, em seguida, desligar o servidor.
+
+   ```bash
+   npm run test:e2e
+   ```
 
 ## 🚀 Deploy
 

@@ -200,7 +200,7 @@ export function DialogContentNewItem({ closeDialog, groups, initialValues, statu
               </FormItem>
             )}
           />
-          <Button type="submit" className="mt-3.5">Cadastrar</Button>
+          <Button type="submit" className="mt-3.5 w-full">Cadastrar</Button>
         </form>
       </Form>
     </DialogContent>

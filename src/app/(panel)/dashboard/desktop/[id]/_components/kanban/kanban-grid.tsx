@@ -42,10 +42,10 @@ export function KanbanGrid({ groupsData }: KanbanProps) {
     const dragPreview = document.createElement('div');
     const statusClass = `text-xs border-l-4 pl-1 ${borderColorStatus(item.status)}`;
     const priorityClass = `text-xs border-l-4 pl-1 ${borderColorPriority(item.priority)}`;
-    dragPreview.className = 'h-35 w-60 bg-zinc-950 border-1 border-violet-500 rounded-lg p-3 shadow-lg opacity-90 space-y-1';
+    dragPreview.className = 'h-35 w-60 bg-background border-1 border-violet-500 rounded-lg p-3 shadow-lg opacity-90 space-y-1';
     dragPreview.innerHTML = `
-      <div class="font-medium text-gray-200 truncate">${item.title}</div>
-      <div class="text-sm text-gray-300">
+      <div class="font-medium truncate">${item.title}</div>
+      <div class="text-sm">
         ${format(new Date(item.term), "dd/MM/yyyy")}
       </div>
       <div class="flex gap-4 text-muted-foreground">
@@ -56,7 +56,7 @@ export function KanbanGrid({ groupsData }: KanbanProps) {
           ${priorityMap[item.priority]}
         </p>
       </div>
-      <div class="text-gray-200 text-sm truncate">${item.notes}</div>
+      <div class="text-sm truncate">${item.notes}</div>
     `;
 
     // Posicionar fora da tela
@@ -135,7 +135,7 @@ export function KanbanGrid({ groupsData }: KanbanProps) {
       {statusConfig.map((config) => (
         <Card
           key={config.status}
-          className={`pt-0 overflow-hidden transition-all duration-200 ${draggedItem ? 'border border-dashed border-violet-500 bg-zinc-600/50' : ''
+          className={`pt-0 overflow-hidden transition-all duration-200 ${draggedItem ? 'border border-dashed border-violet-500 bg-zinc-600/20' : ''
             }`}
           onDrop={(e) => handleDrop(e, config.status)}
           onDragOver={handleDragOver}

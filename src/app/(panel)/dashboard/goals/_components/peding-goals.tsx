@@ -6,6 +6,7 @@ import { goalCompletion } from "../_actions/goal-completion"
 import { toast } from "react-toastify"
 import { deleteGoal } from "../_actions/delete-goal"
 import { PendingGoal } from "../_types"
+import { cn } from "@/lib/utils"
 
 export function PedingGoals({ data }: { data: PendingGoal[] }) {
 
@@ -43,7 +44,9 @@ export function PedingGoals({ data }: { data: PendingGoal[] }) {
   return (
     <div className="flex flex-wrap gap-4">
       {data.map(goal => (
-        <div key={goal.id} className="flex items-center border border-dashed rounded-full hover:border-primary">
+        <div key={goal.id} className={cn("flex items-center border rounded-lg hover:border-primary",
+          goal.completionCount >= goal.desiredWeeklyFrequency ? "hover:bg-accent/5" : "hover:bg-accent"
+        )}>
           <Button
             disabled={goal.completionCount >= goal.desiredWeeklyFrequency}
             variant={"ghost"}
