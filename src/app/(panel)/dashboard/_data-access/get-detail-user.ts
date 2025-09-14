@@ -16,7 +16,8 @@ export async function getDetailUser() {
           include: {
             goalCompletions: true
           }
-        }
+        },
+        UserSettings: true,
       }
     });
     return user;

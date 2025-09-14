@@ -5,6 +5,7 @@ export type UserWithCounts = Prisma.UserGetPayload<{
     _count: { select: { sessions: true } },
     goals: {
       include: { goalCompletions: true }
-    }
+    },
+    UserSettings: true,
   };
 }>;

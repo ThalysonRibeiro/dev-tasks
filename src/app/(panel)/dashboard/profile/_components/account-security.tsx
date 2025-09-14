@@ -1,12 +1,49 @@
 "use client"
 
 import { Button } from "@/components/ui/button";
-import { User } from "@/generated/prisma";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { AlertCircle, CheckCircle, Mail, Shield } from "lucide-react";
 import { toast } from "react-toastify";
+import { SettingsFormData, UseSettingsForm } from "./use-settings-form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Switch } from "@/components/ui/switch";
+import { UserWithCounts } from "../types/profile-types";
+import { updateSettings } from "../_actions/update-settings";
 
-export default function AccountSecurity({ detailUser }: { detailUser: User }) {
+export default function AccountSecurity({ detailUser }: { detailUser: UserWithCounts }) {
   const isVerified = detailUser.emailVerified !== null;
+
+  if (!detailUser.UserSettings) {
+    return null
+  }
+
+  const form = UseSettingsForm({
+    initialValues: {
+      emailNotifications: detailUser.UserSettings?.emailNotifications,
+      pushNotifications: detailUser.UserSettings?.pushNotifications,
+      language: detailUser.UserSettings?.language,
+      timezone: detailUser.UserSettings?.timezone,
+    }
+  });
+
+  const timeZone = Intl.supportedValuesOf("timeZone").filter(zone =>
+    zone.startsWith("America/Sao_Paulo") ||
+    zone.startsWith("America/Fortaleza") ||
+    zone.startsWith("America/Recife") ||
+    zone.startsWith("America/Bahia") ||
+    zone.startsWith("America/Belem") ||
+    zone.startsWith("America/Manaus") ||
+    zone.startsWith("America/Cuiaba") ||
+    zone.startsWith("America/Boa_Vista")
+  );
+
+  const languages = ["pt-BR", "en-US"];
 
   const sendVerificationEmail = async () => {
     try {
@@ -36,6 +73,28 @@ export default function AccountSecurity({ detailUser }: { detailUser: User }) {
     }
   };
 
+  const onSubmit = async (formData: SettingsFormData) => {
+    if (!detailUser.id) {
+      return;
+    }
+    try {
+      const response = await updateSettings({
+        userId: detailUser.id,
+        emailNotifications: formData.emailNotifications,
+        pushNotifications: formData.pushNotifications,
+        language: formData.language,
+        timezone: formData.timezone,
+      });
+      if (response?.error) {
+        toast.error(response.error);
+        return;
+      }
+      toast.success(response.success);
+
+    } catch {
+      toast.error("Erro ao atualizar configurações de segurança");
+    }
+  }
 
   return (
     <div className="w-full">
@@ -68,29 +127,116 @@ export default function AccountSecurity({ detailUser }: { detailUser: User }) {
         </div>
 
         {/* Security Settings */}
-        <div className="space-y-4 opacity-50 cursor-not-allowed p-4 rounded-xl border">
-          <h3 className="font-semibold text-lg">Security Settings</h3>
-          <div className="space-y-3">
-            <div className="border flex items-center justify-between py-3 px-4 rounded-lg">
+
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4 p-4 rounded-xl border"
+          >
+            <h3 className="font-semibold text-lg">Security Settings</h3>
+
+            <div className="opacity-50 cursor-not-allowed border flex items-center justify-between py-3 px-4 rounded-lg">
               <div className="flex items-center gap-3">
                 <Mail className="w-5 h-5" />
-                <span className="font-medium">Two-Factor Authentication</span>
+                <span className="font-medium">Autenticação de dois fatores</span>
               </div>
-              <button className="text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200">
-                Desabilitado
-              </button>
+              <Switch
+                checked={false}
+                className="cursor-not-allowed"
+              />
             </div>
-            <div className="border flex items-center justify-between py-3 px-4 rounded-lg">
-              <div className="flex items-center gap-3">
-                <Shield className="w-5 h-5" />
-                <span className="font-medium">Login Alerts</span>
-              </div>
-              <button className="text-blue-600 hover:text-blue-700 font-medium transition-colors duration-200">
-                Gerenciar
-              </button>
+
+            <FormField
+              control={form.control}
+              name="emailNotifications"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center rounded-lg border p-3 shadow-sm">
+                  <Shield className="w-6 h-6" />
+                  <div className="space-y-0.5">
+                    <FormLabel>Ativar alerta</FormLabel>
+                    <FormDescription>
+                      Alertas de login via email
+                    </FormDescription>
+                  </div>
+                  <FormControl className="ml-auto">
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      className="cursor-pointer"
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            <div className="flex sm:flex-row flex-col gap-3 justify-between">
+              <FormField
+                control={form.control}
+                name="timezone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Fuso horário</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a verified email to display" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {timeZone.map((timeZone) => (
+                          <SelectItem key={timeZone} value={timeZone}>
+                            {timeZone}
+                          </SelectItem>
+                        ))}
+
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      Selecione seu fuso horário
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+
+              <FormField
+                control={form.control}
+                name="language"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Idioma</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value} disabled>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a verified email to display" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {languages.map((language) => (
+                          <SelectItem key={language} value={language}>
+                            {language}
+                          </SelectItem>
+                        ))}
+
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      Selecione seu idioma
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-          </div>
-        </div>
+
+
+            <Button type="submit" size="sm" className="cursor-pointer">
+              Salvar
+            </Button>
+          </form>
+        </Form>
+
       </div>
     </div>
   );

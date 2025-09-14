@@ -14,6 +14,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (session.user) {
         session.user.id = user.id;
       }
+      const dbUser = await prisma.user.findFirst({
+        where: {
+          id: user.id,
+        },
+        include: {
+          UserSettings: true,
+        }
+      });
+
+      if (!dbUser?.UserSettings) {
+        await prisma.userSettings.create({
+          data: {
+            userId: user.id,
+          },
+        });
+      }
       return session;
     },
   },
