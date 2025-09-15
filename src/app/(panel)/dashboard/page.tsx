@@ -10,6 +10,7 @@ import { getPriorities } from "./desktop/[id]/_data-access/get-priorities";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { LoginAlert } from "@/components/login-alert";
 import { getDetailUser } from "./_data-access/get-detail-user";
+import { Item, Prisma } from "@/generated/prisma";
 
 async function Priorities({ desktopId }: { desktopId: string }) {
   const data = await getPriorities(desktopId);
@@ -34,6 +35,22 @@ export default async function Dashboard() {
     return null
   }
 
+  type GroupWithItem = Prisma.GroupGetPayload<{
+    include: {
+      item: true
+    }
+  }>[];
+
+  const totalItens = (group: GroupWithItem): number => {
+    const count: Item[] = [];
+    for (const element of group) {
+      element.item.forEach(item => {
+        count.push(item);
+      });
+    }
+    return count.length;
+  }
+
   return (
     <>
       <LoginAlert emailNotifications={detailUser.UserSettings?.emailNotifications} />
@@ -53,7 +70,11 @@ export default async function Dashboard() {
                   <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-size-[56px_56px]" />
                   <CardHeader className="p-2">
                     <CardTitle>{desktop.title}</CardTitle>
-                    <CardDescription>Total grupos: {desktop.groupe.length}</CardDescription>
+                    <CardDescription>
+                      Total grupos: {desktop.groupe.length}
+                      <br />
+                      Total tarefas: {totalItens(desktop.groupe)}
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="mt-auto w-full p-2">
                     <Priorities desktopId={desktop.id} />

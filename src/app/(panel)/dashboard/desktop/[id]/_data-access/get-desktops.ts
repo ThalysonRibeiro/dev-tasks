@@ -11,7 +11,11 @@ export async function getDesktops() {
     const desktops = await prisma.desktop.findMany({
       where: { userId: session.user.id },
       include: {
-        groupe: true
+        groupe: {
+          include: {
+            item: true
+          }
+        }
       },
       orderBy: {
         createdAt: "desc"

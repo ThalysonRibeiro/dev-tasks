@@ -108,6 +108,12 @@ export function Groups({ groupsData, desktopId }: { groupsData: GroupWithItems[]
                       </span>
                       {group.title.slice(1)}
                     </h2>
+                    <span
+                      className="text-sm font-normal"
+                      style={{ color: group.textColor }}
+                    >
+                      ({unfinishedItems.length}/{group.item.length})
+                    </span>
                     <Button
                       size="icon"
                       variant="outline"
