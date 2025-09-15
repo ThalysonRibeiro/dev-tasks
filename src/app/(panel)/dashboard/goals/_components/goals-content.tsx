@@ -11,15 +11,17 @@ import { PendingGoal, WeekSummaryResponse } from "../_types"
 
 interface GoalsContentProps {
   data: PendingGoal[];
-  summaryData: WeekSummaryResponse
+  summaryData: WeekSummaryResponse;
+  timeZone: string;
+  language: string;
 }
 
-export function GoalsContent({ data, summaryData }: GoalsContentProps) {
+export function GoalsContent({ data, summaryData, timeZone, language }: GoalsContentProps) {
 
   return (
     <section>
       <Sheet>
-        {data.length > 0 ? <Summary data={data} summaryData={summaryData} /> : <EmptyGoal />}
+        {data.length > 0 ? <Summary data={data} summaryData={summaryData} timeZone={timeZone} language={language} /> : <EmptyGoal />}
 
         <CreateGoals />
       </Sheet>

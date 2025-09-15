@@ -1,6 +1,6 @@
 "use client"
 import { endOfWeek, format, startOfWeek } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { enUS, ptBR } from "date-fns/locale";
 import { DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Plus } from "lucide-react";
@@ -14,11 +14,13 @@ import { PendingGoal, WeekSummaryResponse } from "../_types";
 interface SummaryProps {
   data: PendingGoal[];
   summaryData: WeekSummaryResponse;
+  timeZone: string;
+  language: string;
 }
 
 
 
-export function Summary({ data, summaryData }: SummaryProps) {
+export function Summary({ data, summaryData, timeZone, language }: SummaryProps) {
   if (!summaryData.summary) {
     return
   }
@@ -78,7 +80,17 @@ export function Summary({ data, summaryData }: SummaryProps) {
             <h2 className="text-xl font-medium">Sua semana</h2>
           </div>
           {summaryData.summary.goalsPerDay.map(({ date, dayOfWeek, goals }) => {
-            const formattedDate = format(new Date(date + 'T03:00:00Z'), "d 'de' MMMM", { locale: ptBR });
+            const localeMap = {
+              "pt-BR": ptBR,
+              "en-US": enUS,
+            };
+            const dateInTimezone = new Date(new Date(date).toLocaleString("en-US", { timeZone: timeZone }));
+            const formatPattern = language === "pt-BR" ? "d 'de' MMMM" : "MMMM d";
+            const formattedDate = format(
+              dateInTimezone,
+              formatPattern,
+              { locale: localeMap[language as "pt-BR" | "en-US"] }
+            );
             return (
               <div key={date} className="flex flex-col gap-4">
                 <h3 className="font-medium">
@@ -87,14 +99,15 @@ export function Summary({ data, summaryData }: SummaryProps) {
                 </h3>
                 <ul className="flex flex-col gap-3">
                   {goals.sort((a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime()).map(goal => {
-                    const time = format(new Date(goal.completedAt), 'HH:mm')
+                    const timeInTimezone = new Date(new Date(goal.completedAt).toLocaleString("en-US", { timeZone: timeZone }));
+                    const time = format(timeInTimezone, 'HH:mm', { locale: localeMap[language as "pt-BR" | "en-US"] });
                     return (
                       <li key={goal.id} className="flex items-center gap-2 justify-between border-b">
                         <div className="flex gap-2">
                           <CheckCircle2 className="size-4 text-primary" />
                           <p className="text-sm inline-flex">
                             &ldquo;
-                            <span className="truncate text-ellipsis max-w-60 inline-block font-semibold">
+                            <span className="truncate text-ellipsis max-w-60 lg:max-w-140 inline-block font-semibold">
                               <span className="capitalize">{goal.title.slice(0, 1)}</span>
                               {goal.title.slice(1)}</span>
                             &ldquo; -
