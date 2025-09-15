@@ -96,6 +96,26 @@ model User {
   sessions      Session[]
   goals         Goals[]
   Authenticator Authenticator[]
+  UserSettings  UserSettings?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+}
+
+model UserSettings {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Notificações
+  pushNotifications  Boolean @default(true)
+  emailNotifications Boolean @default(true)
+
+  // App
+  language String @default("pt-BR")
+  timezone String @default("America/Sao_Paulo")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

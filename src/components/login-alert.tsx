@@ -4,13 +4,13 @@ import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { getDeviceInfo } from "@/hooks/use-mobile";
 
-export function LoginAlert() {
+export function LoginAlert({ emailNotifications }: { emailNotifications: boolean | null | undefined }) {
   const { data: session } = useSession();
 
   useEffect(() => {
     // Enviar alerta de login quando o usuário acessar o dashboard
     const sendLoginAlert = async () => {
-      if (session?.user?.email) {
+      if (session?.user?.email && emailNotifications === true) {
         try {
           const deviceInfo = getDeviceInfo();
 
@@ -37,7 +37,7 @@ export function LoginAlert() {
       sendLoginAlert();
       sessionStorage.setItem('loginAlertSent', 'true');
     }
-  }, [session]);
+  }, [session, emailNotifications]);
 
   return null; // Este componente não renderiza nada
 }

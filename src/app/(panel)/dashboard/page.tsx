@@ -9,6 +9,7 @@ import { PrioritiesBar } from "./desktop/[id]/_components/priorities-bar";
 import { getPriorities } from "./desktop/[id]/_data-access/get-priorities";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { LoginAlert } from "@/components/login-alert";
+import { getDetailUser } from "./_data-access/get-detail-user";
 
 async function Priorities({ desktopId }: { desktopId: string }) {
   const data = await getPriorities(desktopId);
@@ -27,13 +28,15 @@ export default async function Dashboard() {
   }
   const desktops = await getDesktops();
   const weekSummaryDate = await GetWeekSummary();
+  const detailUser = await getDetailUser();
+  if (!detailUser) return null;
   if (!weekSummaryDate.summary) {
     return null
   }
 
   return (
     <>
-      <LoginAlert />
+      <LoginAlert emailNotifications={detailUser.UserSettings?.emailNotifications} />
       <main className="container mx-auto px-6 pt-6">
         <section className="flex flex-col justify-between space-y-4">
           <div>
