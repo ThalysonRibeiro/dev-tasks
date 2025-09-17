@@ -29,6 +29,7 @@ jest.mock('../lib/getSession', () => ({
 // More robust mock for next/image that explicitly filters Next.js specific props
 jest.mock('next/image', () => ({
   __esModule: true,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default: (props: any) => {
     const { src, alt, width, height, priority, layout, objectFit, ...rest } = props;
     // eslint-disable-next-line @next/next/no-img-element
