@@ -7,11 +7,11 @@ const createJestConfig = nextJest({
 })
 
 // Add any custom config to be passed to Jest
-const config: Config = {
-  coverageProvider: 'babel',
+const customJestConfig: Config = {
+  coverageProvider: 'v8',
   testEnvironment: 'jsdom',
   // Add more setup options before each test is run
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.tsx'],
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
@@ -36,7 +36,30 @@ const config: Config = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
+  watchPathIgnorePatterns: [
+    '<rootDir>/.next/',
+    '<rootDir>/node_modules/',
+    '<rootDir>/coverage/',
+    '<rootDir>/playwright-report/',
+    '<rootDir>/test-results/',
+  ],
+  coverageReporters: [
+    'json',
+    'text',
+    'lcov',
+    'clover'
+  ],
 }
 
-// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-export default createJestConfig(config)
+module.exports = async () => {
+  // Create Next.js jest configuration
+  const nextJestConfig = await createJestConfig(customJestConfig)();
+
+  // Add the transformIgnorePatterns setting
+  nextJestConfig.transformIgnorePatterns = [
+    '/node_modules/(?!next-auth|@auth/core|jose)/',
+    '^.+\.module\.(css|sass|scss)$',
+  ];
+
+  return nextJestConfig;
+};
