@@ -73,7 +73,7 @@ export function ConfirmEmailConmponent() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="p-8 rounded-lg shadow-lg text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4" role="progressbar"></div>
           <p className="text-gray-600 text-lg">Verificando seu e-mail...</p>
         </div>
       </div>
@@ -151,7 +151,6 @@ export function ConfirmEmailConmponent() {
             src={logo_img}
             alt="DevTasks Logo"
             className="mx-auto mt-2 w-24 h-auto opacity-50"
-            priority
           />
           <p className="text-gray-400 text-sm">DevTasks</p>
         </div>

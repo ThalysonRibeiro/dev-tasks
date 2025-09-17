@@ -222,7 +222,7 @@ export function ItemsTables({ items }: { items: Item[] }) {
   if (items.length === 0) {
     return (
       <div className="text-center py-8">
-        Nenhum item encontrado
+        Ainda não há itens cadastrados.
       </div>
     );
   }

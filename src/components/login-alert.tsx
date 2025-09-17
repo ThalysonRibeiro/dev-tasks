@@ -33,7 +33,7 @@ export function LoginAlert({ emailNotifications }: { emailNotifications: boolean
 
     // Enviar apenas uma vez por sessão
     const hasSentAlert = sessionStorage.getItem('loginAlertSent');
-    if (!hasSentAlert && session?.user?.email) {
+    if (!hasSentAlert && session?.user?.email && emailNotifications === true) {
       sendLoginAlert();
       sessionStorage.setItem('loginAlertSent', 'true');
     }

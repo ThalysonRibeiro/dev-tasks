@@ -18,6 +18,9 @@ export async function getStatus(
     select: {
       status: true,
     },
+    orderBy: {
+      status: "asc",
+    },
   });
 
   const statusCount = items.reduce((acc, item) => {

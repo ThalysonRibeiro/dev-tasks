@@ -18,6 +18,9 @@ export async function getPriorities(
     select: {
       priority: true,
     },
+    orderBy: {
+      priority: "asc",
+    },
   });
 
   const prioritiesCount = items.reduce((acc, item) => {

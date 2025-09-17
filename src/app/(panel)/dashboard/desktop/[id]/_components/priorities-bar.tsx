@@ -31,14 +31,14 @@ export function PrioritiesBar({ priorities, label = true }: PrioritiesBarProps) 
 function getPriorityColor(priority: string) {
   switch (priority) {
     case "CRITICAL":
-      return "#ef4444";
+      return "oklch(63.7% 0.237 25.331)";
     case "HIGH":
-      return "#f97316";
+      return "oklch(70.5% 0.213 47.604)";
     case "MEDIUM":
-      return "#eab308";
+      return "oklch(79.5% 0.184 86.047)";
     case "LOW":
-      return "#22c55e";
+      return "oklch(72.3% 0.219 149.579)";
     default:
-      return "#6b7280";
+      return "oklch(70.5% 0.015 286.067)";
   }
 }
