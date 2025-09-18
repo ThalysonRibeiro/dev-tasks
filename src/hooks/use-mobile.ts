@@ -20,7 +20,7 @@ export function useMobile() {
 }
 
 export function getDeviceInfo() {
-  if (typeof window === 'undefined') {
+  if (typeof window === 'undefined' || !window.navigator) {
     return {
       userAgent: 'Desconhecido',
       platform: 'Desconhecido',
@@ -38,19 +38,22 @@ export function getDeviceInfo() {
 
   // Detectar dispositivo
   let deviceType = 'Desktop';
-  if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) {
-    deviceType = 'Mobile';
-  } else if (/iPad|Android/i.test(userAgent)) {
+  if (/iPad/i.test(userAgent)) {
     deviceType = 'Tablet';
+  } else if (/Android/i.test(userAgent) && !/Mobile/i.test(userAgent)) {
+    deviceType = 'Tablet';
+  } else if (/Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) {
+    deviceType = 'Mobile';
   }
 
   // Detectar navegador
   let browser = 'Desconhecido';
-  if (userAgent.includes('Chrome')) browser = 'Chrome';
+  if (userAgent.includes('Opera') || userAgent.includes('OPR')) browser = 'Opera';
+  else if (userAgent.includes('Edg')) browser = 'Edge';
+  else if (userAgent.includes('CriOS') || userAgent.includes('Chrome')) browser = 'Chrome';
   else if (userAgent.includes('Firefox')) browser = 'Firefox';
   else if (userAgent.includes('Safari')) browser = 'Safari';
-  else if (userAgent.includes('Edge')) browser = 'Edge';
-  else if (userAgent.includes('Opera')) browser = 'Opera';
+
 
   return {
     userAgent: `${browser} em ${deviceType}`,

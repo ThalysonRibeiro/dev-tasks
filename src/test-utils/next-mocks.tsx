@@ -36,3 +36,17 @@ jest.mock('next/image', () => ({
     return <img src={src} alt={alt} width={width} height={height} {...rest} />;
   },
 }));
+
+// Mock o NextResponse
+jest.mock('next/server', () => ({
+  ...jest.requireActual('next/server'),
+  NextResponse: {
+    json: jest.fn((body, init) => {
+      return {
+        json: () => Promise.resolve(body),
+        status: init?.status || 200,
+        headers: new Headers(),
+      };
+    }),
+  },
+}));

@@ -1,21 +1,20 @@
-// IMPORTANT: This console.error override must be at the very top
-// to ensure it's applied before other modules might log errors.
+
 const originalConsoleError = console.error;
 console.error = (...args) => {
   const [message, ...rest] = args;
-  // Suppress the "Erro na requisição: Error: Network error" message
   if (typeof message === 'string' && message.includes('Erro na requisição: Error: Network error')) {
     return;
   }
-  // Suppress the 'priority' warning
   if (typeof message === 'string' && message.includes('Received `true` for a non-boolean attribute `priority`')) {
     return;
   }
-  // Also suppress the "act" warnings if they reappear, as they are also noisy
   if (typeof message === 'string' && message.includes('A suspended resource finished loading inside a test, but the event was not wrapped in act')) {
     return;
   }
   if (typeof message === 'string' && message.includes('A component suspended inside an `act` scope, but the `act` call was not awaited')) {
+    return;
+  }
+  if (typeof message === 'string' && message.includes('Erro ao enviar alerta de login:')) {
     return;
   }
   originalConsoleError(message, ...rest);
