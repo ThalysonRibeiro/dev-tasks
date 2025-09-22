@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import NotFound from './not-found';
+import NotFound from '../not-found';
 
 describe('NotFound component', () => {
   it('should render the 404 page with a link to the dashboard', () => {

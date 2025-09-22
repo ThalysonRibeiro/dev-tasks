@@ -2,7 +2,7 @@ import getSession from "@/lib/getSession";
 import { redirect } from "next/navigation";
 import { AppSidebar } from "@/app/(panel)/dashboard/_components/sidebar/app-sidebar"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { getDesktops } from "./desktop/[id]/_data-access/get-desktops";
+import { getDesktops } from "./_data-access/get-desktops";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
   const session = await getSession();

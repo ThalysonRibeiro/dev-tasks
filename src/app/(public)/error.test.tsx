@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { ErrorContent } from './error'; // Importar o componente interno
+import { ErrorContent } from '../error';
 
 describe('GlobalError component', () => {
   it('should render the error message and call reset on button click', () => {

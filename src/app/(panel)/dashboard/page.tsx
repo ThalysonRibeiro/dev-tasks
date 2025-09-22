@@ -2,7 +2,6 @@ import getSession from "@/lib/getSession";
 import { redirect } from "next/navigation";
 import { GetWeekSummary } from "./goals/_data-access/get-week-summary";
 import { ProgressGoals } from "./goals/_components/summary";
-import { getDesktops } from "./desktop/[id]/_data-access/get-desktops";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { PrioritiesBar } from "./desktop/[id]/_components/priorities-bar";
@@ -11,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { LoginAlert } from "@/components/login-alert";
 import { getDetailUser } from "./_data-access/get-detail-user";
 import { Item, Prisma } from "@/generated/prisma";
+import { getDesktops } from "./_data-access/get-desktops";
 
 async function Priorities({ desktopId }: { desktopId: string }) {
   const data = await getPriorities(desktopId);
