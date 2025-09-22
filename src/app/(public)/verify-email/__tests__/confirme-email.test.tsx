@@ -1,32 +1,14 @@
 import { render, screen, waitFor, act } from '@testing-library/react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { ConfirmEmailConmponent } from '../_components/confirme-email';
-import '@testing-library/jest-dom';
+import { mockFetch } from '@/test-utils/global-mocks';
 
-// Mock next/navigation
-jest.mock('next/navigation', () => ({
-  useSearchParams: jest.fn(),
-  useRouter: jest.fn(),
-}));
-
-// Mock fetch
-global.fetch = jest.fn();
-
-// Mock Image component from next/image
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img {...props} alt={props.alt} />;
-  },
-}));
 
 
 describe('ConfirmEmailConmponent', () => {
   const mockUseSearchParams = useSearchParams as jest.Mock;
   const mockUseRouter = useRouter as jest.Mock;
   const mockRouterPush = jest.fn();
-  const mockFetch = fetch as jest.Mock;
 
   beforeEach(() => {
     mockUseRouter.mockReturnValue({ push: mockRouterPush });

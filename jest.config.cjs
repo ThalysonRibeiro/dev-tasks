@@ -22,7 +22,6 @@ const customJestConfig = {
     '!src/**/error.tsx',
     '!src/**/not-found.tsx',
     '!src/**/globals.css',
-    '!src/**/route.ts',
     '!src/generated/**',
     '!**/node_modules/**',
     '!**/.next/**',

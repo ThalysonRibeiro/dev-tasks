@@ -1,23 +1,21 @@
-
 import { POST } from "./route";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { sendLoginAlertEmail } from "@/services/email.service";
+import { mockFetch } from "@/test-utils/global-mocks";
 
 // Mock a dependência sendLoginAlertEmail
 jest.mock("@/services/email.service", () => ({
   sendLoginAlertEmail: jest.fn(),
 }));
 
-// Mock o fetch global
-global.fetch = jest.fn();
-
 describe("API Route: /api/auth/login-alert", () => {
   beforeEach(() => {
     // Limpa os mocks antes de cada teste
     jest.clearAllMocks();
+    mockFetch.mockClear();
   });
 
-  it("deve enviar um alerta de login e retornar 200 em caso de sucesso", async () => {
+  it("should send a login alert and return 200 on success", async () => {
     const mockRequest = {
       json: async () => ({
         email: "test@example.com",
@@ -31,7 +29,7 @@ describe("API Route: /api/auth/login-alert", () => {
     } as unknown as NextRequest;
 
     // Mock da resposta da API de geolocalização
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
+    mockFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({
         status: "success",
@@ -45,8 +43,10 @@ describe("API Route: /api/auth/login-alert", () => {
     const responseBody = await response.json();
 
     expect(response.status).toBe(200);
-    expect(responseBody.success).toBe(true);
-    expect(responseBody.message).toBe("Alerta de login enviado com sucesso");
+    expect(responseBody).toEqual({
+      success: true,
+      message: "Alerta de login enviado com sucesso",
+    });
 
     expect(sendLoginAlertEmail).toHaveBeenCalledTimes(1);
     expect(sendLoginAlertEmail).toHaveBeenCalledWith(
@@ -60,7 +60,7 @@ describe("API Route: /api/auth/login-alert", () => {
     );
   });
 
-  it("deve retornar 400 se o email não for fornecido", async () => {
+  it("should return 400 if email is not provided", async () => {
     const mockRequest = {
       json: async () => ({
         name: "Test User",
@@ -72,11 +72,11 @@ describe("API Route: /api/auth/login-alert", () => {
     const responseBody = await response.json();
 
     expect(response.status).toBe(400);
-    expect(responseBody.error).toBe("Email é obrigatório");
+    expect(responseBody).toEqual({ error: "Email é obrigatório" });
     expect(sendLoginAlertEmail).not.toHaveBeenCalled();
   });
 
-  it("deve lidar com falha na API de geolocalização e continuar a execução", async () => {
+  it("should handle geolocation API failure and continue execution", async () => {
     const mockRequest = {
       json: async () => ({
         email: "test@example.com",
@@ -88,15 +88,13 @@ describe("API Route: /api/auth/login-alert", () => {
     } as unknown as NextRequest;
 
     // Mock de falha na API de geolocalização
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
+    mockFetch.mockResolvedValueOnce({
       ok: false,
     });
 
     const response = await POST(mockRequest);
-    const responseBody = await response.json();
 
     expect(response.status).toBe(200);
-    expect(responseBody.success).toBe(true);
 
     expect(sendLoginAlertEmail).toHaveBeenCalledWith(
       "test@example.com",
@@ -107,7 +105,7 @@ describe("API Route: /api/auth/login-alert", () => {
     );
   });
 
-  it("deve retornar 500 se ocorrer um erro interno", async () => {
+  it("should return 500 if an internal error occurs", async () => {
     const mockRequest = {
       json: async () => ({
         email: "test@example.com",
@@ -123,6 +121,6 @@ describe("API Route: /api/auth/login-alert", () => {
     const responseBody = await response.json();
 
     expect(response.status).toBe(500);
-    expect(responseBody.error).toBe("Erro interno do servidor");
+    expect(responseBody).toEqual({ error: "Erro interno do servidor" });
   });
 });

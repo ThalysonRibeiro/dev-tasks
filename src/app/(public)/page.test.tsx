@@ -3,12 +3,6 @@ import Home from "./page";
 import { redirect } from "next/navigation";
 import getSession from "@/lib/getSession";
 
-jest.mock("next/navigation", () => ({
-  redirect: jest.fn(),
-}));
-
-jest.mock("@/lib/getSession", () => jest.fn());
-
 describe("Home Page", () => {
   it("should redirect to dashboard if session exists", async () => {
     (getSession as jest.Mock).mockResolvedValue({ user: { id: "1" } });
