@@ -1,3 +1,4 @@
+import { totalItens } from "./dashboard-utils";
 import getSession from "@/lib/getSession";
 import { redirect } from "next/navigation";
 import { GetWeekSummary } from "./goals/_data-access/get-week-summary";
@@ -12,7 +13,7 @@ import { getDetailUser } from "./_data-access/get-detail-user";
 import { Item, Prisma } from "@/generated/prisma";
 import { getDesktops } from "./_data-access/get-desktops";
 
-async function Priorities({ desktopId }: { desktopId: string }) {
+export async function Priorities({ desktopId }: { desktopId: string }) {
   const data = await getPriorities(desktopId);
   return (
     <div className="w-full mt-auto">
@@ -35,21 +36,6 @@ export default async function Dashboard() {
     return null
   }
 
-  type GroupWithItem = Prisma.GroupGetPayload<{
-    include: {
-      item: true
-    }
-  }>[];
-
-  const totalItens = (group: GroupWithItem): number => {
-    const count: Item[] = [];
-    for (const element of group) {
-      element.item.forEach(item => {
-        count.push(item);
-      });
-    }
-    return count.length;
-  }
 
   return (
     <>
