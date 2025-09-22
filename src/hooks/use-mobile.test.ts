@@ -3,18 +3,6 @@
 import { renderHook, act } from "@testing-library/react"
 import { useMobile, getDeviceInfo } from "./use-mobile"
 
-// Mock do Intl.DateTimeFormat para testes
-const mockDateTimeFormat = jest.fn(() => ({
-  resolvedOptions: () => ({ timeZone: 'America/Sao_Paulo' })
-}))
-
-Object.defineProperty(global, 'Intl', {
-  value: {
-    DateTimeFormat: mockDateTimeFormat
-  },
-  writable: true
-})
-
 describe("useMobile", () => {
   // Salvar valores originais
   const originalInnerWidth = Object.getOwnPropertyDescriptor(window, 'innerWidth')

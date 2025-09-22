@@ -1,24 +1,9 @@
-// Mock for matchMedia
-if (typeof window !== 'undefined') {
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: jest.fn().mockImplementation(query => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: jest.fn(), // deprecated
-      removeListener: jest.fn(), // deprecated
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
-    })),
-  });
-}
-
 // Add global mocks for Next.js specific functions
 jest.mock('next/navigation', () => ({
-  ...jest.requireActual('next/navigation'), // Import and retain default behavior
-  redirect: jest.fn(), // Mock redirect
+  ...jest.requireActual('next/navigation'),
+  useRouter: jest.fn(),
+  useSearchParams: jest.fn(),
+  redirect: jest.fn(),
 }));
 
 jest.mock('../lib/getSession', () => ({
@@ -37,16 +22,18 @@ jest.mock('next/image', () => ({
   },
 }));
 
-// Mock o NextResponse
 jest.mock('next/server', () => ({
-  ...jest.requireActual('next/server'),
   NextResponse: {
-    json: jest.fn((body, init) => {
-      return {
-        json: () => Promise.resolve(body),
-        status: init?.status || 200,
-        headers: new Headers(),
-      };
-    }),
+    json: jest.fn((data, init) => ({
+      json: () => Promise.resolve(data),
+      status: init?.status || 200,
+    })),
   },
+  NextRequest: jest.fn((input, init) => ({
+    url: input,
+    headers: new Headers(init?.headers),
+    method: init?.method || 'GET',
+    json: async () => (init?.body ? JSON.parse(init.body as string) : {}),
+    formData: async () => init?.body,
+  })),
 }));
