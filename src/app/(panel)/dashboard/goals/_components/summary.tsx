@@ -18,33 +18,31 @@ interface SummaryProps {
   language: string;
 }
 
-
-
 export function Summary({ data, summaryData, timeZone, language }: SummaryProps) {
   if (!summaryData.summary) {
-    return
+    return null; // Fix: explicitly return null instead of undefined
   }
 
   const firstDayOfWeek = format(startOfWeek(new Date()), "d MMM", { locale: ptBR });
   const lastDayOfWeek = format(endOfWeek(new Date()), "d MMM", { locale: ptBR });
 
-
   async function handleUndo(goalId: string) {
     if (!goalId) {
       toast.error("Erro ao desfazer meta.");
+      return; // Add return to prevent further execution
     }
     try {
       const response = await goalUndo({ id: goalId });
-      if (response.erro) {
-        toast.error(response.data)
+      // Fix: Check for 'error' instead of 'erro'
+      if (response.error) {
+        toast.error(response.error); // Fix: Use response.error instead of response.data
+        return; // Prevent showing success message after error
       }
-      toast("🙄👀 " + response.data)
+      toast("🙄👀 " + response.data);
     } catch (error) {
       toast.error("Erro ao desfazer meta.");
     }
-
   }
-
 
   return (
     <article className="space-y-4">
@@ -127,11 +125,8 @@ export function Summary({ data, summaryData, timeZone, language }: SummaryProps)
               </div>
             )
           })}
-
-
         </div>
       </div>
-
     </article>
   )
 }
@@ -143,7 +138,9 @@ export function ProgressGoals({
   total: number;
   completed: number;
 }) {
-  const completedPercentage = Math.round((completed * 100) / total);
+  // Fix: Handle division by zero to avoid NaN
+  const completedPercentage = total === 0 ? 0 : Math.round((completed * 100) / total);
+
   return (
     <div className="space-y-4">
       <Progress max={total} value={completed}>

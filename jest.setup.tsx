@@ -1,7 +1,7 @@
 import 'whatwg-fetch';
 
 const originalConsoleError = console.error;
-const util = require('util');
+import util from 'util';
 
 console.error = (...args) => {
   const suppressedMessages = [
@@ -13,6 +13,7 @@ console.error = (...args) => {
     'Erro ao verificar email:',
     'In HTML, <html> cannot be a child of <div>. This will cause a hydration error.',
     'Received `true` for a non-boolean attribute `fill`',
+    'Invalid prop `max` of value `0` supplied to `Progress`. Only numbers greater than 0 are valid max values. Defaulting to `100`.'
   ];
 
   const formattedMessage = util.format(...args);

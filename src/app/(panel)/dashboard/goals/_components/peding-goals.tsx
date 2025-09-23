@@ -19,6 +19,7 @@ export function PedingGoals({ data }: { data: PendingGoal[] }) {
       const response = await goalCompletion({ goalId });
       if (response.error) {
         toast.error(response.error);
+        return; // Importante: return aqui para não chamar success
       }
       toast.success(response.data);
     } catch (error) {
@@ -35,12 +36,14 @@ export function PedingGoals({ data }: { data: PendingGoal[] }) {
       const response = await deleteGoal({ goalId });
       if (response.error) {
         toast.error(response.error);
+        return; // Importante: return aqui para não chamar success
       }
       toast.success(response.data);
     } catch (error) {
       toast.error("Falha ao deletar meta");
     }
   }
+
   return (
     <div className="flex flex-wrap gap-4">
       {data.map(goal => (
@@ -52,6 +55,7 @@ export function PedingGoals({ data }: { data: PendingGoal[] }) {
             variant={"ghost"}
             className="hover:bg-transparent cursor-pointer"
             onClick={() => handleCompleteGoal(goal.id)}
+            aria-label={`Complete ${goal.title}`} // Melhora acessibilidade
           >
             <Plus />
             <p className="truncate text-ellipsis max-w-[calc(100dvw-9.5rem)]">
@@ -63,6 +67,8 @@ export function PedingGoals({ data }: { data: PendingGoal[] }) {
             variant={"ghost"}
             className="hover:bg-transparent cursor-pointer hover:text-zinc-500"
             onClick={() => handleDeleteGoal(goal.id)}
+            data-testid="delete-button" // Adiciona testid para facilitar seleção
+            aria-label={`Delete ${goal.title}`} // Melhora acessibilidade
           >
             <Trash />
           </Button>
