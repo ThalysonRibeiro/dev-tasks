@@ -1,8 +1,8 @@
+import { totalItens } from "./dashboard-utils";
 import getSession from "@/lib/getSession";
 import { redirect } from "next/navigation";
 import { GetWeekSummary } from "./goals/_data-access/get-week-summary";
 import { ProgressGoals } from "./goals/_components/summary";
-import { getDesktops } from "./desktop/[id]/_data-access/get-desktops";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { PrioritiesBar } from "./desktop/[id]/_components/priorities-bar";
@@ -11,15 +11,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { LoginAlert } from "@/components/login-alert";
 import { getDetailUser } from "./_data-access/get-detail-user";
 import { Item, Prisma } from "@/generated/prisma";
-
-async function Priorities({ desktopId }: { desktopId: string }) {
-  const data = await getPriorities(desktopId);
-  return (
-    <div className="w-full mt-auto">
-      <PrioritiesBar priorities={data} label={false} />
-    </div>
-  )
-}
+import { getDesktops } from "./_data-access/get-desktops";
+import { Priorities } from "./_components/priorities";
 
 export default async function Dashboard() {
   const session = await getSession();
@@ -35,21 +28,6 @@ export default async function Dashboard() {
     return null
   }
 
-  type GroupWithItem = Prisma.GroupGetPayload<{
-    include: {
-      item: true
-    }
-  }>[];
-
-  const totalItens = (group: GroupWithItem): number => {
-    const count: Item[] = [];
-    for (const element of group) {
-      element.item.forEach(item => {
-        count.push(item);
-      });
-    }
-    return count.length;
-  }
 
   return (
     <>

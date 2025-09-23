@@ -1,5 +1,8 @@
+import 'whatwg-fetch';
 
 const originalConsoleError = console.error;
+const util = require('util');
+
 console.error = (...args) => {
   const suppressedMessages = [
     'Erro na requisição: Error: Network error',
@@ -9,11 +12,11 @@ console.error = (...args) => {
     'Erro ao enviar alerta de login:',
     'Erro ao verificar email:',
     'In HTML, <html> cannot be a child of <div>. This will cause a hydration error.',
+    'Received `true` for a non-boolean attribute `fill`',
   ];
 
-  const isSuppressed = args.some(arg =>
-    typeof arg === 'string' && suppressedMessages.some(msg => arg.includes(msg))
-  );
+  const formattedMessage = util.format(...args);
+  const isSuppressed = suppressedMessages.some(msg => formattedMessage.includes(msg));
 
   if (isSuppressed) {
     return;
