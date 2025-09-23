@@ -10,7 +10,7 @@ describe('totalItens', () => {
     const group: GroupWithItem = [
       { item: [{ id: '1' }, { id: '2' }] },
       { item: [{ id: '3' }] },
-    ] as any;
+    ] as GroupWithItem;
     expect(totalItens(group)).toBe(3);
   });
 
@@ -18,7 +18,7 @@ describe('totalItens', () => {
     const group: GroupWithItem = [
       { item: [] },
       { item: [] },
-    ] as any;
+    ] as unknown as GroupWithItem;
     expect(totalItens(group)).toBe(0);
   });
 });
