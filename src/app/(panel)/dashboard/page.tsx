@@ -12,15 +12,7 @@ import { LoginAlert } from "@/components/login-alert";
 import { getDetailUser } from "./_data-access/get-detail-user";
 import { Item, Prisma } from "@/generated/prisma";
 import { getDesktops } from "./_data-access/get-desktops";
-
-export async function Priorities({ desktopId }: { desktopId: string }) {
-  const data = await getPriorities(desktopId);
-  return (
-    <div className="w-full mt-auto">
-      <PrioritiesBar priorities={data} label={false} />
-    </div>
-  )
-}
+import { Priorities } from "./_components/priorities";
 
 export default async function Dashboard() {
   const session = await getSession();
