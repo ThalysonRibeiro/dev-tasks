@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import { UseCreateGoalForm, CreateGoalForm } from './use-create-goal';
+import { UseCreateGoalForm, CreateGoalForm } from '../use-create-goal';
 import { FieldErrors } from 'react-hook-form';
 
 describe('UseCreateGoalForm Hook', () => {

@@ -1,9 +1,9 @@
 import { auth } from '@/lib/auth';
 import prisma from '@/lib/prisma';
-import { GetWeekSummary } from './get-week-summary';
+import { GetWeekSummary } from '../get-week-summary';
 import { Session } from 'next-auth';
 import { Goals } from '@/generated/prisma';
-import { GoalCompletionWithGoal } from '../_types';
+import { GoalCompletionWithGoal } from '../../_types';
 
 // Mock dependencies
 jest.mock('@/lib/auth');

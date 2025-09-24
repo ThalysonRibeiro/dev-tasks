@@ -1,5 +1,3 @@
-"use client"
-
 import { renderHook, act } from "@testing-library/react"
 import { useMobile, getDeviceInfo } from "./use-mobile"
 

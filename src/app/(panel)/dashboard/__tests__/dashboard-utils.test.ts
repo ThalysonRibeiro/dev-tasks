@@ -1,4 +1,4 @@
-import { totalItens, GroupWithItem } from './dashboard-utils';
+import { totalItens, GroupWithItem } from '../dashboard-utils';
 
 describe('totalItens', () => {
   it('retorna 0 para grupo vazio', () => {
@@ -22,3 +22,5 @@ describe('totalItens', () => {
     expect(totalItens(group)).toBe(0);
   });
 });
+
+

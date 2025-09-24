@@ -1,6 +1,6 @@
 import { auth } from '@/lib/auth';
 import prisma from '@/lib/prisma';
-import { getWeekPendingGoal } from './get-week-pendingGoal';
+import { getWeekPendingGoal } from '../get-week-pendingGoal';
 import { Session } from 'next-auth';
 
 // Mock dependencies

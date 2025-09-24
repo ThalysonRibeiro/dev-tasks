@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { CardSignIn } from "../card-signIn";
 import { handleRegister } from "@/app/(public)/_action/signIn";
 
@@ -28,7 +29,7 @@ describe("CardSignIn component", () => {
     render(<CardSignIn />);
 
     const githubButton = screen.getByRole("button", { name: /github/i });
-    fireEvent.click(githubButton);
+    await userEvent.click(githubButton);
 
     // Check if handleRegister was called with the correct provider
     expect(handleRegister).toHaveBeenCalledWith("github");
@@ -39,15 +40,17 @@ describe("CardSignIn component", () => {
     render(<CardSignIn />);
 
     const googleButton = screen.getByRole("button", { name: /google/i });
-    fireEvent.click(googleButton);
+    await userEvent.click(googleButton);
 
     // Check if handleRegister was called with the correct provider
     expect(handleRegister).toHaveBeenCalledWith("google");
     expect(handleRegister).toHaveBeenCalledTimes(1);
   });
 
-  it("should render correctly", () => {
-    const { getByTestId } = render(<CardSignIn />);
-    expect(getByTestId("card-signin")).toBeInTheDocument();
+  it("should render the visible title and provider buttons", () => {
+    render(<CardSignIn />);
+    expect(screen.getByText("SignIn")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /github/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /google/i })).toBeInTheDocument();
   });
 });

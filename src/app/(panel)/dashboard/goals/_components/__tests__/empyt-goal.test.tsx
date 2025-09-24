@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { EmptyGoal } from './empyt-goal';
+import { EmptyGoal } from '../empyt-goal';
 
 // Mock next/image
 jest.mock('next/image', () => ({

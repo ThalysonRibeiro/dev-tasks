@@ -2,7 +2,7 @@
 import { auth } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
-import { createGoal } from './create-goal';
+import { createGoal } from '../create-goal';
 import { Session } from 'next-auth';
 
 // Mock dependencies

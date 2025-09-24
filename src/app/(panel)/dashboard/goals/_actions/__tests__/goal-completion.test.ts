@@ -1,6 +1,6 @@
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
-import { goalCompletion } from './goal-completion';
+import { goalCompletion } from '../goal-completion';
 
 // Mock dependencies
 jest.mock('@/lib/prisma', () => ({

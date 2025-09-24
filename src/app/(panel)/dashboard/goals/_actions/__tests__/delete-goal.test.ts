@@ -1,6 +1,6 @@
 import prisma from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
-import { deleteGoal } from './delete-goal';
+import { deleteGoal } from '../delete-goal';
 
 // Mock dependencies
 jest.mock('@/lib/prisma', () => ({

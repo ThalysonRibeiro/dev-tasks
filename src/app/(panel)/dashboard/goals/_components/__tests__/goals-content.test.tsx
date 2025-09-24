@@ -1,15 +1,15 @@
 import { render, screen } from '@testing-library/react';
-import { GoalsContent } from './goals-content';
-import { PendingGoal, WeekSummaryResponse } from '../_types';
+import { GoalsContent } from '../goals-content';
+import { PendingGoal, WeekSummaryResponse } from '../../_types';
 
 // Mock child components
-jest.mock('./summary', () => ({
+jest.mock('../summary', () => ({
   Summary: jest.fn((props) => <div data-testid="summary-mock">{JSON.stringify(props)}</div>),
 }));
-jest.mock('./empyt-goal', () => ({
+jest.mock('../empyt-goal', () => ({
   EmptyGoal: jest.fn(() => <div data-testid="empty-goal-mock" />),
 }));
-jest.mock('./create-goals', () => ({
+jest.mock('../create-goals', () => ({
   CreateGoals: jest.fn(() => <div data-testid="create-goals-mock" />),
 }));
 

@@ -1,13 +1,13 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { PedingGoals } from './peding-goals';
-import { goalCompletion } from '../_actions/goal-completion';
-import { deleteGoal } from '../_actions/delete-goal';
+import { PedingGoals } from '../peding-goals';
+import { goalCompletion } from '../../_actions/goal-completion';
+import { deleteGoal } from '../../_actions/delete-goal';
 import { toast } from 'react-toastify';
-import { PendingGoal } from '../_types';
+import { PendingGoal } from '../../_types';
 
 // Mock dependencies
-jest.mock('../_actions/goal-completion');
-jest.mock('../_actions/delete-goal');
+jest.mock('../../_actions/goal-completion');
+jest.mock('../../_actions/delete-goal');
 jest.mock('react-toastify');
 
 const mockGoalCompletion = goalCompletion as jest.Mock;
