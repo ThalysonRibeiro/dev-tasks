@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react"
-import { useMobile, getDeviceInfo } from "./use-mobile"
+import { useMobile, getDeviceInfo } from "../use-mobile"
 
 describe("useMobile", () => {
   // Salvar valores originais
