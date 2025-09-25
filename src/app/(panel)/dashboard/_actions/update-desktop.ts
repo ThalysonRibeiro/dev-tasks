@@ -11,18 +11,18 @@ const formSchema = z.object({
 type FormSchema = z.infer<typeof formSchema>;
 
 export async function updateDesktop(formData: FormSchema) {
+  const schema = formSchema.safeParse(formData);
+  if (!schema.success) {
+    return {
+      error: schema.error.issues[0].message
+    }
+  }
   const existingDesktop = await prisma.desktop.findFirst({
     where: { id: formData.desktopId }
   });
   if (!existingDesktop) {
     return {
       error: "Desktop não encontrada"
-    }
-  }
-  const schema = formSchema.safeParse(formData);
-  if (!schema.success) {
-    return {
-      error: schema.error.issues[0].message
     }
   }
   try {
