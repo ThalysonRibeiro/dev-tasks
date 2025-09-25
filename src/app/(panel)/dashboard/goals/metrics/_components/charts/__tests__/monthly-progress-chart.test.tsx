@@ -1,8 +1,8 @@
 import { render, screen, within } from "@testing-library/react";
 import { MonthlyProgressChart } from "../monthly-progress-chart";
 
-jest.mock('recharts', () => {
-  const OriginalModule = jest.requireActual('recharts');
+jest.mock("recharts", () => {
+  const OriginalModule = jest.requireActual("recharts");
   return {
     ...OriginalModule,
     ResponsiveContainer: ({ children }: { children: React.ReactNode }) => (
@@ -47,6 +47,6 @@ describe("MonthlyProgressChart", () => {
   it("should pass the correct data to BarChart", () => {
     render(<MonthlyProgressChart data={mockData} />);
     const barChart = screen.getByTestId("bar-chart");
-    expect(barChart).toHaveAttribute('data-props', JSON.stringify(mockData));
+    expect(barChart).toHaveAttribute("data-props", JSON.stringify(mockData));
   });
 });

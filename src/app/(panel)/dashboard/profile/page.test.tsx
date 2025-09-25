@@ -1,19 +1,19 @@
-import { render, screen } from '@testing-library/react';
-import { redirect } from 'next/navigation';
-import getSession from '@/lib/getSession';
-import { getDetailUser } from '../_data-access/get-detail-user';
-import Profile from './page';
-import { ProfileContent } from './_components/profile-content';
-import { UserWithCounts } from './types/profile-types';
-import { Session } from 'next-auth';
+import { render, screen } from "@testing-library/react";
+import { redirect } from "next/navigation";
+import getSession from "@/lib/getSession";
+import { getDetailUser } from "../_data-access/get-detail-user";
+import Profile from "./page";
+import { ProfileContent } from "./_components/profile-content";
+import { UserWithCounts } from "./types/profile-types";
+import { Session } from "next-auth";
 
 // Mock dependencies
-jest.mock('next/navigation');
-jest.mock('@/lib/getSession');
-jest.mock('../_data-access/get-detail-user');
+jest.mock("next/navigation");
+jest.mock("@/lib/getSession");
+jest.mock("../_data-access/get-detail-user");
 
-// Mock the client component to isolate the server component's logic
-jest.mock('./_components/profile-content', () => ({
+// Mock the client component to isolate the server component"s logic
+jest.mock("./_components/profile-content", () => ({
   ProfileContent: jest.fn(({ sessionUser, detailUser }) => (
     <div data-testid="profile-content">
       <span data-testid="session-user-email">{sessionUser.email}</span>
@@ -31,19 +31,19 @@ const MockProfileContent = ProfileContent as jest.Mock;
 // Mock data
 const mockSession: Session = {
   user: {
-    id: 'user-123',
-    name: 'Test User',
-    email: 'test@example.com',
-    image: 'avatar.jpg',
+    id: "user-123",
+    name: "Test User",
+    email: "test@example.com",
+    image: "avatar.jpg",
   },
   expires: new Date(Date.now() + 86400 * 1000).toISOString(),
 };
 
 const mockDetailUser: UserWithCounts = {
-  id: 'user-123',
-  name: 'Test User',
-  email: 'test@example.com',
-  image: 'avatar.jpg',
+  id: "user-123",
+  name: "Test User",
+  email: "test@example.com",
+  image: "avatar.jpg",
   emailVerified: new Date(),
   emailVerificationToken: null,
   verificationExpiresAt: null,
@@ -55,34 +55,34 @@ const mockDetailUser: UserWithCounts = {
   },
   goals: [],
   UserSettings: {
-    id: 'settings-123',
-    userId: 'user-123',
+    id: "settings-123",
+    userId: "user-123",
     pushNotifications: true,
     emailNotifications: true,
-    language: 'pt-BR',
-    timezone: 'America/Sao_Paulo',
+    language: "pt-BR",
+    timezone: "America/Sao_Paulo",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
 };
 
-describe('Profile Page', () => {
+describe("Profile Page", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe('Authentication', () => {
-    it('should redirect to "/" if session is not found', async () => {
+  describe("Authentication", () => {
+    it("should redirect to '/' if session is not found", async () => {
       mockGetSession.mockResolvedValue(null);
       mockRedirect.mockImplementation(() => {
-        throw new Error('NEXT_REDIRECT');
+        throw new Error("NEXT_REDIRECT");
       });
 
-      await expect(Profile()).rejects.toThrow('NEXT_REDIRECT');
-      expect(mockRedirect).toHaveBeenCalledWith('/');
+      await expect(Profile()).rejects.toThrow("NEXT_REDIRECT");
+      expect(mockRedirect).toHaveBeenCalledWith("/");
     });
 
-    it('should return null if session exists but session.user is null', async () => {
+    it("should return null if session exists but session.user is null", async () => {
       mockGetSession.mockResolvedValue({ ...mockSession, user: undefined });
 
       const result = await Profile();
@@ -91,8 +91,8 @@ describe('Profile Page', () => {
     });
   });
 
-  describe('Data Fetching', () => {
-    it('should call getDetailUser when session is valid', async () => {
+  describe("Data Fetching", () => {
+    it("should call getDetailUser when session is valid", async () => {
       mockGetSession.mockResolvedValue(mockSession);
       mockGetDetailUser.mockResolvedValue(mockDetailUser);
 
@@ -101,7 +101,7 @@ describe('Profile Page', () => {
       expect(getDetailUser).toHaveBeenCalledTimes(1);
     });
 
-    it('should return null if getDetailUser returns null', async () => {
+    it("should return null if getDetailUser returns null", async () => {
       mockGetSession.mockResolvedValue(mockSession);
       mockGetDetailUser.mockResolvedValue(null);
 
@@ -111,8 +111,8 @@ describe('Profile Page', () => {
     });
   });
 
-  describe('Rendering', () => {
-    it('should render ProfileContent with correct props on successful data fetch', async () => {
+  describe("Rendering", () => {
+    it("should render ProfileContent with correct props on successful data fetch", async () => {
       mockGetSession.mockResolvedValue(mockSession);
       mockGetDetailUser.mockResolvedValue(mockDetailUser);
 
@@ -127,10 +127,10 @@ describe('Profile Page', () => {
         undefined
       );
 
-      expect(screen.getByTestId('profile-content')).toBeInTheDocument();
+      expect(screen.getByTestId("profile-content")).toBeInTheDocument();
       // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain
-      expect(screen.getByTestId('session-user-email')).toHaveTextContent(mockSession.user?.email!);
-      expect(screen.getByTestId('detail-user-id')).toHaveTextContent(mockDetailUser.id);
+      expect(screen.getByTestId("session-user-email")).toHaveTextContent(mockSession.user?.email!);
+      expect(screen.getByTestId("detail-user-id")).toHaveTextContent(mockDetailUser.id);
     });
   });
 });

@@ -1,20 +1,20 @@
-import { render, screen } from '@testing-library/react';
-import { GoalsContent } from '../goals-content';
-import { PendingGoal, WeekSummaryResponse } from '../../_types';
+import { render, screen } from "@testing-library/react";
+import { GoalsContent } from "../goals-content";
+import { PendingGoal, WeekSummaryResponse } from "../../_types";
 
 // Mock child components
-jest.mock('../summary', () => ({
+jest.mock("../summary", () => ({
   Summary: jest.fn((props) => <div data-testid="summary-mock">{JSON.stringify(props)}</div>),
 }));
-jest.mock('../empyt-goal', () => ({
+jest.mock("../empyt-goal", () => ({
   EmptyGoal: jest.fn(() => <div data-testid="empty-goal-mock" />),
 }));
-jest.mock('../create-goals', () => ({
+jest.mock("../create-goals", () => ({
   CreateGoals: jest.fn(() => <div data-testid="create-goals-mock" />),
 }));
 
 // Mock UI Sheet component
-jest.mock('@/components/ui/sheet', () => ({
+jest.mock("@/components/ui/sheet", () => ({
   Sheet: ({ children }: { children: React.ReactNode }) => <div data-testid="sheet-mock">{children}</div>,
 }));
 
@@ -27,15 +27,15 @@ const mockEmptySummaryData: WeekSummaryResponse = {
 };
 
 const mockPendingGoals: PendingGoal[] = [
-  { id: '1', title: 'Test Goal', desiredWeeklyFrequency: 3, completionCount: 1 },
+  { id: "1", title: "Test Goal", desiredWeeklyFrequency: 3, completionCount: 1 },
 ];
 
-describe('GoalsContent Component', () => {
+describe("GoalsContent Component", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should render Summary component when data is not empty', () => {
+  it("should render Summary component when data is not empty", () => {
     render(
       <GoalsContent
         data={mockPendingGoals}
@@ -45,11 +45,11 @@ describe('GoalsContent Component', () => {
       />
     );
 
-    expect(screen.getByTestId('summary-mock')).toBeInTheDocument();
-    expect(screen.queryByTestId('empty-goal-mock')).not.toBeInTheDocument();
+    expect(screen.getByTestId("summary-mock")).toBeInTheDocument();
+    expect(screen.queryByTestId("empty-goal-mock")).not.toBeInTheDocument();
   });
 
-  it('should render EmptyGoal component when data is empty', () => {
+  it("should render EmptyGoal component when data is empty", () => {
     render(
       <GoalsContent
         data={[]}
@@ -59,11 +59,11 @@ describe('GoalsContent Component', () => {
       />
     );
 
-    expect(screen.getByTestId('empty-goal-mock')).toBeInTheDocument();
-    expect(screen.queryByTestId('summary-mock')).not.toBeInTheDocument();
+    expect(screen.getByTestId("empty-goal-mock")).toBeInTheDocument();
+    expect(screen.queryByTestId("summary-mock")).not.toBeInTheDocument();
   });
 
-  it('should always render CreateGoals component when data is present', () => {
+  it("should always render CreateGoals component when data is present", () => {
     render(
       <GoalsContent
         data={mockPendingGoals}
@@ -72,10 +72,10 @@ describe('GoalsContent Component', () => {
         language="pt-BR"
       />
     );
-    expect(screen.getByTestId('create-goals-mock')).toBeInTheDocument();
+    expect(screen.getByTestId("create-goals-mock")).toBeInTheDocument();
   });
 
-  it('should always render CreateGoals component when data is empty', () => {
+  it("should always render CreateGoals component when data is empty", () => {
     render(
       <GoalsContent
         data={[]}
@@ -84,10 +84,10 @@ describe('GoalsContent Component', () => {
         language="pt-BR"
       />
     );
-    expect(screen.getByTestId('create-goals-mock')).toBeInTheDocument();
+    expect(screen.getByTestId("create-goals-mock")).toBeInTheDocument();
   });
 
-  it('should pass correct props to Summary component', () => {
+  it("should pass correct props to Summary component", () => {
     render(
       <GoalsContent
         data={mockPendingGoals}
@@ -97,12 +97,12 @@ describe('GoalsContent Component', () => {
       />
     );
 
-    const summaryMock = screen.getByTestId('summary-mock');
-    const props = JSON.parse(summaryMock.textContent || '{}');
+    const summaryMock = screen.getByTestId("summary-mock");
+    const props = JSON.parse(summaryMock.textContent || "{}");
 
     expect(props.data).toEqual(mockPendingGoals);
     expect(props.summaryData).toEqual(mockSummaryData);
-    expect(props.timeZone).toBe('Europe/London');
-    expect(props.language).toBe('en-US');
+    expect(props.timeZone).toBe("Europe/London");
+    expect(props.language).toBe("en-US");
   });
 });
