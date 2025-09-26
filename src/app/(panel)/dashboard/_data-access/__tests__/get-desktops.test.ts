@@ -123,8 +123,6 @@ describe("getDesktops", () => {
 
     const result = await getDesktops();
 
-    console.log(result);
-
     expect(result).toEqual([
       {
         id: "d-01",
