@@ -123,70 +123,21 @@ describe("getDesktops", () => {
 
     const result = await getDesktops();
 
-    expect(result).toEqual([
-      {
-        id: "d-01",
-        title: "test desktop 01",
-        userId: "user-01",
-        createdAt: "2025-09-25T14:05:53.526Z",
-        updatedAt: "2025-09-25T14:05:53.526Z",
-        groupe: [
-          {
-            id: "g-01",
-            title: "test group 01",
-            createdAt: "2025-09-25T14:05:53.526Z",
-            updatedAt: "2025-09-25T14:05:53.526Z",
-            textColor: "#fff",
-            desktopId: "d-01",
-            item: [
-              {
-                id: "i-01",
-                title: "test item 01",
-                status: "DONE",
-                term: "2025-09-25T14:05:53.526Z",
-                priority: "CRITICAL",
-                notes: "test note 01",
-                description: "",
-                groupId: "g-01",
-                createdAt: "2025-09-25T14:05:53.526Z",
-                updatedAt: "2025-09-25T14:05:53.526Z"
-              }
-            ]
+    expect(mockPrismaDesktopFindMany).toHaveBeenCalledWith({
+      where: { userId: mockSession.user!.id },
+      include: {
+        groupe: {
+          include: {
+            item: true
           }
-        ]
+        }
       },
-      {
-        id: "d-02",
-        title: "test desktop 02",
-        userId: "user-02",
-        createdAt: "2025-09-25T14:05:53.526Z",
-        updatedAt: "2025-09-25T14:05:53.526Z",
-        groupe: [
-          {
-            id: "g-02",
-            title: "test group 02",
-            createdAt: "2025-09-25T14:05:53.526Z",
-            updatedAt: "2025-09-25T14:05:53.526Z",
-            textColor: "#fff",
-            desktopId: "d-02",
-            item: [
-              {
-                id: "i-02",
-                title: "test item 02",
-                status: "DONE",
-                term: "2025-09-25T14:05:53.526Z",
-                priority: "CRITICAL",
-                notes: "test note 02",
-                description: "",
-                groupId: "g-02",
-                createdAt: "2025-09-25T14:05:53.526Z",
-                updatedAt: "2025-09-25T14:05:53.526Z"
-              }
-            ]
-          }
-        ]
-      },
-    ] as unknown as DesktopWithGroupAndItem[]);
+      orderBy: {
+        createdAt: "desc"
+      }
+    });
+
+    expect(result).toEqual(mockDesktops);
   });
 
   // it("",async()=>{});

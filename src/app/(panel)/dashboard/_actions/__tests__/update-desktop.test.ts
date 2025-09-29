@@ -23,7 +23,7 @@ describe("update desktop Action", () => {
     jest.clearAllMocks();
   });
 
-  it("should return an error id the desktop not found", async () => {
+  it("should return an error if the desktop not found", async () => {
     mockPrismaDesktopFindFirst.mockResolvedValue(null);
     const result = await updateDesktop(formData);
 
@@ -44,11 +44,9 @@ describe("update desktop Action", () => {
   });
 
   it("should update a desktop and revalidate the path on success", async () => {
+    const updatedDesktop = { id: formData.desktopId, title: formData.title };
     mockPrismaDesktopFindFirst.mockResolvedValue({ id: formData.desktopId });
-    mockPrismaDesktopUpdate.mockResolvedValue({
-      where: { id: formData.desktopId, },
-      data: { title: formData.title }
-    });
+    mockPrismaDesktopUpdate.mockResolvedValue(updatedDesktop);
 
     const result = await updateDesktop(formData);
 

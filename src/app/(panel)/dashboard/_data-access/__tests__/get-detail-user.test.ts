@@ -69,36 +69,26 @@ describe("getDetailUser", () => {
 
   it("should return details user", async () => {
     mockAuth.mockResolvedValue(mockSession);
-
     mockPrismaUserFindUnique.mockResolvedValue(mockUser);
+
     const result = await getDetailUser();
-    expect(mockPrismaUserFindUnique).toHaveBeenCalled();
-    expect(result).toEqual({
-      _count: {
-        sessions: 3,
-      },
-      goals: [
-        {
-          id: "g-01",
-          title: "test goal 01",
-          userId: "user-123",
-          desiredWeeklyFrequency: 4,
-          createdAt: "2025-09-25T14:05:53.526Z",
-          updatedAt: "2025-09-25T14:05:53.526Z",
-          goalCompletions: [
-            {
-              id: "gc-01",
-              createdAt: "2025-09-25T14:05:53.526Z",
-              updatedAt: "2025-09-25T14:05:53.526Z",
-              goalId: "g-01",
-            }
-          ]
-        }
-      ]
-    } as unknown as UserWithCountUserSettingsAndGols);
+
+    expect(mockPrismaUserFindUnique).toHaveBeenCalledWith({
+      where: { id: mockSession.user!.id },
+      include: {
+        _count: { select: { sessions: true, } },
+        goals: {
+          include: {
+            goalCompletions: true
+          }
+        },
+        UserSettings: true,
+      }
+    });
+    expect(result).toEqual(mockUser);
   });
 
-  it("should return an empty array if prisma query fails", async () => {
+  it("should return null if prisma query fails", async () => {
     mockAuth.mockResolvedValue(mockSession);
     mockPrismaUserFindUnique.mockRejectedValue(new Error("Database error"));
     const result = await getDetailUser();

@@ -11,7 +11,9 @@ const customJestConfig = {
   testEnvironment: 'jsdom',
   // Add more setup options before each test is run
   setupFilesAfterEnv: ['<rootDir>/jest.setup.tsx'],
-  collectCoverage: true,
+  collectCoverage: false,
+  verbose: true,
+  moduleDirectories: ['node_modules', '<rootDir>/'],
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',

@@ -44,12 +44,13 @@ describe("create desktop Action", () => {
   });
 
   it("should create a desktop and revalidate the path on success", async () => {
-    mockAuth.mockResolvedValue(mockSession);
-    mockPrismaDesktopCreate({
+    const newDesktop = {
       id: "desktop-1",
       userId: "user-123",
       title: "test desktop",
-    });
+    };
+    mockAuth.mockResolvedValue(mockSession);
+    mockPrismaDesktopCreate.mockResolvedValue(newDesktop);
 
     const result = await createDesktop(formData);
 
@@ -60,18 +61,7 @@ describe("create desktop Action", () => {
       },
     });
     expect(mockRevalidatePath).toHaveBeenCalledWith("/dashboard");
-    expect(result).toEqual(result);
-    // expect(result).toEqual({
-    //   error: undefined,
-    //   newDesktop: {
-    //     userId: "user-123",
-    //     id: "desktop-1",
-    //     title: "test desktop",
-    //     createdAt: "2025-09-25T14:05:53.526Z",
-    //     updatedAt: "2025-09-25T14:05:53.526Z",
-    //   },
-    //   newDesktop: undefined,
-    // });
+    expect(result).toEqual({ newDesktop });
   });
   it("should return an error if prisma create fails", async () => {
     mockAuth.mockResolvedValue(mockSession);

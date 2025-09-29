@@ -23,7 +23,7 @@ describe("delete desktop Action", () => {
   });
 
   it("should return an error if the desktop not found", async () => {
-    mockPrismaDesktopDelete.mockRejectedValue(null);
+    mockPrismaDesktopFindFirst.mockResolvedValue(null);
     const result = await deleteDesktop('non-existent-id');
     expect(result).toEqual({ error: "Desktop não encontrada" });
     expect(mockPrismaDesktopDelete).not.toHaveBeenCalled();
@@ -49,7 +49,7 @@ describe("delete desktop Action", () => {
 
     const result = await deleteDesktop(existingDesktop.id);
 
-    expect(result).toEqual({ error: "Desktop não encontrada" });
+    expect(result).toEqual({ error: "Falha ao deletar Desktop" });
     expect(mockRevalidatePath).not.toHaveBeenCalled();
   });
 });

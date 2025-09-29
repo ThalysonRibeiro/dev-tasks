@@ -1,12 +1,10 @@
 "use client"
 
-import { Background } from "@/components/background"
 import Link from "next/link"
 
 export default function NotFound() {
   return (
     <div className="relative overflow-hidden flex min-h-[100dvh] flex-col items-center justify-center px-4 py-12 text-center">
-      <Background />
       <div className="max-w-md">
         <h1 className="text-9xl font-bold tracking-tighter text-foreground">404</h1>
         <p className="mt-4 text-lg text-muted-foreground">

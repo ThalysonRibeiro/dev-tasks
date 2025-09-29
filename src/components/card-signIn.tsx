@@ -14,7 +14,7 @@ export function CardSignIn() {
   }
 
   return (
-    <Card className="max-w-100 w-full" data-testid="card-signin">
+    <Card className="max-w-100 w-full bg-background" data-testid="card-signin">
       <CardHeader>
         <CardTitle className="text-center">SignIn</CardTitle>
       </CardHeader>
