@@ -24,7 +24,7 @@ export async function goalUndo(formData: FormSchema) {
     });
     if (!existingGoalCompletion) {
       return {
-        erro: "Erro ao completar meta"
+        error: "Erro ao completar meta"
       }
     }
     await prisma.goalCompletions.delete({
@@ -38,7 +38,7 @@ export async function goalUndo(formData: FormSchema) {
     }
   } catch (error) {
     return {
-      erro: "Erro ao completar meta"
+      error: "Erro ao completar meta"
     }
   }
 }

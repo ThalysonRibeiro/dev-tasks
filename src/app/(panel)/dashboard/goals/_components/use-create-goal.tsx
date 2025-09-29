@@ -4,7 +4,9 @@ import { z } from "zod";
 
 const formSchema = z.object({
   title: z.string().min(1, "Informe a atividade qeu deseja realizar"),
-  desiredWeeklyFrequency: z.coerce.number().min(1).max(7),
+  desiredWeeklyFrequency: z.coerce.number()
+    .min(1, "Number must be greater than or equal to 1")
+    .max(7, "Number must be less than or equal to 7"),
 });
 
 export interface UseCreateGoalFormProps {

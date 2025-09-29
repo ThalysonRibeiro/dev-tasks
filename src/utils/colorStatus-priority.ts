@@ -30,7 +30,7 @@ export const statusMap = {
   NOT_STARTED: "NÃO INICIADO",
 }
 
-export const statusKeys = ['DONE', 'IN_PROGRESS', 'STOPPED', 'NOT_STARTED'];
+export const statusKeys = ["DONE", "IN_PROGRESS", "STOPPED", "NOT_STARTED"];
 
 export function colorPriority(status: string): string {
   switch (status) {
@@ -69,7 +69,7 @@ export const priorityMap = {
   STANDARD: "PADRÃO",
 }
 
-export const priorityKeys = ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW', 'STANDARD'];
+export const priorityKeys = ["CRITICAL", "HIGH", "MEDIUM", "LOW", "STANDARD"];
 
 
 

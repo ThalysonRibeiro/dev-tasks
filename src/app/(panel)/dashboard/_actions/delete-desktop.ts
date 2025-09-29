@@ -22,7 +22,7 @@ export async function deleteDesktop(desktopId: string) {
     };
   } catch (error) {
     return {
-      error: "Desktop não encontrada"
+      error: "Falha ao deletar Desktop"
     }
   }
 }

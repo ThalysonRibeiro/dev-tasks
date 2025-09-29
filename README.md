@@ -263,6 +263,10 @@ A maneira mais fácil de fazer deploy é usando a [Vercel Platform](https://verc
 4. Push para a branch (`git push origin feature/nova-funcionalidade`)
 5. Abra um Pull Request
 
+## 🧠 Guia para IAs (Gemini)
+
+Para manter consistência no código gerado por IA, siga o documento: [AI_GUIDELINES.md](./AI_GUIDELINES.md).
+
 ## 📖 Recursos Úteis
 
 Para saber mais sobre Next.js, confira os recursos abaixo:
