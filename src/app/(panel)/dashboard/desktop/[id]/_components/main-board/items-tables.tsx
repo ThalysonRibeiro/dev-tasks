@@ -22,7 +22,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Item, Priority, Status } from "@/generated/prisma"
+import { Priority, Status } from "@/generated/prisma"
 import { format } from "date-fns"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Input } from "@/components/ui/input"
@@ -38,6 +38,7 @@ import { cn } from "@/lib/utils"
 import { InfoItem } from "./info-item"
 import { Sheet, SheetTrigger } from "@/components/ui/sheet"
 import { useMobile } from "@/hooks/use-mobile"
+import { ItemWhitCreatedAssignedUser } from "../kanban/kanban-grid"
 
 type EditingField = 'title' | 'notes' | 'description' | 'term' | null;
 
@@ -46,10 +47,10 @@ interface EditingState {
   field: EditingField;
 }
 
-export function ItemsTables({ items }: { items: Item[] }) {
+export function ItemsTables({ items }: { items: ItemWhitCreatedAssignedUser[] }) {
   const isMobile = useMobile();
   const [editing, setEditing] = useState<EditingState>({ itemId: null, field: null });
-  const [editingData, setEditingData] = useState<Item | null>(null);
+  const [editingData, setEditingData] = useState<ItemWhitCreatedAssignedUser | null>(null);
   const [isLoading, setIsLoading] = useState<string | null>(null);
   const formRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -57,7 +58,7 @@ export function ItemsTables({ items }: { items: Item[] }) {
   const isEditing = (itemId: string, field: EditingField) =>
     editing.itemId === itemId && editing.field === field;
 
-  const startEditing = useCallback((item: Item, field: EditingField) => {
+  const startEditing = useCallback((item: ItemWhitCreatedAssignedUser, field: EditingField) => {
     setEditing({ itemId: item.id, field });
     setEditingData({ ...item });
   }, []);
@@ -84,7 +85,7 @@ export function ItemsTables({ items }: { items: Item[] }) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [editing.itemId, cancelEditing]);
 
-  const handleSaveField = useCallback(async (item: Item) => {
+  const handleSaveField = useCallback(async (item: ItemWhitCreatedAssignedUser) => {
     if (!editingData) return;
 
     setIsLoading(item.id);
@@ -103,7 +104,7 @@ export function ItemsTables({ items }: { items: Item[] }) {
       if (result?.error) {
         toast.error("Erro ao atualizar item");
       } else {
-        toast.success("Item atualizado com sucesso!");
+        toast.success("ItemWhitCreatedAssignedUser atualizado com sucesso!");
         cancelEditing();
       }
     } catch (error) {
@@ -113,7 +114,7 @@ export function ItemsTables({ items }: { items: Item[] }) {
     }
   }, [editingData, cancelEditing]);
 
-  const handleSelectChange = useCallback(async (item: Item, field: 'priority' | 'status', value: Priority | Status) => {
+  const handleSelectChange = useCallback(async (item: ItemWhitCreatedAssignedUser, field: 'priority' | 'status', value: Priority | Status) => {
     setIsLoading(item.id);
 
     try {
@@ -130,7 +131,7 @@ export function ItemsTables({ items }: { items: Item[] }) {
       if (result?.error) {
         toast.error("Erro ao atualizar item");
       } else {
-        toast.success("Item atualizado!");
+        toast.success("ItemWhitCreatedAssignedUser atualizado!");
       }
     } catch (error) {
       toast.error("Erro ao atualizar item");
@@ -144,7 +145,7 @@ export function ItemsTables({ items }: { items: Item[] }) {
 
     try {
       await deleteItem(itemId);
-      toast.success("Item deletado com sucesso!");
+      toast.success("ItemWhitCreatedAssignedUser deletado com sucesso!");
     } catch (error) {
       toast.error("Erro ao deletar item");
     } finally {
@@ -152,7 +153,7 @@ export function ItemsTables({ items }: { items: Item[] }) {
     }
   }, []);
 
-  const renderEditableCell = (item: Item, field: EditingField, value: string | null) => {
+  const renderEditableCell = (item: ItemWhitCreatedAssignedUser, field: EditingField, value: string | null) => {
     if (isEditing(item.id, field) && field) {
       const fieldValue = editingData?.[field] as string || '';
 
