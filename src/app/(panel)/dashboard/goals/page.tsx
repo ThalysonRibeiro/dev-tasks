@@ -8,10 +8,10 @@ export default async function GoalsPage() {
   const weekSummaryDate = await GetWeekSummary();
   const detailUser = await getDetailUser();
   if (!detailUser) return null;
-  const { UserSettings } = detailUser;
+  const { userSettings } = detailUser;
 
-  const timezone = UserSettings?.timezone ?? "America/Sao_Paulo";
-  const language = UserSettings?.language ?? "pt-BR";
+  const timezone = userSettings?.timezone ?? "America/Sao_Paulo";
+  const language = userSettings?.language ?? "pt-BR";
 
   return (
     <main className="container mx-auto px-6 pt-10">
