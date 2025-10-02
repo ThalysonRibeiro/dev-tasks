@@ -11,14 +11,47 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { cn, } from "@/lib/utils";
-import { notificationColor, notificationMap } from "@/utils/colorStatus-priority";
+import { notificationColor, notificationMap } from "@/utils/colorStatus";
 import { Notification, NotificationType } from "@/generated/prisma";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { markNotificationAsRead } from "../../_actions/mark-notification-as-read";
+import { useNotifications } from "@/hooks/useNotifications";
+import { markAllAsRead } from "../../_actions/mark-all-notification-as-read";
+import { toast } from "react-toastify";
+import { deleteNotification } from "../../_actions/delete-notification";
 
 
 export function NotificationContent({ notifications }: { notifications: Notification[] }) {
+  const { refetch } = useNotifications();
+
   const unreadCount = notifications.filter(n => !n.isRead).length;
+
+  const handleMarkAsRead = async (id: string) => {
+    await markNotificationAsRead(id);
+    refetch();
+  };
+
+  const handleMarkAllRead = async () => {
+    const result = await markAllAsRead();
+
+    if (result.error) {
+      toast.error(result.error);
+    } else {
+      refetch();
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    const result = await deleteNotification(id);
+
+    if (result.error) {
+      toast.error(result.error);
+    } else {
+      refetch();
+    }
+  };
+
   return (
     <div className="absolute top-4 right-16 z-50">
       <DropdownMenu>
@@ -51,7 +84,7 @@ export function NotificationContent({ notifications }: { notifications: Notifica
                 className="text-zinc-500 hover:text-zinc-700 font-normal text-sm cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
-                  // handleMarkAllAsRead();
+                  handleMarkAllRead();
                 }}
               >
                 Marcar todas como lidas
@@ -76,6 +109,7 @@ export function NotificationContent({ notifications }: { notifications: Notifica
                   notification.isRead && "opacity-60"
                 )}
                 onSelect={(e) => e.preventDefault()}
+                onClick={() => handleMarkAsRead(notification.id)}
               >
                 <span className="text-xs text-gray-500">
                   {formatDistanceToNow(new Date(notification.createdAt), {
@@ -113,10 +147,10 @@ export function NotificationContent({ notifications }: { notifications: Notifica
                     <Button
                       variant="link"
                       size="sm"
-                      className="h-auto p-0 text-xs text-blue-600 hover:text-blue-700 font-normal"
+                      className="h-auto p-0 text-xs text-blue-600 hover:text-blue-700 font-normal cursor-pointer"
                       onClick={(e) => {
                         e.stopPropagation();
-                        // handleMarkAsRead(notification.id);
+                        handleMarkAsRead(notification.id);
                       }}
                     >
                       Marcar como lida
@@ -129,7 +163,7 @@ export function NotificationContent({ notifications }: { notifications: Notifica
                     className="ml-auto h-8 w-8 opacity-0 group-hover:opacity-100 transition-opacity text-zinc-500 hover:text-red-600 cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation();
-                      // handleDelete(notification.id);
+                      handleDelete(notification.id);
                     }}
                   >
                     <Trash className="h-4 w-4" />

@@ -80,6 +80,8 @@ export const notificationMap = {
   DESKTOP_INVITE: "CONVITE DE PROJETO",
   ITEM_ASSIGNED: "ITEM ATRIBUÍDO",
   CHAT_MESSAGE: "MENSAGEM DE BATE-PAPO",
+  SISTEM_MESSAGE: "MENSAGEM DO SISTEMA",
+  NOTICES_MESSAGE: "NOTÍCIAS",
 };
 
 export const notificationColor = (notification: NotificationType) => {
@@ -92,6 +94,10 @@ export const notificationColor = (notification: NotificationType) => {
       return "border border-violet-400 text-violet-400";
     case "ITEM_ASSIGNED":
       return "border border-orange-400 text-orange-400";
+    case "SISTEM_MESSAGE":
+      return "border border-red-400 text-red-400";
+    case "NOTICES_MESSAGE":
+      return "border border-yellow-400 text-yellow-400";
     default:
       return "border border-zinc-400 text-zinc-400";
   }

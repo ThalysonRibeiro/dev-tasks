@@ -7,7 +7,7 @@ import {
   borderColorPriority,
   priorityMap,
   priorityKeys,
-} from "./colorStatus-priority";
+} from "./colorStatus";
 
 describe("Utils - colorStatus-priority", () => {
   describe("colorStatus", () => {

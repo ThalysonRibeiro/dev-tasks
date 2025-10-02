@@ -1,4 +1,4 @@
-import { colorStatus, statusKeys, statusMap } from "@/utils/colorStatus-priority";
+import { colorStatus, statusKeys, statusMap } from "@/utils/colorStatus";
 import { StatusCount } from "../_data-access/get-status";
 import { Status } from "@/generated/prisma";
 

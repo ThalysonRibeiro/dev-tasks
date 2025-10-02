@@ -31,11 +31,13 @@ enum SpatusInvitation {
 }
 
 enum NotificationType {
-  FRIEND_REQUEST   // Solicitação de amizade
-  FRIEND_ACCEPTED  // Quando alguém aceitou
-  DESKTOP_INVITE   // Convite para um projeto
-  ITEM_ASSIGNED    // Item atribuído
-  CHAT_MESSAGE     // Nova mensagem no chat
+  FRIEND_REQUEST // Solicitação de amizade
+  FRIEND_ACCEPTED // Quando alguém aceitou
+  DESKTOP_INVITE // Convite para um projeto
+  ITEM_ASSIGNED // Item atribuído
+  CHAT_MESSAGE // Nova mensagem no chat
+  SISTEM_MESSAGE // Mensagem do sistema
+  NOTICES_MESSAGE // Mensagem de notícias
 }
 
 enum Role {
@@ -45,9 +47,9 @@ enum Role {
 }
 
 enum FriendStatus {
-  PENDING 
+  PENDING
   ACCEPTED
-  BLOCKED 
+  BLOCKED
 }
 
 model Goals {
@@ -79,7 +81,7 @@ model Desktop {
   groups            Group[]
   members           DesktopMember[]
   desktopInvitation DesktopInvitation[]
-  chat Chat[]
+  chat              Chat[]
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
 }
@@ -164,10 +166,10 @@ model Assessments {
 }
 
 model UserFriend {
-  id        String   @id @default(cuid())
+  id          String       @id @default(cuid())
   requesterId String
   addresseeId String
-  status    FriendStatus @default(PENDING)
+  status      FriendStatus @default(PENDING)
 
   requester User @relation("RequestedFriends", fields: [requesterId], references: [id])
   addressee User @relation("ReceivedFriends", fields: [addresseeId], references: [id])
@@ -179,18 +181,18 @@ model UserFriend {
 }
 
 model Chat {
-  id        String       @id @default(cuid())
-  title     String?
-  isGroup   Boolean      @default(false)
+  id      String  @id @default(cuid())
+  title   String?
+  isGroup Boolean @default(false)
 
   // Relações
-  messages  Message[]
-  members   ChatMember[]
-  desktop   Desktop?     @relation(fields: [desktopId], references: [id], onDelete: Cascade)
+  messages Message[]
+  members  ChatMember[]
+  desktop  Desktop?     @relation(fields: [desktopId], references: [id], onDelete: Cascade)
 
   desktopId String?
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ChatMember {
@@ -204,17 +206,16 @@ model ChatMember {
 }
 
 model Message {
-  id        String   @id @default(cuid())
-  content   String
-  senderId  String
-  chatId    String
+  id       String @id @default(cuid())
+  content  String
+  senderId String
+  chatId   String
 
   sender User @relation(fields: [senderId], references: [id], onDelete: Cascade)
   chat   Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
 }
-
 
 model User {
   id                     String    @id @default(cuid())
@@ -248,9 +249,8 @@ model User {
   requestedFriends UserFriend[] @relation("RequestedFriends")
   receivedFriends  UserFriend[] @relation("ReceivedFriends")
 
-  message Message[]
+  message    Message[]
   chatMember ChatMember[]
-  
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -1,4 +1,4 @@
-import { colorPriority, priorityKeys, priorityMap } from "@/utils/colorStatus-priority";
+import { colorPriority, priorityKeys, priorityMap } from "@/utils/colorStatus";
 import { PrioritiesCount } from "../_data-access/get-priorities";
 
 interface PrioritiesBarProps {

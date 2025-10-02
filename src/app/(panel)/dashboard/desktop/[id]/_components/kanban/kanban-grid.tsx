@@ -15,7 +15,7 @@ import { updateItem } from "../../_actions/update-item";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { DialogContentNewItem } from "./dialog-new-item";
 import { Button } from "@/components/ui/button";
-import { borderColorPriority, borderColorStatus, priorityMap, statusMap } from "@/utils/colorStatus-priority";
+import { borderColorPriority, borderColorStatus, priorityMap, statusMap } from "@/utils/colorStatus";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { InfoItem } from "../main-board/info-item";
 import { KanbanProps } from "./kanban-content";

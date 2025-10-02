@@ -24,7 +24,7 @@ import { Button } from "@/components/ui/button";
 import { CalendarTerm } from "./calendar-term";
 import { createItem } from "../../_actions/create-item";
 import { Textarea } from "@/components/ui/textarea";
-import { colorPriority, colorStatus, priorityMap, statusMap } from "@/utils/colorStatus-priority";
+import { colorPriority, colorStatus, priorityMap, statusMap } from "@/utils/colorStatus";
 import { cn } from "@/lib/utils";
 import { updateItem } from "../../_actions/update-item";
 import { useMobile } from "@/hooks/use-mobile";

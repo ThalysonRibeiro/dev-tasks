@@ -6,32 +6,22 @@ import { Prisma } from "@/generated/prisma";
 
 jest.mock("@/lib/auth");
 jest.mock("@/lib/prisma", () => ({
-  desktop: {
-    findMany: jest.fn(),
-  },
+  desktop: { findMany: jest.fn() },
+  group: { findMany: jest.fn() },
 }));
+
 
 
 const mockAuth = auth as jest.Mock;
 const mockPrismaDesktopFindMany = prisma.desktop.findMany as jest.Mock;
+const mockPrismaGroupFindMany = prisma.group.findMany as jest.Mock;
+
 
 const mockSession: Session = {
   user: { id: "user-123" },
   expires: "some-future-date",
 };
 
-type DesktopWithGroupAndItem = Prisma.DesktopGetPayload<{
-  include: {
-    groupe: {
-      include: {
-        item: true
-      }
-    }
-  },
-  orderBy: {
-    createdAt: "desc"
-  }
-}>;
 
 describe("getDesktops", () => {
   beforeEach(() => {
@@ -52,93 +42,33 @@ describe("getDesktops", () => {
     expect(result).toEqual([]);
   });
 
-  it("should return desktop with group and item", async () => {
+  it("should return desktop summaries with groupsCount and itemsCount", async () => {
     mockAuth.mockResolvedValue(mockSession);
-    const mockDesktops = [
-      {
-        id: "d-01",
-        title: "test desktop 01",
-        userId: "user-01",
-        createdAt: "2025-09-25T14:05:53.526Z",
-        updatedAt: "2025-09-25T14:05:53.526Z",
-        groupe: [
-          {
-            id: "g-01",
-            title: "test group 01",
-            createdAt: "2025-09-25T14:05:53.526Z",
-            updatedAt: "2025-09-25T14:05:53.526Z",
-            textColor: "#fff",
-            desktopId: "d-01",
-            item: [
-              {
-                id: "i-01",
-                title: "test item 01",
-                status: "DONE",
-                term: "2025-09-25T14:05:53.526Z",
-                priority: "CRITICAL",
-                notes: "test note 01",
-                description: "",
-                groupId: "g-01",
-                createdAt: "2025-09-25T14:05:53.526Z",
-                updatedAt: "2025-09-25T14:05:53.526Z"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        id: "d-02",
-        title: "test desktop 02",
-        userId: "user-02",
-        createdAt: "2025-09-25T14:05:53.526Z",
-        updatedAt: "2025-09-25T14:05:53.526Z",
-        groupe: [
-          {
-            id: "g-02",
-            title: "test group 02",
-            createdAt: "2025-09-25T14:05:53.526Z",
-            updatedAt: "2025-09-25T14:05:53.526Z",
-            textColor: "#fff",
-            desktopId: "d-02",
-            item: [
-              {
-                id: "i-02",
-                title: "test item 02",
-                status: "DONE",
-                term: "2025-09-25T14:05:53.526Z",
-                priority: "CRITICAL",
-                notes: "test note 02",
-                description: "",
-                groupId: "g-02",
-                createdAt: "2025-09-25T14:05:53.526Z",
-                updatedAt: "2025-09-25T14:05:53.526Z"
-              }
-            ]
-          }
-        ]
-      },
-    ] as unknown as DesktopWithGroupAndItem[];
 
-    mockPrismaDesktopFindMany.mockResolvedValue(mockDesktops);
+    // mock da primeira query: desktops
+    mockPrismaDesktopFindMany.mockResolvedValue([
+      { id: "d1", title: "Desktop 1", _count: { groups: 2 } },
+      { id: "d2", title: "Desktop 2", _count: { groups: 1 } },
+    ]);
+
+    mockPrismaGroupFindMany.mockResolvedValue([
+      { desktopId: "d1", _count: { item: 3 } },
+      { desktopId: "d1", _count: { item: 2 } },
+      { desktopId: "d2", _count: { item: 4 } },
+    ]);
 
     const result = await getDesktops();
 
-    expect(mockPrismaDesktopFindMany).toHaveBeenCalledWith({
-      where: { userId: mockSession.user!.id },
-      include: {
-        groupe: {
-          include: {
-            item: true
-          }
-        }
-      },
-      orderBy: {
-        createdAt: "desc"
-      }
+    expect(mockPrismaDesktopFindMany).toHaveBeenCalled();
+    expect(mockPrismaGroupFindMany).toHaveBeenCalledWith({
+      where: { desktopId: { in: ["d1", "d2"] } },
+      select: { desktopId: true, _count: { select: { item: true } } },
     });
 
-    expect(result).toEqual(mockDesktops);
+    expect(result).toEqual([
+      { id: "d1", title: "Desktop 1", groupsCount: 2, itemsCount: 5 },
+      { id: "d2", title: "Desktop 2", groupsCount: 1, itemsCount: 4 },
+    ]);
   });
 
-  // it("",async()=>{});
 });

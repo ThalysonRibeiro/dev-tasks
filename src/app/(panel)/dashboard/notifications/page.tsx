@@ -1,11 +1,9 @@
-// app/dashboard/notifications/page.tsx
 'use client'
 import { useNotifications } from '@/hooks/useNotifications';
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Trash2, CheckCheck, X, Sparkles, Check, Bell } from 'lucide-react';
+import { CheckCheck, X, Sparkles, Check, Bell, Trash } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { toast } from 'react-toastify';
@@ -47,7 +45,6 @@ export default function NotificationsPage() {
     if (result.error) {
       toast.error(result.error);
     } else {
-      toast.success('Notificação deletada');
       refetch();
     }
     setIsDeleting(false);
@@ -112,8 +109,6 @@ export default function NotificationsPage() {
           <div>{result.deleted.old} excedentes</div>
         </div>
       );
-
-
       refetch();
     }
     setIsDeleting(false);
@@ -126,7 +121,6 @@ export default function NotificationsPage() {
     if (result.error) {
       toast.error(result.error);
     } else {
-      toast.success('Todas marcadas como lidas');
       refetch();
     }
     setIsDeleting(false);
@@ -167,7 +161,7 @@ export default function NotificationsPage() {
               onClick={handleDeleteSelected}
               disabled={isDeleting}
             >
-              <Trash2 className="w-4 h-4 mr-2" />
+              <Trash className="w-4 h-4 mr-2" />
               Deletar ({selectedIds.length})
             </Button>
           )}
@@ -262,7 +256,7 @@ export default function NotificationsPage() {
                 onClick={() => handleDelete(notification.id)}
                 disabled={isDeleting}
               >
-                <Trash2 className="w-4 h-4 text-destructive" />
+                <Trash className="w-4 h-4 text-destructive" />
               </Button>
             </div>
           ))

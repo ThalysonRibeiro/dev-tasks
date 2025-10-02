@@ -7,7 +7,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils"
-import { colorPriority, colorStatus, priorityMap, statusMap } from "@/utils/colorStatus-priority"
+import { colorPriority, colorStatus, priorityMap, statusMap } from "@/utils/colorStatus"
 import { Edit } from "lucide-react"
 import { useRef, useState } from "react"
 import { CreateOrEditItemForm } from "./create-or-edit-item-form"

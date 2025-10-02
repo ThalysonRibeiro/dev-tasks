@@ -27,7 +27,7 @@ type UserWithCountUserSettingsAndGols = Prisma.UserGetPayload<{
         goalCompletions: true
       }
     },
-    UserSettings: true,
+    userSettings: true,
   }
 }>;
 
@@ -82,7 +82,7 @@ describe("getDetailUser", () => {
             goalCompletions: true
           }
         },
-        UserSettings: true,
+        userSettings: true,
       }
     });
     expect(result).toEqual(mockUser);

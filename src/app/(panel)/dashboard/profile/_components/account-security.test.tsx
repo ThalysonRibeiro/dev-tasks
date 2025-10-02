@@ -31,7 +31,7 @@ const createMockUser = (isVerified: boolean): UserWithCounts => ({
   id: "user-123",
   email: "test@example.com",
   emailVerified: isVerified ? new Date() : null,
-  UserSettings: {
+  userSettings: {
     emailNotifications: true,
     pushNotifications: false,
     language: "pt-BR",
@@ -116,7 +116,7 @@ describe("AccountSecurity Component", () => {
     });
 
     it("should return null if UserSettings are not provided", () => {
-      const userWithoutSettings = { ...createMockUser(true), UserSettings: null };
+      const userWithoutSettings = { ...createMockUser(true), userSettings: null };
       const { container } = render(<AccountSecurity detailUser={userWithoutSettings} />);
       expect(container).toBeEmptyDOMElement();
     });

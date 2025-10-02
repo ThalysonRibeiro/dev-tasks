@@ -6,7 +6,7 @@ import { NotificationType } from "@/generated/prisma";
 
 const formSchema = z.object({
   userId: z.string().min(1, "O id é obrigatório"),
-  referenceId: z.string().optional(),
+  referenceId: z.string().min(1, "O id é obrigatório"),
   title: z.string().min(1, "O titulo é obrigatório"),
   message: z.string().min(1, "A mensagem é obrigatória"),
   type: z.enum([
