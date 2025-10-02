@@ -6,14 +6,14 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
-import { Item } from "@/generated/prisma"
 import { cn } from "@/lib/utils"
 import { colorPriority, colorStatus, priorityMap, statusMap } from "@/utils/colorStatus-priority"
 import { Edit } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 import { CreateOrEditItemForm } from "./create-or-edit-item-form"
+import { ItemWhitCreatedAssignedUser } from "../kanban/kanban-grid"
 
-export function InfoItem({ data }: { data: Item }) {
+export function InfoItem({ data }: { data: ItemWhitCreatedAssignedUser }) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const shetRef = useRef<HTMLDivElement>(null);
 

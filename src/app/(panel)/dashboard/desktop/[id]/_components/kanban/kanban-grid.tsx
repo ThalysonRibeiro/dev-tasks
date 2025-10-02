@@ -6,9 +6,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Item, Status } from "@/generated/prisma";
-import { Eye, Info, Plus } from "lucide-react";
+} from "@/components/ui/card";
+import { Item, Prisma, Status } from "@/generated/prisma";
+import { Eye, Plus } from "lucide-react";
 import { format } from "date-fns";
 import { useState } from "react";
 import { updateItem } from "../../_actions/update-item";
@@ -18,14 +18,29 @@ import { Button } from "@/components/ui/button";
 import { borderColorPriority, borderColorStatus, priorityMap, statusMap } from "@/utils/colorStatus-priority";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { InfoItem } from "../main-board/info-item";
-import { cn } from "@/lib/utils";
 import { KanbanProps } from "./kanban-content";
 
+export type ItemWhitCreatedAssignedUser = Prisma.ItemGetPayload<{
+  select: {
+    id: true,
+    title: true,
+    term: true,
+    priority: true,
+    status: true,
+    notes: true,
+    description: true,
+    createdBy: true,
+    assignedTo: true,
+    createdByUser: true,
+    assignedToUser: true,
+  }
+}>
+
 export function KanbanGrid({ groupsData }: KanbanProps) {
-  const [draggedItem, setDraggedItem] = useState<Item | null>(null);
+  const [draggedItem, setDraggedItem] = useState<ItemWhitCreatedAssignedUser | null>(null);
   const [isCloseDialog, setIsCloseDialog] = useState<boolean>(false);
   const [getStatus, setGetStatus] = useState<Status>("NOT_STARTED");
-  const items: Item[] = [];
+  const items: ItemWhitCreatedAssignedUser[] = [];
   groupsData.forEach((groupStatus) => {
     if (Array.isArray(groupStatus.item)) {
       items.push(...groupStatus.item);
@@ -34,7 +49,7 @@ export function KanbanGrid({ groupsData }: KanbanProps) {
     }
   });
 
-  function handleDragStart(e: React.DragEvent, item: Item) {
+  function handleDragStart(e: React.DragEvent, item: ItemWhitCreatedAssignedUser) {
     setDraggedItem(item);
     e.dataTransfer.effectAllowed = "move";
 
