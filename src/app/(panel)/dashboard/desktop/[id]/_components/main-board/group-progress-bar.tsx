@@ -1,7 +1,8 @@
 import { Item, Status } from "@/generated/prisma";
+import { ItemWhitCreatedAssignedUser } from "../kanban/kanban-grid";
 
 interface GroupProgressBarProps {
-  items: Item[];
+  items: ItemWhitCreatedAssignedUser[];
 }
 
 export function GroupProgressBar({ items }: GroupProgressBarProps) {
