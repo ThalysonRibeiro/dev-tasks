@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Header } from "../../_components/header";
 import { GroupContent, GroupWithItems } from "./main-board/group-content";
-import { KanbanContent } from "./kanban/kanbam-content";
+import { KanbanContent } from "./kanban/kanban-content";
 import { PrioritiesCount } from "../_data-access/get-priorities";
 import { StatusCount } from "../_data-access/get-status";
 

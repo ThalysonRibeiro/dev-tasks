@@ -15,7 +15,7 @@ export function ProgressIndicator(
   return (
     <ProgressPrimitive.Indicator
       {...props}
-      className="bg-gradient-to-r from-cyan-500 dark:to-violet-500 to-rose-500 w-1/2 h-2 rounded-full"
+      className="bg-gradient-to-r from-primary to-orange-500 w-1/2 h-2 rounded-full"
     />
   )
 }

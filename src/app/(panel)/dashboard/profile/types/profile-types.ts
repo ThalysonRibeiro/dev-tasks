@@ -6,6 +6,6 @@ export type UserWithCounts = Prisma.UserGetPayload<{
     goals: {
       include: { goalCompletions: true }
     },
-    UserSettings: true,
+    userSettings: true,
   };
 }>;

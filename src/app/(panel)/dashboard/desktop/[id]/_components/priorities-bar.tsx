@@ -12,13 +12,13 @@ export function PrioritiesBar({ priorities, label = true }: PrioritiesBarProps) 
   return (
     <div className="relative group">
       {label && <h3 className="font-semibold text-sm">Prioridade geral</h3>}
-      <div className=" flex w-full h-4 rounded-md overflow-hidden">
+      <div data-testid="progress-bar-container" className=" flex w-full h-4 rounded-md overflow-hidden">
         {priorities.map((priority) => (
           <div
             key={priority.priority}
             className={`h-full`}
             style={{
-              width: `${(priority.count / total) * 100}%`,
+              width: `${total > 0 ? (priority.count / total) * 100 : 0}%`,
               backgroundColor: getPriorityColor(priority.priority),
             }}
           />

@@ -30,7 +30,6 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { DesktopForm } from "./desktop-form"
-import { Desktop } from "@/generated/prisma"
 import { Button } from "@/components/ui/button"
 import { deleteDesktop } from "../../_actions/delete-desktop"
 import { toast } from "react-toastify"
@@ -83,6 +82,11 @@ interface AppSidebarProps {
   desktops: Desktop[];
   userData: Session;
 }
+
+type Desktop = {
+  id: string;
+  title: string;
+};
 
 interface EditingState {
   isEditing: boolean;

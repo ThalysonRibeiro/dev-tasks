@@ -1,3 +1,5 @@
+import { NotificationType } from "@/generated/prisma";
+
 export function colorStatus(status: string): string {
   switch (status) {
     case "DONE":
@@ -72,4 +74,25 @@ export const priorityMap = {
 export const priorityKeys = ["CRITICAL", "HIGH", "MEDIUM", "LOW", "STANDARD"];
 
 
+export const notificationMap = {
+  FRIEND_REQUEST: "PEDIDO DE AMIZADE",
+  FRIEND_ACCEPTED: "AMIZADE ACEITA",
+  DESKTOP_INVITE: "CONVITE DE PROJETO",
+  ITEM_ASSIGNED: "ITEM ATRIBUÍDO",
+  CHAT_MESSAGE: "MENSAGEM DE BATE-PAPO",
+};
 
+export const notificationColor = (notification: NotificationType) => {
+  switch (notification) {
+    case "FRIEND_REQUEST":
+      return "border border-blue-400 text-blue-400";
+    case "FRIEND_ACCEPTED":
+      return "border border-green-400 text-green-400";
+    case "DESKTOP_INVITE":
+      return "border border-violet-400 text-violet-400";
+    case "ITEM_ASSIGNED":
+      return "border border-orange-400 text-orange-400";
+    default:
+      return "border border-zinc-400 text-zinc-400";
+  }
+}

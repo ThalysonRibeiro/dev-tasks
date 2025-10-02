@@ -4,7 +4,7 @@ import { z } from "zod";
 
 const formSchema = z.object({
   title: z.string().min(1, "O titulo é obrigatório"),
-  textColor: z.string().min(4, "O titulo é obrigatório"),
+  textColor: z.string().min(4, "A cor é obrigatória"),
 });
 
 export interface UseGroupFormProps {

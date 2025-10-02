@@ -1,3 +1,4 @@
+// Schema atualizado com Super Admin
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -23,6 +24,32 @@ enum Priority {
   STANDARD
 }
 
+enum SpatusInvitation {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum NotificationType {
+  FRIEND_REQUEST   // Solicitação de amizade
+  FRIEND_ACCEPTED  // Quando alguém aceitou
+  DESKTOP_INVITE   // Convite para um projeto
+  ITEM_ASSIGNED    // Item atribuído
+  CHAT_MESSAGE     // Nova mensagem no chat
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  USER
+}
+
+enum FriendStatus {
+  PENDING 
+  ACCEPTED
+  BLOCKED 
+}
+
 model Goals {
   id                     String            @id @default(cuid())
   title                  String
@@ -45,13 +72,38 @@ model GoalCompletions {
 }
 
 model Desktop {
-  id        String   @id @default(cuid())
-  title     String
+  id                String              @id @default(cuid())
+  title             String
+  userId            String
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  groups            Group[]
+  members           DesktopMember[]
+  desktopInvitation DesktopInvitation[]
+  chat Chat[]
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+}
+
+model DesktopMember {
+  desktopId String
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  groupe    Group[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  desktop Desktop @relation(fields: [desktopId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([desktopId, userId])
+}
+
+model DesktopInvitation {
+  id        String           @id @default(cuid())
+  desktopId String
+  userId    String // usuário convidado
+  status    SpatusInvitation @default(PENDING)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  desktop Desktop @relation(fields: [desktopId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Group {
@@ -74,34 +126,138 @@ model Item {
   notes       String
   description String
   groupId     String?
-  group       Group?   @relation(fields: [groupId], references: [id])
+
+  createdBy  String? // ID do usuário que criou
+  assignedTo String? // ID do usuário que recebeu a tarefa
+
+  group          Group? @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  createdByUser  User?  @relation("CreatedItems", fields: [createdBy], references: [id])
+  assignedToUser User?  @relation("AssignedItems", fields: [assignedTo], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model User {
-  id    String  @id @default(cuid())
-  name  String?
-  email String  @unique
-  image String?
+model Notification {
+  id          String           @id @default(cuid())
+  userId      String // usuário que recebe a notificação
+  type        NotificationType
+  message     String // texto da notificação
+  referenceId String? // id de referência (ex: DesktopInvitation.id ou Item.id)
+  isRead      Boolean          @default(false)
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Assessments {
+  id      String @id @default(cuid())
+  message String
+  rating  Int
+  userId  String @unique
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserFriend {
+  id        String   @id @default(cuid())
+  requesterId String
+  addresseeId String
+  status    FriendStatus @default(PENDING)
+
+  requester User @relation("RequestedFriends", fields: [requesterId], references: [id])
+  addressee User @relation("ReceivedFriends", fields: [addresseeId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([requesterId, addresseeId])
+}
+
+model Chat {
+  id        String       @id @default(cuid())
+  title     String?
+  isGroup   Boolean      @default(false)
+
+  // Relações
+  messages  Message[]
+  members   ChatMember[]
+  desktop   Desktop?     @relation(fields: [desktopId], references: [id], onDelete: Cascade)
+
+  desktopId String?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model ChatMember {
+  chatId String
+  userId String
+
+  chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([chatId, userId])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  content   String
+  senderId  String
+  chatId    String
+
+  sender User @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  chat   Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+
+model User {
+  id                     String    @id @default(cuid())
+  name                   String?
+  email                  String    @unique
   emailVerified          DateTime?
   emailVerificationToken String?
   verificationExpiresAt  DateTime?
+  image                  String?
+  role                   Role      @default(USER)
   acceptTerms            Boolean?  @default(true)
+  isActive               Boolean   @default(true) // Para desativar usuários sem deletar
+  createdBy              String? // ID de quem criou este usuário
 
+  // Relações existentes
   desktop       Desktop[]
+  desktopMember DesktopMember[]
   accounts      Account[]
   sessions      Session[]
   goals         Goals[]
   Authenticator Authenticator[]
-  UserSettings  UserSettings?
+  userSettings  UserSettings?
+
+  // Relações de atribuição
+  assignedItems     Item[]              @relation("AssignedItems")
+  createdItems      Item[]              @relation("CreatedItems")
+  DesktopInvitation DesktopInvitation[]
+  Notification      Notification[]
+  assessments       Assessments?
+
+  requestedFriends UserFriend[] @relation("RequestedFriends")
+  receivedFriends  UserFriend[] @relation("ReceivedFriends")
+
+  message Message[]
+  chatMember ChatMember[]
+  
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([email])
+  @@index([role])
+  @@index([isActive])
 }
 
 model UserSettings {
@@ -109,13 +265,10 @@ model UserSettings {
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Notificações
   pushNotifications  Boolean @default(true)
   emailNotifications Boolean @default(true)
-
-  // App
-  language String @default("pt-BR")
-  timezone String @default("America/Sao_Paulo")
+  language           String  @default("pt-BR")
+  timezone           String  @default("America/Sao_Paulo")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -160,7 +313,6 @@ model VerificationToken {
   @@id([identifier, token])
 }
 
-// Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique
   userId               String

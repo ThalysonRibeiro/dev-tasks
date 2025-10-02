@@ -434,3 +434,28 @@ export async function sendLoginAlertEmail(to: string, name?: string, loginInfo?:
         throw new Error("Não foi possível enviar o email de alerta de login.");
     }
 }
+
+export async function sendEmail({
+    to,
+    subject,
+    html,
+    text,
+}: {
+    to: string;
+    subject: string;
+    html?: string;
+    text?: string;
+}) {
+    try {
+        await transporter.sendMail({
+            from: `"Seu App" <${process.env.MAIL_USER}>`,
+            to,
+            subject,
+            html,
+            text,
+        });
+        console.log(`Email enviado para ${to}`);
+    } catch (err) {
+        console.error("Erro ao enviar e-mail:", err);
+    }
+}

@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { KanbanProps } from "./kanbam-content";
 import { Item, Status } from "@/generated/prisma";
 import { Eye, Info, Plus } from "lucide-react";
 import { format } from "date-fns";
@@ -20,6 +19,7 @@ import { borderColorPriority, borderColorStatus, priorityMap, statusMap } from "
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
 import { InfoItem } from "../main-board/info-item";
 import { cn } from "@/lib/utils";
+import { KanbanProps } from "./kanban-content";
 
 export function KanbanGrid({ groupsData }: KanbanProps) {
   const [draggedItem, setDraggedItem] = useState<Item | null>(null);

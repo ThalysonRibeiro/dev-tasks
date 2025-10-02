@@ -17,7 +17,7 @@ export async function getDetailUser() {
             goalCompletions: true
           }
         },
-        UserSettings: true,
+        userSettings: true,
       }
     });
     return user;

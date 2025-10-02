@@ -19,11 +19,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           id: user.id,
         },
         include: {
-          UserSettings: true,
+          userSettings: true,
         }
       });
 
-      if (!dbUser?.UserSettings) {
+      if (!dbUser?.userSettings) {
         await prisma.userSettings.create({
           data: {
             userId: user.id,

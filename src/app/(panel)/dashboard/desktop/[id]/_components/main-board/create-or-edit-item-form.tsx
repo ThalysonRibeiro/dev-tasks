@@ -226,6 +226,7 @@ export function CreateOrEditItemForm({ closeForm, initialValues, groupId, itemId
                   <FormControl>
                     <CalendarTerm
                       onChange={(date) => {
+                        console.log("Data passada:", date);
                         field.onChange(date)
                       }}
                       initialDate={field.value || new Date()} // Adiciona esta linha

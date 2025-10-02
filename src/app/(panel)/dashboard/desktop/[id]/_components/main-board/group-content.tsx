@@ -4,7 +4,21 @@ import { Groups } from "./groups";
 
 export type GroupWithItems = Prisma.GroupGetPayload<{
   include: {
-    item: true
+    item: {
+      select: {
+        id: true,
+        title: true,
+        term: true,
+        priority: true,
+        status: true,
+        notes: true,
+        description: true,
+        createdBy: true,
+        assignedTo: true,
+        createdByUser: true,
+        assignedToUser: true,
+      }
+    }
   }
 }>
 

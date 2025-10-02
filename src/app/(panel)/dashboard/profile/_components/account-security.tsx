@@ -19,16 +19,16 @@ import { updateSettings } from "../_actions/update-settings";
 export default function AccountSecurity({ detailUser }: { detailUser: UserWithCounts }) {
   const isVerified = detailUser.emailVerified !== null;
 
-  if (!detailUser.UserSettings) {
+  if (!detailUser.userSettings) {
     return null
   }
 
   const form = UseSettingsForm({
     initialValues: {
-      emailNotifications: detailUser.UserSettings?.emailNotifications,
-      pushNotifications: detailUser.UserSettings?.pushNotifications,
-      language: detailUser.UserSettings?.language,
-      timezone: detailUser.UserSettings?.timezone,
+      emailNotifications: detailUser.userSettings?.emailNotifications,
+      pushNotifications: detailUser.userSettings?.pushNotifications,
+      language: detailUser.userSettings?.language,
+      timezone: detailUser.userSettings?.timezone,
     }
   });
 

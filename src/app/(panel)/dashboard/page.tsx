@@ -1,18 +1,16 @@
-import { totalItens } from "./dashboard-utils";
 import getSession from "@/lib/getSession";
 import { redirect } from "next/navigation";
 import { GetWeekSummary } from "./goals/_data-access/get-week-summary";
 import { ProgressGoals } from "./goals/_components/summary";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
-import { PrioritiesBar } from "./desktop/[id]/_components/priorities-bar";
-import { getPriorities } from "./desktop/[id]/_data-access/get-priorities";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { LoginAlert } from "@/components/login-alert";
 import { getDetailUser } from "./_data-access/get-detail-user";
-import { Item, Prisma } from "@/generated/prisma";
 import { getDesktops } from "./_data-access/get-desktops";
 import { Priorities } from "./_components/priorities";
+import { Plus } from "lucide-react";
+import FolderAnimation from "@/components/folder-animation";
 
 export default async function Dashboard() {
   const session = await getSession();
@@ -28,39 +26,49 @@ export default async function Dashboard() {
     return null
   }
 
-
   return (
     <>
-      <LoginAlert emailNotifications={detailUser.UserSettings?.emailNotifications} />
+      <LoginAlert emailNotifications={detailUser.userSettings?.emailNotifications} />
       <main className="container mx-auto px-6 pt-6">
         <section className="flex flex-col justify-between space-y-4">
           <div>
             <h1 className="text-2xl font-semibold">Bem vindo de volta!</h1>
             <h2>Aqui está seu resumo.</h2>
           </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-5">
+            <Card className="relative hover:border-primary/50 bg-gradient-to-b from-card hover:from-primary/10 to-card hover:to-orange-500/20 transition-all duration-300 ease-in-out capitalize">
+              <CardHeader>
+                <CardTitle>Adicionar desktop</CardTitle>
+                <CardDescription>Criar uma nova área de trabalho</CardDescription>
+              </CardHeader>
+              <CardContent className="flex items-center justify-center">
+                <Plus className="w-15 h-15 opacity-25" strokeWidth={.5} />
+              </CardContent>
+            </Card>
             {desktops.map(desktop => (
               <Link
                 href={`/dashboard/desktop/${desktop.id}`}
                 key={desktop.id}
               >
-                <Card className="relative rounded-none hover:border-primary/50 hover:bg-primary/10 transition-all duration-300 ease-in-out capitalize">
-                  <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-size-[56px_56px]" />
-                  <CardHeader className="p-2">
-                    <CardTitle>{desktop.title}</CardTitle>
-                    <CardDescription>
-                      Total grupos: {desktop.groupe.length}
-                      <br />
-                      Total tarefas: {totalItens(desktop.groupe)}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="mt-auto w-full p-2">
-                    <Priorities desktopId={desktop.id} />
-                  </CardContent>
-                </Card>
+                <FolderAnimation>
+                  <Card className="relative rounded-none border-0 shadow-none bg-transparent capitalize">
+                    <CardHeader className="p-2">
+                      <CardTitle>{desktop.title}</CardTitle>
+                      <CardDescription>
+                        Total grupos: {desktop.groupsCount}
+                        <br />
+                        Total tarefas: {desktop.itemsCount}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="mt-auto w-full p-2">
+                      <Priorities desktopId={desktop.id} />
+                    </CardContent>
+                  </Card>
+                </FolderAnimation>
               </Link>
             ))}
           </div>
+
           <Separator />
           {weekSummaryDate?.summary?.total > 0 ? (
             <div className="w-full space-y-4">

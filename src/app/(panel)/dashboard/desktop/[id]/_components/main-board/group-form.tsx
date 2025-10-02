@@ -12,7 +12,7 @@ import { GroupFormData, UseGroupForm } from "./use-group-form";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { updateGroup } from "../../_actions/update-group";
-import { createGroup } from "../../_actions/create-groupe";
+import { createGroup } from "../../_actions/create-group";
 
 
 interface CreateGroupFormProps {

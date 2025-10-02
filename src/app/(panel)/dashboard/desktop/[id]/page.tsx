@@ -16,11 +16,9 @@ export default async function DesktopPage({
     redirect('/')
   }
   const desktopId = (await params).id;
-  const groupsData = await getGroups({ desktopId: desktopId as string });
+  const groupsData = await getGroups(desktopId);
   const prioritiesData = await getPriorities(desktopId);
   const statusData = await getStatus(desktopId);
-
-
 
   return (
     <main className="container mx-auto px-6 pt-6">

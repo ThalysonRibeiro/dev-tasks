@@ -2,25 +2,34 @@
 
 import prisma from "@/lib/prisma";
 
-export async function getGroups({ desktopId }: { desktopId: string }) {
+export async function getGroups(desktopId: string, cursor?: string, take = 50) {
   if (!desktopId) return [];
 
   try {
-    const groupes = await prisma.group.findMany({
-      where: { desktopId: desktopId },
+    return await prisma.group.findMany({
+      where: { desktopId },
       include: {
         item: {
-          orderBy: {
-            createdAt: "desc"
+          select: {
+            id: true,
+            title: true,
+            term: true,
+            priority: true,
+            status: true,
+            notes: true,
+            description: true,
+            createdBy: true,
+            assignedTo: true,
+            createdByUser: true,
+            assignedToUser: true,
           }
         }
       },
-      orderBy: {
-        createdAt: "desc",
-      }
+      orderBy: { createdAt: "desc" },
+      take,
+      ...(cursor ? { skip: 1, cursor: { id: cursor } } : {})
     });
-    return groupes
-  } catch (error) {
+  } catch {
     return [];
   }
 }

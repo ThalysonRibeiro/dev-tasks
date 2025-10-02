@@ -5,6 +5,8 @@ import { SessionAuthProvider } from "@/components/session-auth";
 import { Bounce, ToastContainer } from "react-toastify";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "@/components/modeToggle";
+import { Providers } from "@/components/providers";
+import { ToastProvider } from "@/components/toast-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,30 +57,20 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased relative`}
       >
         <SessionAuthProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick={false}
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="dark"
-              transition={Bounce}
-            />
-            <div className="absolute top-4 right-4 z-50">
-              <ModeToggle />
-            </div>
-            {children}
-          </ThemeProvider>
+          <Providers>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <ToastProvider />
+              <div className="absolute top-4 right-4 z-50">
+                <ModeToggle />
+              </div>
+              {children}
+            </ThemeProvider>
+          </Providers>
         </SessionAuthProvider>
       </body>
     </html>

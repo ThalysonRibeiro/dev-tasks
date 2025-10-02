@@ -21,7 +21,7 @@ export default async function Home() {
       <section id="hero" className="container mx-auto px-4 py-20 flex flex-col items-center text-center">
         <div className="flex flex-col justify-betweengap-10 items-center">
           <div className="flex flex-col text-left">
-            <h2 className="text-5xl md:text-6xl font-bold uppercase text-center bg-radial from-violet-500 via-cyan-400 to-violet-700 bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] mb-6">
+            <h2 className="text-5xl md:text-6xl font-bold uppercase text-center bg-radial from-primary via-orange-500 to-primary bg-clip-text text-transparent animate-gradient-x bg-[length:200%_auto] mb-6">
               Gerencie suas tarefas
               <br />com eficiência
             </h2>

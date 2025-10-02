@@ -12,13 +12,13 @@ export function StatusBar({ status }: StatusBarProps) {
   return (
     <div className="relative group">
       <h3 className="font-semibold text-sm">Status geral</h3>
-      <div className="flex w-full h-4 rounded-md overflow-hidden">
+      <div data-testid="progress-bar-container" className="flex w-full h-4 rounded-md overflow-hidden">
         {status.map((s) => (
           <div
             key={s.status}
             className={`h-full`}
             style={{
-              width: `${(s.count / total) * 100}%`,
+              width: `${total > 0 ? (s.count / total) * 100 : 0}%`,
               backgroundColor: getStatusColor(s.status as Status),
             }}
           />
